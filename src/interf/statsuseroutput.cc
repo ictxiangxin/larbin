@@ -2,7 +2,7 @@
 // Sebastien Ailleret
 // 03-01-02 -> 04-01-02
 
-#include <iostream.h>
+#include <iostream>
 #include <string.h>
 #include <unistd.h>
 
