@@ -15,6 +15,8 @@ Develop:
 
 * The most improve is that I use the newest adns v1.3 to replace the old adns v1.1 which used in origin Larbin v2.6.3.
 
+* Add a new conf option: ignoreRobot, it can make Larbin ignore robot.txt, as you know.
+
 Table of content :
 ------------------
 
@@ -31,7 +33,7 @@ Have a look at options.h to choose options you need, these function directly aff
 Excute the next commands to compile:
 
 ```bash
-./configure
+> ./configure
 make
 ```
 If you get error when doing configure, make sure that you have already installed makedepend, on Debian/Ubuntu class OS, you can use next commands to install it:
@@ -49,6 +51,8 @@ See larbin.conf. Please be sure to specify your mail.
 
 Read the sentences of larbin.conf line by line, they will lead you configure your Larbin accurately and let your Larbin running successfully.
 
+If you want to use chinese configure file, please see larbin-cn.conf.
+
 There is also some documentation in the doc directory in html format.
 
 ###Running
@@ -56,7 +60,15 @@ There is also some documentation in the doc directory in html format.
 Be sure you did the configuration
 
 ```bash
-./larbin
+> ./larbin
+```
+If you use the chinese configure file larbin-cn.conf, then you should set the configure filename when you start Larbin:
+```bash
+> ./larbin -c larbin-cn.conf
+```
+If you write a new configure file, then you also need set the configure filename when you start Larbin:
+```bash
+> ./larbin -c your_conf_filename
 ```
 
 To see how it works, visit http://localhost:8081/

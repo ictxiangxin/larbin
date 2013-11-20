@@ -58,6 +58,7 @@ ConstantSizedFifo<Connexion> *global::userConns;
 Interval *global::inter;
 int8_t global::depthInSite;
 bool global::externalLinks = true;
+bool global::ignoreRobot = false;
 time_t global::waitDuration;
 char *global::userAgent;
 char *global::sender;
@@ -283,6 +284,8 @@ void global::parseFile (char *file) {
 	  manageExt(&posParse);
 	} else if (!strcasecmp(tok, "noExternalLinks")) {
 	  externalLinks = false;
+    } else if (!strcasecmp(tok, "ignoreRobot")) {
+	  ignoreRobot = true;
 	} else {
 	  std::cerr << "bad configuration file : " << tok << "\n";
 	  exit(1);

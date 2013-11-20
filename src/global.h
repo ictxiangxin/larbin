@@ -102,6 +102,8 @@ struct global {
   static int8_t depthInSite;
   /** Follow external links ? */
   static bool externalLinks;
+  /** Ignore robot.txt ? */
+  static bool ignoreRobot;
   /** how many seconds should we wait beetween 2 calls at the same server 
    * 0 if you are only on a personnal server, >=30 otherwise
    */

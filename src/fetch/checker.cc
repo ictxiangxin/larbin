@@ -57,7 +57,6 @@ void check (url *u)
  */
 bool filter1 (char *host, char *file)
 {
-    int i=0;
     if (global::domains != NULL)
     {
 	    bool ok = false;

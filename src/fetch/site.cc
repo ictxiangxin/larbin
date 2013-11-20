@@ -308,13 +308,15 @@ void NamedSite::dnsErr () {
 }
 
 /** test if a file can be fetched thanks to the robots.txt */
-bool NamedSite::testRobots(char *file) {
-  uint pos = forbidden.getLength();
-  for (uint i=0; i<pos; i++) {
-    if (robotsMatch(forbidden[i], file))
-      return false;
-  }
-  return true;
+bool NamedSite::testRobots(char *file)
+{
+    if(global::ignoreRobot) // ignore robot.txt then always return true
+        return true;
+    uint pos = forbidden.getLength();
+    for (uint i = 0; i < pos; i++)
+        if (robotsMatch(forbidden[i], file))
+            return false;
+    return true;
 }
 
 /** Delete the old identity of the site */
