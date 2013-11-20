@@ -1,6 +1,8 @@
 Larbin Web Crawler
 ==================
 
+[中文](/README-cn.md) [English](/README.md)
+
 Version: 2.6.3
 
 Larbin is a web crawler and stop develop, the least version is 2.6.3.
@@ -56,7 +58,7 @@ but i'll work on it for future versions. Please report success or failure on any
 Contact :
 ---------
 
-https://github.com/ictxiangxin/larbin
+URL: https://github.com/ictxiangxin/larbin
 
 Email: ictxiangxin@gmail.com
 
