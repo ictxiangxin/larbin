@@ -1,7 +1,7 @@
-Larbin Web Crawler
+Larbin网络爬虫
 ==================
 
-[中文](/README-cn.md) [English](/README.md)
+[中文](/README-cn.md)    [English](/README.md)
 
 版本：2.6.3
 
@@ -11,15 +11,16 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 开发概况：
 ----------
 
-目前，我在Larbin v2.6.3上做了一些修改， 修复了许多编译时的警告，发现并修复了一个严重的bug。
-最大的提升是我使用了最新版的adns v1.3替换了原始Larbin v2.6.3中的旧版adns v1.1。
+* 目前，我在Larbin v2.6.3上做了一些修改， 修复了许多编译时的警告，发现并修复了一个严重的bug。
+
+* 最大的提升是我使用了最新版的adns v1.3替换了原始Larbin v2.6.3中的旧版adns v1.1。
 
 内容提要：
 ----------
 
-* [编译Larbin](#编译Larbin)
-* [配置Larbin](#配置Larbin)
-* [运行Larbin](#运行Larbin)
+* [编译Larbin](#编译larbin)
+* [配置Larbin](#配置larbin)
+* [运行Larbin](#运行larbin)
 * [支持的运行环境](#支持的运行环境)
 * [联系我](#联系我)
 
