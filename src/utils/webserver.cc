@@ -88,7 +88,7 @@ static void writeHeader(int fds) {
 
 static void writeFooter(int fds) {
   // end of page and kill the connexion
-  ecrire(fds, (char*)"\n</pre>\n<a href=\"stats.html\">stats</a>\n(<a href=\"smallstats.html\">small stats</a>+<a href=\"graph.html\">graphics</a>)\n<a href=\"debug.html\">debug</a>\n<a href=\"all.html\">all</a>\n<a href=\"ip.html\">ip</a>\n<a href=\"dns.html\">dns</a>\n<a href=\"output.html\">output</a>\n<hr>\n<A HREF=\"http://larbin.sourceforge.net/\"><img SRC=\"http://perso.wanadoo.fr/sebastien.ailleret/seb.gif\"></A>\n<A HREF=\"mailto:sebastien@ailleret.com\">sebastien@ailleret.com</A>\n</body>\n</html>");
+  ecrire(fds, (char*)"\n</pre>\n<a href=\"stats.html\">stats</a>\n(<a href=\"smallstats.html\">small stats</a>+<a href=\"graph.html\">graphics</a>)\n<a href=\"debug.html\">debug</a>\n<a href=\"all.html\">all</a>\n<a href=\"ip.html\">ip</a>\n<a href=\"dns.html\">dns</a>\n<a href=\"output.html\">output</a>\n<hr>\n<A HREF=\"mailto:ictxiangxin@gmail.com\">ictxiangxin@gmail.com</A>\n</body>\n</html>");
   shutdown(fds, 2);
 }
 

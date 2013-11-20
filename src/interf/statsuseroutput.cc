@@ -69,24 +69,24 @@ void initUserOutput () {
  */
 static void dessine(int fds, double *tab, double *maxi) {
   for (int i=0; i<nb; i++) {
-    ecrire(fds, "|");
+    ecrire(fds, (char*)"|");
     int n = (int) ((tab[i] * larg) / (*maxi+1));
-    for (int j=0; j<n; j++) ecrire(fds, "*");
-    ecrire(fds, "\n");
+    for (int j=0; j<n; j++) ecrire(fds, (char*)"*");
+    ecrire(fds, (char*)"\n");
   }
 }
 
 void outputStats(int fds) {
-  ecrire(fds, "Stats for ");
+  ecrire(fds, (char*)"Stats for ");
   ecrireInt(fds, totalpages);
-  ecrire(fds, " pages.\nMean size of a page : ");
+  ecrire(fds, (char*)" pages.\nMean size of a page : ");
   ecrireInt(fds, ((int) totalbytes) / totalpages);
-  ecrire(fds, "\n\nProportion of pages per size (one row is ");
+  ecrire(fds, (char*)"\n\nProportion of pages per size (one row is ");
   ecrireInt(fds, taille);
-  ecrire(fds, " bytes, max size is ");
+  ecrire(fds, (char*)" bytes, max size is ");
   ecrireInt(fds, taille*nb);
-  ecrire(fds, " bytes) :\n\n");
+  ecrire(fds, (char*)" bytes) :\n\n");
   dessine(fds, tabs, &maxs);
-  ecrire(fds, "\n\nbytes transfered by size :\n\n");
+  ecrire(fds, (char*)"\n\nbytes transfered by size :\n\n");
   dessine(fds, tabb, &maxb);
 }

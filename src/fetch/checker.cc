@@ -26,55 +26,55 @@
  * if not send it
  * @param u the url to check
  */
-void check (url *u) {
-  if (global::seen->testSet(u)) {
-	hashUrls();  // stat
-	// where should this link go ?
+void check (url *u)
+{
+    if (global::seen->testSet(u))
+    {
+	    hashUrls();  // stat
+	    // where should this link go ?
 #ifdef SPECIFICSEARCH
-	if (privilegedExts[0] != NULL
-        && matchPrivExt(u->getFile())) {
-	  interestingExtension();
-	  global::URLsPriority->put(u);
-	} else {
-	  global::URLsDisk->put(u);
-	}
+	    if (privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
+        {
+	        interestingExtension();
+	        global::URLsPriority->put(u);
+	    }
+        else
+	        global::URLsDisk->put(u);
 #else // not a SPECIFICSEARCH
-    global::URLsDisk->put(u);
+        global::URLsDisk->put(u);
 #endif
-  } else {
-	// This url has already been seen
-    answers(urlDup);
-	delete u;
-  }
+    }
+    else
+    {
+	    // This url has already been seen
+        answers(urlDup);
+	    delete u;
+    }
 }
 
 /** Check the extension of an url
  * @return true if it might be interesting, false otherwise
  */
-bool filter1 (char *host, char *file) {
-  int i=0;
-  if (global::domains != NULL) {
-	bool ok = false;
-	while ((*global::domains)[i] != NULL) {
-	  ok = ok || endWith((*global::domains)[i], host);
-	  i++;
-	}
-	if (!ok) {
-	  return false;
-	}
-  }
-  i=0;
-  int l = strlen(file);
-  if (endWithIgnoreCase((char*)"html", file, l)
-      || file[l-1] == '/'
-      || endWithIgnoreCase((char*)"htm", file, l)) {
+bool filter1 (char *host, char *file)
+{
+    int i=0;
+    if (global::domains != NULL)
+    {
+	    bool ok = false;
+	    for (int i = 0; (*global::domains)[i] != NULL; i++)
+	        ok = ok || endWith((*global::domains)[i], host);
+	    if (!ok)
+	        return false;
+    }
+    int l = strlen(file);
+    if (
+           endWithIgnoreCase((char*)"html", file, l)
+        || endWithIgnoreCase((char*)"htm", file, l)
+        || file[l-1] == '/'
+       )
+           return true;
+    for (int i = 0; global::forbExt[i] != NULL; i++)
+	    if (endWithIgnoreCase(global::forbExt[i], file, l))
+	        return false;
     return true;
-  }
-  while (global::forbExt[i] != NULL) {
-	if (endWithIgnoreCase(global::forbExt[i], file, l)) {
-	  return false;
-	}
-	i++;
-  }
-  return true;
 }

@@ -1,64 +1,76 @@
-Larbin Web Crawler
-==================
+Larbin网络爬虫
+==============
 
-[中文](/README-cn.md)    [English](/README.md)
+[See the English edition](/README-en.md)
 
-Version: 2.6.3
+版本：2.6.3
 
-Larbin is a web crawler and stop develop, the least version is 2.6.3.
-We will continue develop this nice software and open the source on Github.
+Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本是2.6.3。
+我将继续开发这一优秀的软件，并在Github上开放源代码。
 
-Develop:
---------
+开发概况：
+----------
 
-* Currently, I did some modify on Larbin v2.6.3, fix many compiling warning and fix a serious bug.
+* 目前，我在Larbin v2.6.3上做了一些修改， 修复了许多编译时的警告，发现并修复了一个严重的bug。
 
-* The most improve is that I use the newest adns v1.3 to replace the old adns v1.1 which used in origin Larbin v2.6.3.
+* 最大的提升是我使用了最新版的adns v1.3替换了原始Larbin v2.6.3中的旧版adns v1.1。
 
-Table of content :
-------------------
+内容提要：
+----------
 
-* [Compiling](#compiling)
-* [Configuring](#configuring)
-* [Running](#running)
-* [Platforms](#platforms)
-* [Contact](#contact)
+* [编译Larbin](#编译larbin)
+* [配置Larbin](#配置larbin)
+* [运行Larbin](#运行larbin)
+* [运行环境](#运行环境)
+* [联系我](#联系我)
 
-###Compiling
+###编译Larbin
 
-Have a look at options.h to choose options you need
+查看options.h文件来进行功能选择，这些功能直接决定了Larbin的功能和工作方式，请仔细配置这个文件。每次修改该文件后需要重新编译Larbin以使其生效。
+
+执行如下命令进行:
 
 ```bash
-./configure
-make
+> ./configure
+> make
+```
+如果configure时出现错误，确保已经安装了makedepend，在Debian/Ubuntu类操作系统下，执行下列命令进行安装：
+```bash
+> sudo apt-get install xutils-dev
+```
+你仍然需要注意一些常用程序是否安装，如g++，m4等，如果没有，在Debian/Ubuntu类操作系统下，执行下列命令进行安装：
+```bash
+> sudo apt-get install g++ m4
 ```
 
-###Configuring
+###配置Larbin
 
-See larbin.conf. Please be sure to specify your mail.
+配置larbin.conf。确保正确修改为你的Email地址。
 
-There is also some documentation in the doc directory in html format.
+仔细逐行查看larbin.conf中的每一段话，它们将详细引导你如何正确配置Larbin并让它成功跑起来。
 
-###Running
+在doc文件夹下，有Larbin的html格式的详细文档。
 
-Be sure you did the configuration
+###运行Larbin
+
+确保你已经完成配置，然后运行：
 
 ```bash
 ./larbin
 ```
 
-To see how it works, visit http://localhost:8081/
+查看它的工作情况，访问http://localhost:8081/
 
-###Platforms
+###运行环境
 
-Larbin has mainly been developped under Linux.
+Larbin主要在Linux下进行开发。
 
-I've tested larbin with success on Linux and freeBSD.
+我已经在Linux和FreeBSD下测试成功。
 
-It probably won't compile right out of the box on any other platform,
-but i'll work on it for future versions. Please report success or failure on any platform.
+它可能在其他的平台下无法正确编译，但是我将在后续的版本中使其支持更多的平台。
+请向我汇报Larbin在任何平台下的工作情况。
 
-###Contact
+###联系我
 
 URL: https://github.com/ictxiangxin/larbin
 

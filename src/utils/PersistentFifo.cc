@@ -184,8 +184,8 @@ char *PersistentFifo::readLine () {
   char *posn = strchr(buf + bufPos, '\n');
   while (posn == NULL) {
     if (!(bufEnd - bufPos < maxUrlSize + 40 + maxCookieSize)) {
-      printf(fileName);
-      printf(buf+bufPos);
+      printf((char*)fileName);
+      printf((char*)(buf+bufPos));
     }
     if (bufPos*2 > BUF_SIZE) {
       bufEnd -= bufPos;
