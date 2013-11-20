@@ -34,7 +34,7 @@ Excute the next commands to compile:
 
 ```bash
 > ./configure
-make
+> make
 ```
 If you get error when doing configure, make sure that you have already installed makedepend, on Debian/Ubuntu class OS, you can use next commands to install it:
 ```bash
