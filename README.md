@@ -20,8 +20,8 @@ Table of content :
 
 * [Compiling](#compiling)
 * [Configuring](#configuring)
-* [Running](#Running)
-* [Supported platforms](#supported platforms)
+* [Running](#running)
+* [Platforms](#platforms)
 * [Contact](#contact)
 
 ###Compiling
@@ -49,7 +49,7 @@ Be sure you did the configuration
 
 To see how it works, visit http://localhost:8081/
 
-###Supported platforms
+###Platforms
 
 Larbin has mainly been developped under Linux.
 
