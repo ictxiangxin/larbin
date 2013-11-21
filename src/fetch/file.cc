@@ -133,83 +133,87 @@ bool robots::parseHeaders () {
 
 /** try to understand the file
  */
-void robots::parseRobots () {
-  robotsOK();
+void robots::parseRobots ()
+{
+    robotsOK();
 #ifndef NOSTATS
-  bool goodfile = true;
+    bool goodfile = true;
 #endif // NOSTATS
-  server->forbidden.recycle();
-  uint items = 0; // size of server->forbidden
-  // state
-  // 0 : not concerned
-  // 1 : weakly concerned
-  // 2 : strongly concerned
-  int state = 1;
-  char *tok = nextToken(&posParse, ':');
-  while (tok != NULL) {
-	if (!strcasecmp(tok, "useragent") || !strcasecmp(tok, "user-agent")) {
-	  if (state == 2) {
-		// end of strong concern record => the end for us
-		return;
-	  } else {
-		state = 0;
-		// what is the new state ?
-		tok = nextToken(&posParse, ':');
-		while (tok != NULL
-			   && strcasecmp(tok, "useragent")
-			   && strcasecmp(tok, "user-agent")
-			   && strcasecmp(tok, "disallow")) {
-          if (caseContain(tok, global::userAgent)) {
-            state = 2;
-          } else if (state == 0 && !strcmp(tok, "*")) {
-            state = 1;
-          }
-		  tok = nextToken(&posParse, ':');
-		}
-	  }
-	  if (state) {
-		// delete old forbidden : we've got a better record than older ones
-		server->forbidden.recycle();
-		items = 0;
-	  } else {
-        // forget this record
-        while (tok != NULL
-			   && strcasecmp(tok, "useragent")
-			   && strcasecmp(tok, "user-agent")) {
-          tok = nextToken(&posParse, ':');
-        }
-      }
-	} else if (!strcasecmp(tok, "disallow")) {
-      tok = nextToken(&posParse, ':');
-      while (tok != NULL
-             && strcasecmp(tok, "useragent")
-             && strcasecmp(tok, "user-agent")
-             && strcasecmp(tok, "disallow")) {
-        // add nextToken to forbidden
-        if (items++ < maxRobotsItem) {
-          // make this token a good token
-          if (tok[0] == '*') { // * is not correct, / disallows everything
-            tok[0] = '/';
-          } else if (tok[0] != '/') {
-            tok--;
-            tok[0] = '/';
-          }
-          if (fileNormalize(tok)) {
-            server->forbidden.addElement(newString(tok));
-          }
-        }
-        tok = nextToken(&posParse, ':');
-      }
-	} else {
+    server->forbidden.recycle();
+    uint items = 0; // size of server->forbidden
+    // state
+    // 0 : not concerned
+    // 1 : weakly concerned
+    // 2 : strongly concerned
+    int state = 1;
+    char *tok = nextToken(&posParse, ':');
+    while (tok != NULL)
+    {
+	    if (!strcasecmp(tok, "useragent") || !strcasecmp(tok, "user-agent"))
+        {
+	        if (state == 2)
+		        return; // end of strong concern record => the end for us
+            else
+            {
+		        state = 0;
+		        // what is the new state ?
+		        tok = nextToken(&posParse, ':');
+		        while (tok != NULL && strcasecmp(tok, "useragent") && strcasecmp(tok, "user-agent") && strcasecmp(tok, "disallow"))
+                {
+                    if (caseContain(tok, global::userAgent))
+                        state = 2;
+                    else if (state == 0 && !strcmp(tok, "*"))
+                        state = 1;
+		            tok = nextToken(&posParse, ':');
+		        }
+	        }
+	        if (state)
+            {
+		        // delete old forbidden : we've got a better record than older ones
+		        server->forbidden.recycle();
+		        items = 0;
+	        }
+            else
+            {
+                // forget this record
+                while (tok != NULL && strcasecmp(tok, "useragent") && strcasecmp(tok, "user-agent"))
+                    tok = nextToken(&posParse, ':');
+            }
+	    }
+        else if (!strcasecmp(tok, "disallow"))
+        {
+            tok = nextToken(&posParse, ':');
+            while (tok != NULL && strcasecmp(tok, "useragent") && strcasecmp(tok, "user-agent") && strcasecmp(tok, "disallow"))
+            {
+                // add nextToken to forbidden
+                if (items++ < maxRobotsItem)
+                {
+                    // make this token a good token
+                    if (tok[0] == '*') // * is not correct, / disallows everything
+                        tok[0] = '/';
+                    else if (tok[0] != '/')
+                    {
+                        tok--;
+                        tok[0] = '/';
+                    }
+                    if (fileNormalize(tok))
+                        server->forbidden.addElement(newString(tok));
+                }
+                tok = nextToken(&posParse, ':');
+            }
+	    }
+        else
+        {
 #ifndef NOSTATS
-	  if (goodfile) {
-        robotsOKdec();
-		goodfile = false;
-	  }
+	        if (goodfile)
+            {
+                robotsOKdec();
+		        goodfile = false;
+	        }
 #endif // NOSTATS
-	  tok = nextToken(&posParse, ':');
-	}
-  }
+	        tok = nextToken(&posParse, ':');
+	    }
+    }
 }
 
 

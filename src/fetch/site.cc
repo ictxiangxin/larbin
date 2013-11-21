@@ -310,7 +310,7 @@ void NamedSite::dnsErr () {
 /** test if a file can be fetched thanks to the robots.txt */
 bool NamedSite::testRobots(char *file)
 {
-    if(global::ignoreRobots) // ignore robot.txt then always return true
+    if(global::ignoreRobots) // ignore robots.txt then always return true
         return true;
     uint pos = forbidden.getLength();
     for (uint i = 0; i < pos; i++)
