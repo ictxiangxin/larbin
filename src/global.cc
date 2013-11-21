@@ -59,6 +59,8 @@ Interval *global::inter;
 int8_t global::depthInSite;
 bool global::externalLinks = true;
 bool global::ignoreRobots = false;
+uint global::limitTime = 0;
+bool global::timeOut = false;
 time_t global::waitDuration;
 char *global::userAgent;
 char *global::sender;
@@ -201,10 +203,10 @@ global::global (int argc, char *argv[]) {
   }
 }
 
-/** Destructor : never used because the program should never end !
+/** If time out, this function will be invoked.
  */
-global::~global () {
-  assert(false);
+global::~global ()
+{
 }
 
 /** parse configuration file */
@@ -286,6 +288,9 @@ void global::parseFile (char *file) {
 	  externalLinks = false;
     } else if (!strcasecmp(tok, "ignoreRobots")) {
 	  ignoreRobots = true;
+    } else if (!strcasecmp(tok, "limitTime")) {
+	  tok = nextToken(&posParse);
+	  limitTime = atoi(tok) * 60;
 	} else {
 	  std::cerr << "bad configuration file : " << tok << "\n";
 	  exit(1);

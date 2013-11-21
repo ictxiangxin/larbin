@@ -28,7 +28,7 @@
 #define timeoutIncr 2000 // number of bytes for 1 more sec
 
 // How long do we keep dns answers and robots.txt
-#define dnsValidTime 2*24*3600
+#define dnsValidTime (2 * 24 * 3600)
 
 // Maximum size of a page
 #define maxPageSize    100000

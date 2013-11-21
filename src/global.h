@@ -104,6 +104,10 @@ struct global {
   static bool externalLinks;
   /** Ignore robots.txt ? */
   static bool ignoreRobots;
+  /** Limit running time */
+  static uint limitTime;
+  /** timeout flag */
+  static bool timeOut;
   /** how many seconds should we wait beetween 2 calls at the same server 
    * 0 if you are only on a personnal server, >=30 otherwise
    */
