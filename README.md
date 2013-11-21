@@ -15,7 +15,7 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 
 * 最大的提升是我使用了最新版的adns v1.3替换了原始Larbin v2.6.3中的旧版adns v1.1。
 
-* 增加了一个配置选项ignoreRobot，它可以使Larbin在抽取网页时不受robot.txt的影响，你懂的。
+* 增加了一个配置选项ignoreRobots，它可以使Larbin在抽取网页时不受robots.txt的影响，你懂的。
 
 内容提要：
 ----------

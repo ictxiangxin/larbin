@@ -15,7 +15,7 @@ Develop:
 
 * The most improve is that I use the newest adns v1.3 to replace the old adns v1.1 which used in origin Larbin v2.6.3.
 
-* Add a new conf option: ignoreRobot, it can make Larbin ignore robot.txt, as you know.
+* Add a new conf option: ignoreRobots, it can make Larbin ignore robots.txt, as you know.
 
 Table of content :
 ------------------

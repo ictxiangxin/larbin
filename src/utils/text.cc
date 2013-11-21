@@ -47,7 +47,8 @@ bool robotsMatch (char *a, char *b)
         {
             i++;
             char *tmp = strchr(b + j, a[i]);
-            if (tmp == NULL) return false;
+            if (tmp == NULL)
+                return false;
             j = tmp - b;
         }
         else
