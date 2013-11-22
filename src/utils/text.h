@@ -48,6 +48,6 @@ char *nextToken(char **posParse, char c=' ');
 bool matchPrivExt(char *file);
 
 /* does this char * match contentType */
-bool matchContentType(char *ct);
+int matchContentType(char *ct);
 
 #endif // TEXT_H

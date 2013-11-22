@@ -39,10 +39,8 @@ void check (url *u)
 	        global::URLsPriority->put(u);
 	    }
         else
-	        global::URLsDisk->put(u);
-#else // not a SPECIFICSEARCH
-        global::URLsDisk->put(u);
-#endif
+#endif //SPECIFICSEARCH
+            global::URLsDisk->put(u);
     }
     else
     {

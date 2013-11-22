@@ -447,18 +447,18 @@ void IPSite::putUrl (url *u) {
 
 /** Get an url from the fifo and do some stats
  */
-inline url *IPSite::getUrl () {
-  url *u = tab.get();
-  delIPUrl();
-  urls();
-  global::namedSiteList[u->hostHashCode()].nburls--;
-  global::inter->getOne();
+inline url *IPSite::getUrl ()
+{
+    url *u = tab.get();
+    delIPUrl();
+    urls();
+    global::namedSiteList[u->hostHashCode()].nburls--;
+    global::inter->getOne();
 #if defined(SPECIFICSEARCH) && !defined(NOSTATS)
-  if (privilegedExts[0] != NULL && matchPrivExt(u->getFile())) {
-    extensionTreated();
-  }
+    if (privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
+        extensionTreated();
 #endif
-  return u;
+    return u;
 }
 
 /** fetch the first page in the fifo okSites

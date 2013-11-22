@@ -219,13 +219,13 @@ bool matchPrivExt (char *file)
 }
 
 /* does this char * match contentType */
-bool matchContentType (char *ct)
+int matchContentType (char *ct)
 {
     
     for (int i = 0; contentTypes[i] != NULL; i++)
         if (startWithIgnoreCase(contentTypes[i], ct))
-            return true;
-    return false;
+            return i;
+    return -1;
 }
 
 #else // SPECIFICSEARCH is not defined
@@ -234,10 +234,11 @@ bool matchPrivExt (char *file)
 {
     return false;
 }
-bool matchContentType (char *ct)
+
+int matchContentType (char *ct)
 {
     assert(false);
-    return true;
+    return -1;
 }
 
 #endif // SPECIFICSEARCH

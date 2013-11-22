@@ -21,15 +21,12 @@
  * @param u the URL of the doc
  * @param reason reason of the fail
  */
-void fetchFail (url *u, FetchError err, bool interesting=false) {
+void fetchFail (url *u, FetchError err, bool interesting=false)
+{
 #ifdef SPECIFICSEARCH
-  if (interesting
-      || (privilegedExts[0] != NULL && matchPrivExt(u->getFile()))) {
-    failure(u, err);
-  }
-#else // not a SPECIFICSEARCH
-  failure(u, err);
+    if (interesting || (privilegedExts[0] != NULL && matchPrivExt(u->getFile())))
 #endif
+        failure(u, err);
 }
 
 /** It's over with this file

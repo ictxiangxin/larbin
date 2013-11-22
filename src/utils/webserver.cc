@@ -134,9 +134,9 @@ static void writeSpecStats(int fds) {
     i++;
   }
   ecrire(fds, (char*)") :</h2>\ntotal fetched (success)          : ");
-  ecrireInti(fds, interestingPage, "%5d");
+  ecrireInti(fds, interestingPage, (char*)"%5d");
   ecrire(fds, (char*)"\ntotal fetched (error or success) : ");
-  ecrireInti(fds, interestingSeen, "%5d");
+  ecrireInti(fds, interestingSeen, (char*)"%5d");
   if (privilegedExts[0] != NULL) {
     ecrire(fds, (char*)"\nprivileged links seen (");
     ecrire(fds, privilegedExts[0]);
@@ -147,9 +147,9 @@ static void writeSpecStats(int fds) {
       i++;
     }
     ecrire(fds, (char*)") :     ");
-    ecrireInti(fds, interestingExtension, "%5d");
+    ecrireInti(fds, interestingExtension, (char*)"%5d");
     ecrire(fds, (char*)"\nprivileged links fetched :         ");
-    ecrireInti(fds, extensionTreated, "%5d");
+    ecrireInti(fds, extensionTreated, (char*)"%5d");
   }
 }
 #else

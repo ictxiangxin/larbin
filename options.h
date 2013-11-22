@@ -1,7 +1,3 @@
-// Larbin
-// Sebastien Ailleret
-// 27-05-01 -> 09-03-02
-
 #ifndef LARBIN_CONFIG
 #define LARBIN_CONFIG
 
@@ -17,14 +13,14 @@
 //#define DEFAULT_OUTPUT   // do nothing...
 //#define SIMPLE_SAVE      // save in files named save/dxxxxxx/fyyyyyy
 //#define MIRROR_SAVE      // save in files (respect sites hierarchy)
-#define STATS_OUTPUT     // do some stats on pages
+//#define STATS_OUTPUT     // do some stats on pages
 
 ////////////////////////////////////////////////////////////
 // Set up a specific search
 
 //#define SPECIFICSEARCH
-//#define contentTypes ((char *[]) { "audio/mpeg", NULL })
-//#define privilegedExts ((char *[]) { ".mp3", NULL })
+//#define contentTypes ((char *[]) { "audio/mpeg", "image/jpeg", NULL })
+//#define privilegedExts ((char *[]) { ".mp3", ".jpg", NULL })
 
 // how do you want to manage specific pages (select one of the followings)
 //#define DEFAULT_SPECIFIC

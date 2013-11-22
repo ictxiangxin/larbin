@@ -432,23 +432,23 @@ int html::parseHeader () {
 #define checkType() errorType()
 #endif
 
-int html::verifType () {
-  if (startWithIgnoreCase((char*)"content-type: ", area)) {
-    // Let's read the type of this doc
-    if (!startWithIgnoreCase((char*)"text/html", area+14)) {
+int html::verifType ()
+{
+    if (startWithIgnoreCase((char*)"content-type: ", area))
+        // Let's read the type of this doc
+        if (!startWithIgnoreCase((char*)"text/html", area + 14))
+        {
 #ifdef SPECIFICSEARCH
-      if (matchContentType(area+14)) {
-        interestingSeen();
-        isInteresting = true;
-      } else {
-        checkType();
-      }
-#else // SPECIFICSEARCH
-      checkType();
+            if ((extIndex = matchContentType(area + 14)) != -1)
+            {
+                interestingSeen();
+                isInteresting = true;
+            }
+            else
 #endif // SPECIFICSEARCH
-    }
-  }
-  return 0;
+                checkType();
+        }
+    return 0;
 }
 
 /** function called by parseHeader
@@ -461,7 +461,7 @@ int html::verifLength () {
     int len = 0;
     char *p = area+16;
     while (*p >= '0' && *p <= '9') {
-      len = len*10 + *p -'0';
+      len = len * 10 + *p -'0';
       p++;
     }
     if (len > maxPageSize) {
