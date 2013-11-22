@@ -3,7 +3,7 @@ Larbin网络爬虫
 
 [See the English edition](/README-en.md)
 
-版本：2.6.3
+版本：2.6.4
 
 Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本是2.6.3。
 我将继续开发这一优秀的软件，并在Github上开放源代码。
