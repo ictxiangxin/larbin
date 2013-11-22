@@ -108,6 +108,8 @@ struct global {
   static uint limitTime;
   /** timeout flag */
   static bool timeOut;
+  /** close flag */
+  static bool closeSignal;
   /** how many seconds should we wait beetween 2 calls at the same server 
    * 0 if you are only on a personnal server, >=30 otherwise
    */
@@ -161,9 +163,9 @@ struct global {
   /** array used for dealing with answers */
   static short *ansPoll;
   /** number of the biggest file descriptor */
-  static int maxFds;
+  static uint maxFds;
   /** make sure the new socket is not too big for ansPoll */
-  static void verifMax (int fd);
+  static void verifMax (uint fd);
 #ifdef MAXBANDWIDTH
   /** number of bits still allowed during this second */
   static long int remainBand;

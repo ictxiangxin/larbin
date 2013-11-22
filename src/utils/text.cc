@@ -168,7 +168,6 @@ char *nextToken(char **posParse, char c)
     // go to the beginning of next word
     bool cont = 1;
     while (cont)
-    {
         if (**posParse == c || **posParse == ' ' || **posParse == '\t' || **posParse == '\r' || **posParse == '\n')
             (*posParse)++;
         else if (**posParse == '#')
@@ -181,7 +180,6 @@ char *nextToken(char **posParse, char c)
         }
         else
             cont=0;
-    }
     // find the end of this word
     char *deb = *posParse;
     if (**posParse == '\"')

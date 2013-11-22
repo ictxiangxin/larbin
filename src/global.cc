@@ -61,6 +61,7 @@ bool global::externalLinks = true;
 bool global::ignoreRobots = false;
 uint global::limitTime = 0;
 bool global::timeOut = false;
+bool global::closeSignal = false;
 time_t global::waitDuration;
 char *global::userAgent;
 char *global::sender;
@@ -77,7 +78,7 @@ struct pollfd *global::pollfds;
 uint global::posPoll;
 uint global::sizePoll;
 short *global::ansPoll;
-int global::maxFds;
+uint global::maxFds;
 #ifdef MAXBANDWIDTH
 long int global::remainBand = MAXBANDWIDTH;
 #endif // MAXBANDWIDTH
@@ -86,121 +87,124 @@ int global::IPUrl = 0;
 /** Constructor : initialize almost everything
  * Everything is read from the config file (larbin.conf by default)
  */
-global::global (int argc, char *argv[]) {
-  char *configFile = (char*)"larbin.conf";
+global::global (int argc, char *argv[])
+{
+    char *configFile = (char*)"larbin.conf";
 #ifdef RELOAD
-  bool reload = true;
+    bool reload = true;
 #else
-  bool reload = false;
+    bool reload = false;
 #endif
-  now = time(NULL);
-  // verification of arguments
-  int pos = 1;
-  while (pos < argc) {
-	if (!strcmp(argv[pos], "-c") && argc > pos+1) {
-	  configFile = argv[pos+1];
-	  pos += 2;
-	} else if (!strcmp(argv[pos], "-scratch")) {
-	  reload = false;
-	  pos++;
-	} else {
-	  break;
-	}
-  }
-  if (pos != argc) {
-	std::cerr << "usage : " << argv[0];
-	std::cerr << " [-c configFile] [-scratch]\n";
-	exit(1);
-  }
+    now = time(NULL);
+    // verification of arguments
+    int pos = 1;
+    while (pos < argc)
+    {
+	    if (!strcmp(argv[pos], "-c") && argc > pos + 1)
+        {
+	        configFile = argv[pos + 1];
+	        pos += 2;
+	    }
+        else if (!strcmp(argv[pos], "-scratch"))
+        {
+	        reload = false;
+	        pos++;
+	    }
+        else
+	        break;
+    }
+    if (pos != argc)
+    {
+	    std::cerr << "usage : " << argv[0];
+	    std::cerr << " [-c configFile] [-scratch]\n";
+	    exit(1);
+    }
 
-  // Standard values
-  waitDuration = 60;
-  depthInSite = 5;
-  userAgent = (char*)"larbin";
-  sender = (char*)"larbin@unspecified.mail";
-  nb_conn = 20;
-  dnsConn = 3;
-  httpPort = 0;
-  inputPort = 0;  // by default, no input available
-  proxyAddr = NULL;
-  domains = NULL;
-  // FIFOs
-  URLsDisk = new PersistentFifo(reload, (char*)fifoFile);
-  URLsDiskWait = new PersistentFifo(reload, (char*)fifoFileWait);
-  URLsPriority = new SyncFifo<url>;
-  URLsPriorityWait = new SyncFifo<url>;
-  inter = new Interval(ramUrls);
-  namedSiteList = new NamedSite[namedSiteListSize];
-  IPSiteList = new IPSite[IPSiteListSize];
-  okSites = new Fifo<IPSite>(2000);
-  dnsSites = new Fifo<NamedSite>(2000);
-  seen = new hashTable(!reload);
+    // Standard values
+    waitDuration = 60;
+    depthInSite = 5;
+    userAgent = (char*)"larbin";
+    sender = (char*)"larbin@unspecified.mail";
+    nb_conn = 20;
+    dnsConn = 3;
+    httpPort = 0;
+    inputPort = 0;  // by default, no input available
+    proxyAddr = NULL;
+    domains = NULL;
+    // FIFOs
+    URLsDisk = new PersistentFifo(reload, (char*)fifoFile);
+    URLsDiskWait = new PersistentFifo(reload, (char*)fifoFileWait);
+    URLsPriority = new SyncFifo<url>;
+    URLsPriorityWait = new SyncFifo<url>;
+    inter = new Interval(ramUrls);
+    namedSiteList = new NamedSite[namedSiteListSize];
+    IPSiteList = new IPSite[IPSiteListSize];
+    okSites = new Fifo<IPSite>(2000);
+    dnsSites = new Fifo<NamedSite>(2000);
+    seen = new hashTable(!reload);
 #ifdef NO_DUP
-  hDuplicate = new hashDup(dupSize, dupFile, !reload);
+    hDuplicate = new hashDup(dupSize, dupFile, !reload);
 #endif // NO_DUP
-  // Read the configuration file
-  crash("Read the configuration file");
-  parseFile(configFile);
-  // Initialize everything
-  crash("Create global values");
-  // Headers
-  LarbinString strtmp;
-  strtmp.addString((char*)"\r\nUser-Agent: ");
-  strtmp.addString(userAgent);
-  strtmp.addString((char*)" ");
-  strtmp.addString(sender);
+    // Read the configuration file
+    crash("Read the configuration file");
+    parseFile(configFile);
+    // Initialize everything
+    crash("Create global values");
+    // Headers
+    LarbinString strtmp;
+    strtmp.addString((char*)"\r\nUser-Agent: ");
+    strtmp.addString(userAgent);
+    strtmp.addString((char*)" ");
+    strtmp.addString(sender);
 #ifdef SPECIFICSEARCH
-  strtmp.addString((char*)"\r\nAccept: text/html");
-  int i=0;
-  while (contentTypes[i] != NULL) {
-    strtmp.addString((char*)", ");
-    strtmp.addString(contentTypes[i]);
-    i++;
-  }
+    strtmp.addString((char*)"\r\nAccept: text/html");
+    for (uint i = 0; contentTypes[i] != NULL; i++)
+    {
+        strtmp.addString((char*)", ");
+        strtmp.addString(contentTypes[i]);
+    }
 #elif !defined(IMAGES) && !defined(ANYTYPE)
-  strtmp.addString((char*)"\r\nAccept: text/html");
+    strtmp.addString((char*)"\r\nAccept: text/html");
 #endif // SPECIFICSEARCH
-  strtmp.addString((char*)"\r\n\r\n");
-  headers = strtmp.giveString();
-  // Headers robots.txt
-  strtmp.recycle();
-  strtmp.addString((char*)"\r\nUser-Agent: ");
-  strtmp.addString(userAgent);
-  strtmp.addString((char*)" (");
-  strtmp.addString(sender);
-  strtmp.addString((char*)")\r\n\r\n");
-  headersRobots = strtmp.giveString();
+    strtmp.addString((char*)"\r\n\r\n");
+    headers = strtmp.giveString();
+    // Headers robots.txt
+    strtmp.recycle();
+    strtmp.addString((char*)"\r\nUser-Agent: ");
+    strtmp.addString(userAgent);
+    strtmp.addString((char*)" (");
+    strtmp.addString(sender);
+    strtmp.addString((char*)")\r\n\r\n");
+    headersRobots = strtmp.giveString();
 #ifdef THREAD_OUTPUT
-  userConns = new ConstantSizedFifo<Connexion>(nb_conn);
+    userConns = new ConstantSizedFifo<Connexion>(nb_conn);
 #endif
-  freeConns = new ConstantSizedFifo<Connexion>(nb_conn);
-  connexions = new Connexion [nb_conn];
-  for (uint i=0; i<nb_conn; i++) {
-	freeConns->put(connexions+i);
-  }
-  // init poll structures
-  sizePoll = nb_conn + maxInput;
-  pollfds = new struct pollfd[sizePoll];
-  posPoll = 0;
-  maxFds = sizePoll;
-  ansPoll = new short[maxFds];
-  // init non blocking dns calls
-  adns_initflags flags =
+    freeConns = new ConstantSizedFifo<Connexion>(nb_conn);
+    connexions = new Connexion [nb_conn];
+    for (uint i = 0; i < nb_conn; i++)
+	    freeConns->put(connexions + i);
+    // init poll structures
+    sizePoll = nb_conn + maxInput;
+    pollfds = new struct pollfd[sizePoll];
+    posPoll = 0;
+    maxFds = sizePoll;
+    ansPoll = new short[maxFds];
+    // init non blocking dns calls
+    adns_initflags flags =
 	adns_initflags (adns_if_nosigpipe | adns_if_noerrprint);
-  adns_init(&ads, flags, NULL);
-  // call init functions of all modules
-  initSpecific();
-  initInput();
-  initOutput();
-  initSite();
-  // let's ignore SIGPIPE
-  static struct sigaction sn, so;
-  sigemptyset(&sn.sa_mask);
-  sn.sa_flags = SA_RESTART;
-  sn.sa_handler = SIG_IGN;
-  if (sigaction(SIGPIPE, &sn, &so)) {
-    std::cerr << "Unable to disable SIGPIPE : " << strerror(errno) << std::endl;
-  }
+    adns_init(&ads, flags, NULL);
+    // call init functions of all modules
+    initSpecific();
+    initInput();
+    initOutput();
+    initSite();
+    // let's ignore SIGPIPE
+    static struct sigaction sn, so;
+    sigemptyset(&sn.sa_mask);
+    sn.sa_flags = SA_RESTART;
+    sn.sa_handler = SIG_IGN;
+    if (sigaction(SIGPIPE, &sn, &so))
+        std::cerr << "Unable to disable SIGPIPE : " << strerror(errno) << std::endl;
 }
 
 /** If time out, this function will be invoked.
@@ -210,149 +214,185 @@ global::~global ()
 }
 
 /** parse configuration file */
-void global::parseFile (char *file) {
-  int fds = open(file, O_RDONLY);
-  if (fds < 0) {
-	std::cerr << "Cannot open config file (" << file << ") : "
-         << strerror(errno) << std::endl;
-	exit(1);
-  }
-  char *tmp = readfile(fds);
-  close(fds);
-  // suppress commentary
-  bool eff = false;
-  for (int i=0; tmp[i] != 0; i++) {
-	switch (tmp[i]) {
-	case '\n': eff = false; break;
-	case '#': eff = true; // no break !!!
-	default: if (eff) tmp[i] = ' ';
-	}
-  }
-  char *posParse = tmp;
-  char *tok = nextToken(&posParse);
-  while (tok != NULL) {
-	if (!strcasecmp(tok, "UserAgent")) {
-	  userAgent = newString(nextToken(&posParse));
-	} else if (!strcasecmp(tok, "From")) {
-	  sender = newString(nextToken(&posParse));
-	} else if (!strcasecmp(tok, "startUrl")) {
-	  tok = nextToken(&posParse);
-      url *u = new url(tok, global::depthInSite, (url *) NULL);
-      if (u->isValid()) {
-        check(u);
-      } else {
-        std::cerr << "The start url " << tok << " is invalid\n";
-        exit(1);
-      }
-	} else if (!strcasecmp(tok, "waitduration")) {
-	  tok = nextToken(&posParse);
-	  waitDuration = atoi(tok);
-	} else if (!strcasecmp(tok, "proxy")) {
-	  // host name and dns call
-	  tok = nextToken(&posParse);
-	  struct hostent* hp;
-	  proxyAddr = new sockaddr_in;
-	  memset((char *) proxyAddr, 0, sizeof (struct sockaddr_in));
-	  if ((hp = gethostbyname(tok)) == NULL) {
-		endhostent();
-		std::cerr << "Unable to find proxy ip address (" << tok << ")\n";
-		exit(1);
-	  } else {
-		proxyAddr->sin_family = hp->h_addrtype;
-		memcpy ((char*) &proxyAddr->sin_addr, hp->h_addr, hp->h_length);
-	  }
-	  endhostent();
-	  // port number
-	  tok = nextToken(&posParse);
-	  proxyAddr->sin_port = htons(atoi(tok));
-	} else if (!strcasecmp(tok, "pagesConnexions")) {
-	  tok = nextToken(&posParse);
-	  nb_conn = atoi(tok);
-	} else if (!strcasecmp(tok, "dnsConnexions")) {
-	  tok = nextToken(&posParse);
-	  dnsConn = atoi(tok);
-	} else if (!strcasecmp(tok, "httpPort")) {
-	  tok = nextToken(&posParse);
-	  httpPort = atoi(tok);
-	} else if (!strcasecmp(tok, "inputPort")) {
-	  tok = nextToken(&posParse);
-	  inputPort = atoi(tok);
-	} else if (!strcasecmp(tok, "depthInSite")) {
-	  tok = nextToken(&posParse);
-	  depthInSite = atoi(tok);
-	} else if (!strcasecmp(tok, "limitToDomain")) {
-	  manageDomain(&posParse);
-	} else if (!strcasecmp(tok, "forbiddenExtensions")) {
-	  manageExt(&posParse);
-	} else if (!strcasecmp(tok, "noExternalLinks")) {
-	  externalLinks = false;
-    } else if (!strcasecmp(tok, "ignoreRobots")) {
-	  ignoreRobots = true;
-    } else if (!strcasecmp(tok, "limitTime")) {
-	  tok = nextToken(&posParse);
-	  limitTime = atoi(tok) * 60;
-	} else {
-	  std::cerr << "bad configuration file : " << tok << "\n";
-	  exit(1);
-	}
-	tok = nextToken(&posParse);
-  }
-  delete [] tmp;
+void global::parseFile (char *file)
+{
+    printf("Configure: %s\n", file);
+    int fds = open(file, O_RDONLY);
+    if (fds < 0)
+    {
+	    std::cerr << "Cannot open config file (" << file << ") : " << strerror(errno) << std::endl;
+	    exit(1);
+    }
+    char *tmp = readfile(fds);
+    close(fds);
+    // suppress commentary
+    bool eff = false;
+    for (int i=0; tmp[i] != 0; i++)
+	    switch (tmp[i])
+        {
+	        case '\n':
+                eff = false;
+                break;
+	        case '#':
+                eff = true;
+                // no break !!!
+	        default:
+                if (eff)
+                    tmp[i] = ' ';
+	    }
+    char *posParse = tmp;
+    char *tok = nextToken(&posParse);
+    while (tok != NULL)
+    {
+	    if (!strcasecmp(tok, "UserAgent"))
+	        userAgent = newString(nextToken(&posParse));
+        else if (!strcasecmp(tok, "From"))
+	        sender = newString(nextToken(&posParse));
+        else if (!strcasecmp(tok, "startUrl"))
+        {
+	        tok = nextToken(&posParse);
+            url *u = new url(tok, global::depthInSite, (url *) NULL);
+            if (u->isValid())
+            {
+                check(u);
+            }
+            else
+            {
+                std::cerr << "The start url " << tok << " is invalid\n";
+                exit(1);
+            }
+	    }
+        else if (!strcasecmp(tok, "waitduration"))
+        {
+	        tok = nextToken(&posParse);
+	        waitDuration = atoi(tok);
+	    }
+        else if (!strcasecmp(tok, "proxy"))
+        {
+	        // host name and dns call
+	        tok = nextToken(&posParse);
+	        struct hostent* hp;
+	        proxyAddr = new sockaddr_in;
+	        memset((char *) proxyAddr, 0, sizeof (struct sockaddr_in));
+	        if ((hp = gethostbyname(tok)) == NULL)
+            {
+		        endhostent();
+		        std::cerr << "Unable to find proxy ip address (" << tok << ")\n";
+		        exit(1);
+	        }
+            else
+            {
+		        proxyAddr->sin_family = hp->h_addrtype;
+		        memcpy ((char*) &proxyAddr->sin_addr, hp->h_addr, hp->h_length);
+	        }
+	        endhostent();
+	        // port number
+	        tok = nextToken(&posParse);
+	        proxyAddr->sin_port = htons(atoi(tok));
+	    }
+        else if (!strcasecmp(tok, "pagesConnexions"))
+        {
+	        tok = nextToken(&posParse);
+	        nb_conn = atoi(tok);
+	    }
+        else if (!strcasecmp(tok, "dnsConnexions"))
+        {
+	        tok = nextToken(&posParse);
+	        dnsConn = atoi(tok);
+	    }
+        else if (!strcasecmp(tok, "httpPort"))
+        {
+	        tok = nextToken(&posParse);
+	        httpPort = atoi(tok);
+	    }
+        else if (!strcasecmp(tok, "inputPort"))
+        {
+	        tok = nextToken(&posParse);
+	        inputPort = atoi(tok);
+	    }
+        else if (!strcasecmp(tok, "depthInSite"))
+        {
+	        tok = nextToken(&posParse);
+	        depthInSite = atoi(tok);
+	    }
+        else if (!strcasecmp(tok, "limitToDomain"))
+	        manageDomain(&posParse);
+        else if (!strcasecmp(tok, "forbiddenExtensions"))
+	         manageExt(&posParse);
+        else if (!strcasecmp(tok, "noExternalLinks"))
+	        externalLinks = false;
+        else if (!strcasecmp(tok, "ignoreRobots"))
+	        ignoreRobots = true;
+        else if (!strcasecmp(tok, "limitTime"))
+        {
+	        tok = nextToken(&posParse);
+	        limitTime = atoi(tok) * 60;
+	    }
+        else
+        {
+	        std::cerr << "bad configuration file : " << tok << "\n";
+	        exit(1);
+	    }
+	    tok = nextToken(&posParse);
+    }
+    delete [] tmp;
 }
 
 /** read the domain limit */
-void global::manageDomain (char **posParse) {
-  char *tok = nextToken(posParse);
-  if (domains == NULL) {
-	domains = new Vector<char>;
-  }
-  while (tok != NULL && strcasecmp(tok, "end")) {
-	domains->addElement(newString(tok));
-	tok = nextToken(posParse);
-  }
-  if (tok == NULL) {
-	std::cerr << "Bad configuration file : no end to limitToDomain\n";
-	exit(1);
-  }
+void global::manageDomain (char **posParse)
+{
+    char *tok = nextToken(posParse);
+    if (domains == NULL)
+	    domains = new Vector<char>;
+    while (tok != NULL && strcasecmp(tok, "end"))
+    {
+	    domains->addElement(newString(tok));
+	    tok = nextToken(posParse);
+    }
+    if (tok == NULL)
+    {
+	    std::cerr << "Bad configuration file : no end to limitToDomain\n";
+	    exit(1);
+    }
 }
 
 /** read the forbidden extensions */
-void global::manageExt (char **posParse) {
-  char *tok = nextToken(posParse);
-  while (tok != NULL && strcasecmp(tok, "end")) {
-    int l = strlen(tok);
-    int i;
-    for (i=0; i<l; i++) {
-      tok[i] = tolower(tok[i]);
+void global::manageExt (char **posParse)
+{
+    char *tok = nextToken(posParse);
+    while (tok != NULL && strcasecmp(tok, "end"))
+    {
+        uint l = strlen(tok);
+        for (uint i = 0; i < l; i++)
+            tok[i] = tolower(tok[i]);
+        if (!matchPrivExt(tok))
+            forbExt.addElement(newString(tok));
+	    tok = nextToken(posParse);
     }
-    if (!matchPrivExt(tok))
-      forbExt.addElement(newString(tok));
-	tok = nextToken(posParse);
-  }
-  if (tok == NULL) {
-	std::cerr << "Bad configuration file : no end to forbiddenExtensions\n";
-	exit(1);
-  }
+    if (tok == NULL)
+    {
+	    std::cerr << "Bad configuration file : no end to forbiddenExtensions\n";
+	    exit(1);
+    }
 }
 
 /** make sure the max fds has not been reached */
-void global::verifMax (int fd) {
-  if (fd >= maxFds) {
-    int n = 2 * maxFds;
-    if (fd >= n) {
-      n = fd + maxFds;
+void global::verifMax (uint fd)
+{
+    if (fd >= maxFds)
+    {
+        uint n = 2 * maxFds;
+        if (fd >= n)
+            n = fd + maxFds;
+        short *tmp = new short[n];
+        for (uint i = 0; i < maxFds; i++)
+            tmp[i] = ansPoll[i];
+        for (uint i = maxFds; i < n; i++)
+            tmp[i] = 0;
+        delete (ansPoll);
+        maxFds = n;
+        ansPoll = tmp;
     }
-    short *tmp = new short[n];
-    for (int i=0; i<maxFds; i++) {
-      tmp[i] = ansPoll[i];
-    }
-    for (int i=maxFds; i<n; i++) {
-      tmp[i] = 0;
-    }
-    delete (ansPoll);
-    maxFds = n;
-    ansPoll = tmp;
-  }
 }
 
 ///////////////////////////////////////////////////////////
@@ -361,20 +401,23 @@ void global::verifMax (int fd) {
 
 /** put Connection in a coherent state
  */
-Connexion::Connexion () {
-  state = emptyC;
-  parser = NULL;
+Connexion::Connexion ()
+{
+    state = emptyC;
+    parser = NULL;
 }
 
 /** Destructor : never used : we recycle !!!
  */
-Connexion::~Connexion () {
-  assert(false);
+Connexion::~Connexion ()
+{
+    assert(false);
 }
 
 /** Recycle a connexion
  */
-void Connexion::recycle () {
-  delete parser;
-  request.recycle();
+void Connexion::recycle ()
+{
+    delete parser;
+    request.recycle();
 }

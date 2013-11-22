@@ -80,10 +80,16 @@ void *startWebserver (void *none) {
 ////////////////////////////////////////////////////////////
 // write answer
 
-static void writeHeader(int fds) {
-  ecrire(fds, (char*)"HTTP/1.0 200 OK\r\nServer: Larbin\r\nContent-type: text/html\r\n\r\n<html>\n<head>\n<title>");
-  ecrire(fds, global::userAgent);
-  ecrire(fds, (char*)" real time statistic</title>\n</head>\n<body bgcolor=\"#FFFFFF\">\n<center><h1>Larbin is up and running !</h1></center>\n<pre>\n");
+static void writeHeader(int fds)
+{
+    ecrire(fds, (char*)"HTTP/1.0 200 OK\r\nServer: Larbin\r\nContent-type: text/html\r\n\r\n<html>\n<head>\n<title>");
+    ecrire(fds, global::userAgent);
+    ecrire(fds, (char*)" real time statistic</title>\n</head>\n<body bgcolor=\"#FFFFFF\">\n<center><h1>Larbin is");
+    if (global::timeOut)
+        ecrire(fds, " end ");
+    else
+        ecrire(fds, " up and running ");
+    ecrire(fds, (char*)"!</h1></center>\n<pre>\n");
 }
 
 static void writeFooter(int fds) {

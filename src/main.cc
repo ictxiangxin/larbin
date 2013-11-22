@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <iostream>
 
 #include "options.h"
 
@@ -71,7 +72,7 @@ static void printLimitTime(uint t)
         td = th /24;
         td %= 24;
     }
-    printf("Limit time: ");
+    printf("Limit Time: ");
     if(td != 0)
         printf("%d Days, ", td);
     if(th != 0)
@@ -83,10 +84,25 @@ static void printLimitTime(uint t)
 static uint count = 0;
 #endif // NDEBUG
 
+static void userEnd(int signo)
+{
+    printf("\nLarbin is closing...\n");
+    global::closeSignal = true;
+}
+
+static void welcome()
+{
+    printf("####################################\n");
+    printf("#        Larbin Web Crawler        #\n");
+    printf("#                           v2.6.3 #\n");
+    printf("####################################\n");
+}
+
 ///////////////////////////////////////////////////////////
 // If this thread terminates, the whole program exits
 int main (int argc, char *argv[])
 {
+    welcome();
     // create all the structures
     global glob(argc, argv);
 #ifdef PROF
@@ -98,7 +114,7 @@ int main (int argc, char *argv[])
     if (global::httpPort != 0)
         startThread(startWebserver, NULL);
 #endif // NOWEBSERVER
-    printf("%s is starting its search.\n", global::userAgent);
+    printf("User Agent: %s\n", global::userAgent);
     if (global::limitTime != 0)
     {
         startThread(pLimitTime, NULL);
@@ -107,7 +123,13 @@ int main (int argc, char *argv[])
     // Start the search
     time_t old = global::now;
 
-    while (!global::timeOut)
+    printf("Starting...\n\n");
+    if(signal(SIGINT, userEnd) == SIG_ERR)
+    {
+        std::cerr << "Can not register" << std::endl;
+        exit(0);
+    }
+    while (!global::timeOut && !global::closeSignal)
     {
         // update time
         global::now = time(NULL);
@@ -120,9 +142,9 @@ int main (int argc, char *argv[])
         stateMain(-count);
         waitBandwidth(&old);
         stateMain(1);
-        for (int i=0; i<global::maxFds; i++)
+        for (uint i = 0; i < global::maxFds; i++)
             global::ansPoll[i] = 0;
-        for (uint i=0; i<global::posPoll; i++)
+        for (uint i = 0; i < global::posPoll; i++)
             global::ansPoll[global::pollfds[i].fd] = global::pollfds[i].revents;
         global::posPoll = 0;
         stateMain(2);
@@ -139,6 +161,14 @@ int main (int argc, char *argv[])
         stateMain(count++);
         poll(global::pollfds, global::posPoll, 10);
         stateMain(7);
+
+    }
+
+    if (global::httpPort != 0 && !global::closeSignal)
+    {
+        printf("[End]\n");
+        while(true)
+            sleep(60);
     }
 }
 
