@@ -60,8 +60,10 @@ int8_t global::depthInSite;
 bool global::externalLinks = true;
 bool global::ignoreRobots = false;
 uint global::limitTime = 0;
-bool global::timeOut = false;
-bool global::closeSignal = false;
+uint global::closeLevel = 0;
+bool global::searchOn = false;
+bool global::webServerOn = false;
+bool global::highLevelWebServer = false;
 time_t global::waitDuration;
 char *global::userAgent;
 char *global::sender;
@@ -323,6 +325,8 @@ void global::parseFile (char *file)
 	        externalLinks = false;
         else if (!strcasecmp(tok, "ignoreRobots"))
 	        ignoreRobots = true;
+        else if (!strcasecmp(tok, "highLevelWebServer"))
+            highLevelWebServer = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
 	        tok = nextToken(&posParse);

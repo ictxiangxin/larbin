@@ -25,11 +25,15 @@
 #include "options.h"
 
 #include "global.h"
+
 #include "fetch/sequencer.h"
+
 #include "utils/text.h"
 #include "utils/connexion.h"
 #include "utils/debug.h"
 #include "utils/histogram.h"
+#include "utils/level.h"
+
 #include "interf/useroutput.h"
 
 static char *readRequest (int fds);
@@ -41,39 +45,44 @@ static char *startDate;
 // a buffer used for various things (read request, write urls...)
 static char buf[BUF_SIZE];
 
-void *startWebserver (void *none) {
-  // bind the socket
-  int fds;
-  int nAllowReuse = 1;
-  struct sockaddr_in addr;
-  startTime = global::now;
-  startDate = newString(ctime(&startTime));
-  memset(&addr, 0, sizeof(addr));
-  addr.sin_addr.s_addr = INADDR_ANY;
-  addr.sin_family = AF_INET;
-  addr.sin_port = htons(global::httpPort);
-  if ((fds = socket(AF_INET, SOCK_STREAM, 0)) == -1
-	  || setsockopt(fds, SOL_SOCKET, SO_REUSEADDR, (char*)&nAllowReuse, sizeof(nAllowReuse))
-	  || bind(fds, (struct sockaddr *) &addr, sizeof(addr)) != 0
-	  || listen(fds, 4) != 0) {
-	std::cerr << "Unable to get the socket for the webserver (" << global::httpPort
-         << ") : " << strerror(errno) << std::endl;
-	exit(1);
-  }
-  // answer requests
-  for (;;) {
-	struct sockaddr_in addrc;
-	int fdc;
-	uint len = sizeof(addr);
-	fdc = accept(fds, (struct sockaddr *) &addrc, &len);
-	if (fdc == -1) {
-	  std::cerr << "Trouble with web server...\n";
-	} else {
-      manageAns(fdc, readRequest(fdc));
-      close(fdc);
-	}
-  }
-  return NULL;
+void *startWebserver (void *none)
+{
+    // bind the socket
+    int fds;
+    int nAllowReuse = 1;
+    struct sockaddr_in addr;
+    startTime = global::now;
+    startDate = newString(ctime(&startTime));
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(global::httpPort);
+    if ((fds = socket(AF_INET, SOCK_STREAM, 0)) == -1
+	    || setsockopt(fds, SOL_SOCKET, SO_REUSEADDR, (char*)&nAllowReuse, sizeof(nAllowReuse))
+	    || bind(fds, (struct sockaddr *) &addr, sizeof(addr)) != 0
+	    || listen(fds, 4) != 0)
+    {
+	    std::cerr << "Unable to get the socket for the webserver (" << global::httpPort << ") : " << strerror(errno) << std::endl;
+	    webServerOff();
+        pthread_exit(NULL);
+    }
+    webServerOn();
+    // answer requests
+    while (true)
+    {
+	    struct sockaddr_in addrc;
+	    int fdc;
+	    uint len = sizeof(addr);
+	    fdc = accept(fds, (struct sockaddr *) &addrc, &len);
+	    if (fdc == -1)
+	        std::cerr << "Trouble with web server...\n";
+        else
+        {
+            manageAns(fdc, readRequest(fdc));
+            close(fdc);
+	    }
+    }
+    return NULL;
 }
 
 
@@ -85,7 +94,7 @@ static void writeHeader(int fds)
     ecrire(fds, (char*)"HTTP/1.0 200 OK\r\nServer: Larbin\r\nContent-type: text/html\r\n\r\n<html>\n<head>\n<title>");
     ecrire(fds, global::userAgent);
     ecrire(fds, (char*)" real time statistic</title>\n</head>\n<body bgcolor=\"#FFFFFF\">\n<center><h1>Larbin is");
-    if (global::timeOut)
+    if (global::searchOn)
         ecrire(fds, " end ");
     else
         ecrire(fds, " up and running ");

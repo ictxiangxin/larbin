@@ -26,6 +26,7 @@
 #include "utils/webserver.h"
 #include "utils/histogram.h"
 #include "utils/limitTime.h"
+#include "utils/level.h"
 
 static void cron ();
 
@@ -86,15 +87,15 @@ static uint count = 0;
 
 static void userEnd(int signo)
 {
-    printf("\nLarbin is closing...\n");
-    global::closeSignal = true;
+    printf("\n");
+    closeLevelUp();
 }
 
 static void welcome()
 {
     printf("####################################\n");
     printf("#        Larbin Web Crawler        #\n");
-    printf("#                           v2.6.3 #\n");
+    printf("#                           v2.6.4 #\n");
     printf("####################################\n");
 }
 
@@ -123,13 +124,14 @@ int main (int argc, char *argv[])
     // Start the search
     time_t old = global::now;
 
-    printf("Starting...\n\n");
+    printf("[Search] Starting...\n");
     if(signal(SIGINT, userEnd) == SIG_ERR)
     {
         std::cerr << "Can not register" << std::endl;
         exit(0);
     }
-    while (!global::timeOut && !global::closeSignal)
+    searchOn();
+    while (global::searchOn)
     {
         // update time
         global::now = time(NULL);
@@ -161,15 +163,11 @@ int main (int argc, char *argv[])
         stateMain(count++);
         poll(global::pollfds, global::posPoll, 10);
         stateMain(7);
-
     }
-
-    if (global::httpPort != 0 && !global::closeSignal)
-    {
-        printf("[End]\n");
-        while(true)
-            sleep(60);
-    }
+    printf("[Search] End.\n");
+    while(global::webServerOn)
+        sleep(1);
+    printf("*** Larbin Close ***\n");
 }
 
 // a lot of stats and profiling things

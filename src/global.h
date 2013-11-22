@@ -106,10 +106,14 @@ struct global {
   static bool ignoreRobots;
   /** Limit running time */
   static uint limitTime;
-  /** timeout flag */
-  static bool timeOut;
   /** close flag */
-  static bool closeSignal;
+  static uint closeLevel;
+  /** search is running */
+  static bool searchOn;
+  /** web server is running */
+  static bool webServerOn;
+  /** high level web server mode */
+  static bool highLevelWebServer;
   /** how many seconds should we wait beetween 2 calls at the same server 
    * 0 if you are only on a personnal server, >=30 otherwise
    */
