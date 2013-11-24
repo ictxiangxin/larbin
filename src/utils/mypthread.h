@@ -36,6 +36,6 @@
 #endif // THREAD_OUTPUT
 
 typedef void* (*StartFun) (void *);
-void startThread (StartFun run, void *arg);
+pthread_t startThread (StartFun run, void *arg);
 
 #endif // MYTHREAD_H

@@ -84,6 +84,10 @@ uint global::maxFds;
 #ifdef MAXBANDWIDTH
 long int global::remainBand = MAXBANDWIDTH;
 #endif // MAXBANDWIDTH
+pthread_t global::limitTimeThread = 0;
+#ifndef NOWEBSERVER
+pthread_t global::webServerThread = 0;
+#endif // NOWEBSERVER
 int global::IPUrl = 0;
 
 /** Constructor : initialize almost everything

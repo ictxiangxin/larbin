@@ -1,6 +1,5 @@
 #include <time.h>
 #include <pthread.h>
-#include <stdio.h>
 
 #include "global.h"
 #include "utils/level.h"

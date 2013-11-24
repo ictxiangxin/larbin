@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/poll.h>
+#include <pthread.h>
 
 #include <adns.h>
 
@@ -174,6 +175,10 @@ struct global {
   /** number of bits still allowed during this second */
   static long int remainBand;
 #endif // MAXBANDWIDTH
+  static pthread_t limitTimeThread;
+#ifndef NOWEBSERVER
+  static pthread_t webServerThread;
+#endif // NOWEBSERVER
 };
 
 /** set this fds for next poll */

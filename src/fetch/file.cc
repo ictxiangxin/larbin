@@ -662,12 +662,14 @@ void html::parseContent (int action)
         {
             case LINK:
                 // try to understand this new link
-                manageUrl(new url(area, here->getDepth()-1, base), false);
+                manageUrl(new url(area, here->getDepth() - 1, base), false);
                 break;
             case BASE:
             {
                 // This page has a BASE HREF tag
                 uint end = posParse - area - 1;
+                if(posParse == area)
+                    break;
                 while (end > 7 && area[end] != '/') // 7 because http://
                     end--;
                 if (end > 7) // this base looks good

@@ -10,7 +10,7 @@
 /* Launch a new thread
  * return 0 in case of success
  */
-void startThread (StartFun run, void *arg)
+pthread_t startThread (StartFun run, void *arg)
 {
     pthread_t t;
     pthread_attr_t attr;
@@ -24,4 +24,5 @@ void startThread (StartFun run, void *arg)
         std::cerr << "Unable to launch a thread\n";
         exit(1);
     }
+    return t;
 }

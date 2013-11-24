@@ -111,12 +111,12 @@ int main (int argc, char *argv[])
 #ifndef NOWEBSERVER
     // launch the webserver if needeed
     if (global::httpPort != 0)
-        startThread(startWebserver, NULL);
+        global::webServerThread = startThread(startWebserver, NULL);
 #endif // NOWEBSERVER
     searchOn();
     if (global::limitTime != 0)
     {
-        startThread(pLimitTime, NULL);
+        global::limitTimeThread = startThread(pLimitTime, NULL);
         printLimitTime(global::limitTime);
     }
 
