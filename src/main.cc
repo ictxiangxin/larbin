@@ -30,15 +30,6 @@
 
 static void cron ();
 
-///////////////////////////////////////////////////////////
-#ifdef PROF
-static bool stop = false;
-static void handler (int i)
-{
-    stop = true;
-}
-#endif // PROF
-
 // wait to limit bandwidth usage
 #ifdef MAXBANDWIDTH
 static void waitBandwidth (time_t *old)
@@ -106,21 +97,8 @@ int main (int argc, char *argv[])
     welcome();
     // create all the structures
     global glob(argc, argv);
-#ifdef PROF
-    signal (2, handler);
-#endif // PROF
 
-#ifndef NOWEBSERVER
-    // launch the webserver if needeed
-    if (global::httpPort != 0)
-        startThread(startWebserver, NULL);
-#endif // NOWEBSERVER
     printf("User Agent: %s\n", global::userAgent);
-    if (global::limitTime != 0)
-    {
-        startThread(pLimitTime, NULL);
-        printLimitTime(global::limitTime);
-    }
     // Start the search
     time_t old = global::now;
 
@@ -130,7 +108,18 @@ int main (int argc, char *argv[])
         std::cerr << "Can not register" << std::endl;
         exit(0);
     }
+#ifndef NOWEBSERVER
+    // launch the webserver if needeed
+    if (global::httpPort != 0)
+        startThread(startWebserver, NULL);
+#endif // NOWEBSERVER
     searchOn();
+    if (global::limitTime != 0)
+    {
+        startThread(pLimitTime, NULL);
+        printLimitTime(global::limitTime);
+    }
+
     while (global::searchOn)
     {
         // update time
@@ -173,11 +162,6 @@ int main (int argc, char *argv[])
 // a lot of stats and profiling things
 static void cron ()
 {
-    // shall we stop
-#ifdef PROF
-    if (stop)
-        exit(2);
-#endif // PROF
 #ifdef EXIT_AT_END
     if (global::URLsDisk->getLength() == 0 && global::URLsDiskWait->getLength() == 0 && debUrl == 0)
         exit(0);

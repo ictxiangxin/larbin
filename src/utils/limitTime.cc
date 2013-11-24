@@ -13,10 +13,12 @@ void *pLimitTime (void *none)
     {
         sleep(30);
         endTime = time(NULL);
+        if(!global::searchOn)
+            break;
         if((uint)(endTime - startTime) >= global::limitTime)
         {
-            printf("[Search] Time up.\n");
             closeLevelUp();
+            printf("[Search] Time up.\n");
             pthread_exit(NULL);
         }
     }
