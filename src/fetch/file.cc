@@ -633,57 +633,65 @@ void html::parseTag () {
 }
 
 /** read the content of an interesting tag */
-void html::parseContent (int action) {
-  posParse++;
-  while (*posParse==' ' || *posParse=='=') posParse++;
-  if (*posParse=='\"' || *posParse=='\'') posParse++;
-  area = posParse;
-  char *endItem = area + maxUrlSize;
-  if (endItem > buffer + pos) endItem = buffer + pos;
-  while (posParse < endItem && *posParse!='\"' && *posParse!='\''
-         && *posParse!='\n' && *posParse!=' ' && *posParse!='>'
-         && *posParse!='\r' && *posParse!='\t' && notCgiChar(*posParse)) {
-    if (*posParse == '\\') *posParse = '/';    // Bye Bye DOS !
+void html::parseContent (int action)
+{
     posParse++;
-  }
-  if (posParse == buffer + pos) {
-    // end of file => content may be truncated => forget it
-    return;
-  } else if (posParse < endItem && notCgiChar(*posParse)) {
-    // compute this url (not too long and not cgi)
-    char oldchar = *posParse;
-    *posParse = 0;
-    switch (action) {
-    case LINK:
-      // try to understand this new link
-      manageUrl(new url(area, here->getDepth()-1, base), false);
-      break;
-    case BASE:
-      // This page has a BASE HREF tag
-      {
-        uint end = posParse - area - 1;
-        if (posParse == area)
-            break;
-        while (end > 7 && area[end] != '/') end--; // 7 because http://
-        if (end > 7) { // this base looks good
-          end++;
-          char tmp = area[end];
-          area[end] = 0;
-          url *tmpbase = new url(area, 0, (url *) NULL);
-          area[end] = tmp;
-          delete base;
-          if (tmpbase->isValid()) {
-            base = tmpbase;
-          } else {
-            delete tmpbase;
-            base = NULL;
-          }
-        }
-      }
-      break;
-    default: assert(false);
+    while (*posParse==' ' || *posParse=='=')
+        posParse++;
+    if (*posParse=='\"' || *posParse=='\'')
+        posParse++;
+    area = posParse;
+    char *endItem = area + maxUrlSize;
+    if (endItem > buffer + pos)
+        endItem = buffer + pos;
+    while (posParse < endItem && *posParse!='\"' && *posParse!='\''
+           && *posParse!='\n' && *posParse!=' ' && *posParse!='>'
+           && *posParse!='\r' && *posParse!='\t' && notCgiChar(*posParse))
+    {
+        if (*posParse == '\\') *posParse = '/';    // Bye Bye DOS !
+        posParse++;
     }
-    *posParse = oldchar;
-  }
-  posParse++;
+    if (posParse == buffer + pos) // end of file => content may be truncated => forget it
+        return;
+    else if (posParse < endItem && notCgiChar(*posParse))
+    {
+        // compute this url (not too long and not cgi)
+        char oldchar = *posParse;
+        *posParse = 0;
+        switch (action)
+        {
+            case LINK:
+                // try to understand this new link
+                manageUrl(new url(area, here->getDepth()-1, base), false);
+                break;
+            case BASE:
+            {
+                // This page has a BASE HREF tag
+                uint end = posParse - area - 1;
+                while (end > 7 && area[end] != '/') // 7 because http://
+                    end--;
+                if (end > 7) // this base looks good
+                {
+                    end++;
+                    char tmp = area[end];
+                    area[end] = 0;
+                    url *tmpbase = new url(area, 0, (url *) NULL);
+                    area[end] = tmp;
+                    delete base;
+                    if (tmpbase->isValid())
+                        base = tmpbase;
+                    else
+                    {
+                        delete tmpbase;
+                        base = NULL;
+                    }
+                }
+                break;
+            }
+            default:
+                assert(false);
+        }
+        *posParse = oldchar;
+    }
+    posParse++;
 }

@@ -32,63 +32,69 @@ static void endOfFile (Connexion *conn);
 
 /** Check timeout
  */
-void checkTimeout () {
-  for (uint i=0; i<global::nb_conn; i++) {
-	Connexion *conn = global::connexions+i;
-    if (conn->state != emptyC) {
-      if (conn->timeout > 0) {
-        if (conn->timeout > timeoutPage) {
-          conn->timeout = timeoutPage;
-        } else {
-          conn->timeout--;
+void checkTimeout ()
+{
+    for (uint i=0; i<global::nb_conn; i++)
+    {
+	    Connexion *conn = global::connexions+i;
+        if (conn->state != emptyC)
+        {
+            if (conn->timeout > 0)
+            {
+                if (conn->timeout > timeoutPage)
+                    conn->timeout = timeoutPage;
+                else
+                    conn->timeout--;
+            }
+            else
+            {
+                // This server doesn't answer (time out)
+                conn->err = timeout;
+                endOfFile(conn);
+            }
         }
-      } else {
-        // This server doesn't answer (time out)
-        conn->err = timeout;
-        endOfFile(conn);
-      }
     }
-  }
 }
 
 /** read all data available
  * fill fd_set for next select
  * give back max fds
  */
-void checkAll () {
-  // read and write what can be
-  for (uint i=0; i<global::nb_conn; i++) {
-    Connexion *conn = global::connexions+i;
-    switch (conn->state) {
-    case connectingC:
-    case writeC:
-      if (global::ansPoll[conn->socket]) {
-        // trying to finish the connection
-        pipeWrite(conn);
-      }
-      break;
-    case openC:
-      if (global::ansPoll[conn->socket]) {
-        // The socket is open, let's try to read it
-        pipeRead(conn);
-      }
-      break;
+void checkAll ()
+{
+    // read and write what can be
+    for (uint i = 0; i < global::nb_conn; i++)
+    {
+        Connexion *conn = global::connexions+i;
+        switch (conn->state)
+        {
+            case connectingC :
+            case writeC :
+                if (global::ansPoll[conn->socket])
+                    pipeWrite(conn); // trying to finish the connection
+                break;
+            case openC:
+                if (global::ansPoll[conn->socket])
+                    pipeRead(conn); // The socket is open, let's try to read it
+                break;
+        }
     }
-  }
 
-  // update fd_set for the next select
-  for (uint i=0; i<global::nb_conn; i++) {
-    int n = (global::connexions+i)->socket;
-    switch ((global::connexions+i)->state) {
-    case connectingC:
-    case writeC:
-      global::setPoll(n, POLLOUT);
-      break;
-    case openC:
-      global::setPoll(n, POLLIN);
-      break;
+    // update fd_set for the next select
+    for (uint i = 0; i < global::nb_conn; i++)
+    {
+        int n = (global::connexions+i)->socket;
+        switch ((global::connexions+i)->state)
+        {
+            case connectingC:
+            case writeC:
+                global::setPoll(n, POLLOUT);
+                break;
+            case openC:
+                global::setPoll(n, POLLIN);
+            break;
+        }
     }
-  }
 }
 
 /** The socket is finally open !

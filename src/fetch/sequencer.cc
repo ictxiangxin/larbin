@@ -25,7 +25,8 @@ void sequencer ()
     if (space == 0)
         space = global::inter->putAll();
     int still = space;
-    if (still > maxPerCall) still = maxPerCall;
+    if (still > maxPerCall)
+        still = maxPerCall;
     while (still)
     {
         if (canGetUrl(&testPriority))

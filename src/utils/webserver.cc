@@ -94,7 +94,7 @@ static void writeHeader(int fds)
     ecrire(fds, (char*)"HTTP/1.0 200 OK\r\nServer: Larbin\r\nContent-type: text/html\r\n\r\n<html>\n<head>\n<title>");
     ecrire(fds, global::userAgent);
     ecrire(fds, (char*)" real time statistic</title>\n</head>\n<body bgcolor=\"#FFFFFF\">\n<center><h1>Larbin is");
-    if (global::searchOn)
+    if (!global::searchOn)
         ecrire(fds, " end ");
     else
         ecrire(fds, " up and running ");
