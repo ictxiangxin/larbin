@@ -64,49 +64,47 @@ static void printLimitTime(uint t)
         td = th /24;
         td %= 24;
     }
-    printf("Limit Time: ");
+    std::cout << "Limit Time: ";
     if(td != 0)
-        printf("%d Days, ", td);
+        std::cout << td << " Days, ";
     if(th != 0)
-        printf("%d Hours, ", th);
-    printf("%d Minutes.\n", tm);
+        std::cout << th << " Hours, ";
+    std::cout << tm << " Minutes." << std::endl;
 }
 
 #ifndef NDEBUG
 static uint count = 0;
 #endif // NDEBUG
 
-static void userEnd(int signo)
+static void getSIGINT(int signo)
 {
-    printf("\n");
+    std::cout << std::endl;
     closeLevelUp();
 }
 
 static void welcome()
 {
-    printf("####################################\n");
-    printf("#        Larbin Web Crawler        #\n");
-    printf("#                           v2.6.4 #\n");
-    printf("####################################\n");
+    std::cout << "####################################" << std::endl;
+    std::cout << "#        Larbin Web Crawler        #" << std::endl;
+    std::cout << "#                           v2.6.4 #" << std::endl;
+    std::cout << "####################################" << std::endl;
 }
 
-///////////////////////////////////////////////////////////
-// If this thread terminates, the whole program exits
 int main (int argc, char *argv[])
 {
     welcome();
     // create all the structures
     global glob(argc, argv);
 
-    printf("User Agent: %s\n", global::userAgent);
+    std::cout << "User Agent: " << global::userAgent << std::endl;
     // Start the search
     time_t old = global::now;
 
-    printf("[Search] Starting...\n");
-    if(signal(SIGINT, userEnd) == SIG_ERR)
+    std::cerr << "[Search] Starting..." << std::endl;
+    if(signal(SIGINT, getSIGINT) == SIG_ERR)
     {
         std::cerr << "Can not register" << std::endl;
-        exit(0);
+        exit(-1);
     }
 #ifndef NOWEBSERVER
     // launch the webserver if needeed
@@ -153,10 +151,10 @@ int main (int argc, char *argv[])
         poll(global::pollfds, global::posPoll, 10);
         stateMain(7);
     }
-    printf("[Search] End.\n");
+    std::cout << "[Search] End." << std::endl;
     while(global::webServerOn)
         sleep(1);
-    printf("*** Larbin Close ***\n");
+    std::cout << "*** Larbin Close ***" << std::endl;
 }
 
 // a lot of stats and profiling things

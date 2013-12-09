@@ -1,3 +1,4 @@
+#include <iostream>
 #include <time.h>
 #include <pthread.h>
 
@@ -16,8 +17,8 @@ void *pLimitTime (void *none)
             break;
         if((uint)(endTime - startTime) >= global::limitTime)
         {
+            std::cout << "[Search] Time up." << std::endl;
             closeLevelUp();
-            printf("[Search] Time up.\n");
             pthread_exit(NULL);
         }
     }

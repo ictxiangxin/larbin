@@ -1,7 +1,3 @@
-// Larbin
-// Sebastien Ailleret
-// 12-01-00 -> 10-12-01
-
 #ifndef TYPES_H
 #define TYPES_H
 
@@ -17,7 +13,7 @@
 #define IPSiteListSize 10000
 
 // Max number of urls in ram
-#define ramUrls 100000
+#define ramUrls   100000
 #define maxIPUrls 80000  // this should allow less dns call
 
 // Max number of urls per site in Url
@@ -31,7 +27,7 @@
 #define dnsValidTime (2 * 24 * 3600)
 
 // Maximum size of a page
-#define maxPageSize    100000
+#define maxPageSize     100000
 #define nearlyFullPage  90000
 
 // Maximum size of a robots.txt that is read
@@ -42,7 +38,7 @@
 #define maxRobotsItem 100
 
 // file name used for storing urls on disk
-#define fifoFile "fifo"
+#define fifoFile     "fifo"
 #define fifoFileWait "fifowait"
 
 // number of urls per file on disk
@@ -50,11 +46,11 @@
 #define urlByFile ramUrls
 
 // Size of the buffer used to read sockets
-#define BUF_SIZE 16384
+#define BUF_SIZE    16384
 #define STRING_SIZE 1024
 
 // Max size for a url
-#define maxUrlSize 512
+#define maxUrlSize  512
 #define maxSiteSize 40    // max size for the name of a site
 
 // max size for cookies
@@ -68,34 +64,34 @@
 
 // if we save files, how many files per directory and where
 #define filesPerDir 2000
-#define saveDir "save/"
-#define indexFile "index.html"    // for MIRROR_SAVE
-#define nbDir 1000                // for MIRROR_SAVE
+#define saveDir     "save/"
+#define indexFile   "index.html"    // for MIRROR_SAVE
+#define nbDir       1000            // for MIRROR_SAVE
 
 // options for SPECIFICSEARCH (except with DEFAULT_SPECIFIC)
-#define specDir "specific/"
+#define specDir     "specific/"
 #define maxSpecSize 5000000
 
 // Various reasons of error when getting a page
 #define nbAnswers 16
 enum FetchError
 {
-  success,
-  noDNS,
-  noConnection,
-  forbiddenRobots,
-  timeout,
-  badType,
-  tooBig,
-  err30X,
-  err40X,
-  earlyStop,
-  duplicate,
-  fastRobots,
-  fastNoConn,
-  fastNoDns,
-  tooDeep,
-  urlDup
+    success,
+    noDNS,
+    noConnection,
+    forbiddenRobots,
+    timeout,
+    badType,
+    tooBig,
+    err30X,
+    err40X,
+    earlyStop,
+    duplicate,
+    fastRobots,
+    fastNoConn,
+    fastNoDns,
+    tooDeep,
+    urlDup
 };
 
 // standard types

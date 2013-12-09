@@ -1,7 +1,3 @@
-// Larbin
-// Sebastien Ailleret
-// 18-11-99 -> 10-12-01
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -25,28 +21,24 @@ char lowerCase(char a)
 
 /* test if b starts with a
  */
-bool startWith (char *a, char *b)
+bool startWith (const char *a, const char *b)
 {
-    int i = 0;
-    while (a[i] != 0)
-    {
+    for (uint i = 0; a[i] != 0; i++)
         if (a[i] != b[i])
             return false;
-        i++;
-    }
     return true;
 }
 
 /* test if b is forbidden by pattern a */
-bool robotsMatch (char *a, char *b)
+bool robotsMatch (const char *a, const char *b)
 {
-    int i = 0;
-    int j = 0;
+    uint i = 0;
+    uint j = 0;
     while (a[i] != 0)
         if (a[i] == '*')
         {
             i++;
-            char *tmp = strchr(b + j, a[i]);
+            const char *tmp = strchr(b + j, a[i]);
             if (tmp == NULL)
                 return false;
             j = tmp - b;
@@ -63,38 +55,34 @@ bool robotsMatch (char *a, char *b)
 
 /* test if b starts with a ignoring case
  */
-bool startWithIgnoreCase (char *amin, char *b)
+bool startWithIgnoreCase (const char *amin, const char *b)
 {
-    int i=0;
-    while (amin[i] != 0)
-    {
-        if (amin[i] != (b[i]|32))
+    for (uint i = 0; amin[i] != 0; i++)
+        if (amin[i] != (b[i] | 0x20))
             return false;
-        i++;
-    }
     return true;
 }
 
 /* test if b end with a
  */
-bool endWith (char *a, char *b)
+bool endWith (const char *a, const char *b)
 {
-    int la = strlen(a);
-    int lb = strlen(b);
+    uint la = strlen(a);
+    uint lb = strlen(b);
     return (la <= lb) && !strcmp(a, b + lb - la);
 }
 
 /* test if b end with a ignoring case
  * a can use min char, '.' (a[i] = a[i] | 32)
  */
-bool endWithIgnoreCase (char *amin, char *b, int lb)
+bool endWithIgnoreCase (const char *amin, const char *b, int lb)
 {
-    int la = strlen(amin);
+    uint la = strlen(amin);
     if (la <= lb)
     {
-        int diff = lb - la;
-        for (int i = 0; i < la; i++)
-            if (amin[i] != (b[diff + i] | 32))
+        uint diff = lb - la;
+        for (uint i = 0; i < la; i++)
+            if (amin[i] != (b[diff + i] | 0x20))
                 return false;
         return true;
     }
@@ -102,7 +90,7 @@ bool endWithIgnoreCase (char *amin, char *b, int lb)
 }
 
 /* test if b contains a */
-bool caseContain (char *a, char *b)
+bool caseContain (const char *a, const char *b)
 {
     size_t la = strlen(a);
     for (int i = strlen(b) - la; i >= 0; i--)
@@ -113,7 +101,7 @@ bool caseContain (char *a, char *b)
 
 /* create a copy of a string
  */
-char *newString (char *arg)
+char *newString (const char *arg)
 {
     char *res = new char[strlen(arg) + 1];
     strcpy(res, arg);
@@ -207,17 +195,16 @@ char *nextToken(char **posParse, char c)
 #ifdef SPECIFICSEARCH
 
 /* does this char * match privilegedExt */
-bool matchPrivExt (char *file)
+bool matchPrivExt (const char *file)
 {
-    int i = 0;
-    for (int len = strlen(file); privilegedExts[i] != NULL; i++)
+    for (int len = strlen(file), i = 0; privilegedExts[i] != NULL; i++)
         if (endWithIgnoreCase(privilegedExts[i], file, len))
             return true;
     return false;
 }
 
 /* does this char * match contentType */
-int matchContentType (char *ct)
+int matchContentType (const char *ct)
 {
     
     for (int i = 0; contentTypes[i] != NULL; i++)
@@ -228,12 +215,12 @@ int matchContentType (char *ct)
 
 #else // SPECIFICSEARCH is not defined
 
-bool matchPrivExt (char *file)
+bool matchPrivExt (const char *file)
 {
     return false;
 }
 
-int matchContentType (char *ct)
+int matchContentType (const char *ct)
 {
     assert(false);
     return -1;

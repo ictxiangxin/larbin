@@ -36,7 +36,7 @@ void initSpecific ()
     endFileName = strlen(specDir);
     fileName = new char[endFileName + 20];
     strcpy(fileName, specDir);
-    if (fileName[endFileName-1] != '/')
+    if (fileName[endFileName - 1] != '/')
         fileName[endFileName++] = '/';
 }
 
@@ -52,14 +52,14 @@ void html::newSpec ()
         getIndexName(nbdir);
         fileName[endFileName + 6] = 0;
         if (mkdir(fileName, S_IRWXU) != 0)
-            perror("trouble while creating dir");
+            perror("Trouble while creating dir");
         fileName[endFileName + 6] = '/';
         // open new index
         close(indexFds);
         indexFds = creat(fileName, S_IRWXU);
         if (indexFds < 0)
         {
-            std::cerr << "cannot open file " << fileName << " : " << strerror(errno) << std::endl;
+            std::cerr << "Cannot open file " << fileName << " : " << strerror(errno) << std::endl;
             exit(1);
         }
     }

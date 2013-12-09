@@ -11,27 +11,27 @@
 char lowerCase (char a);
 
 /* tests if b starts with a */
-bool startWith (char *a, char *b);
+bool startWith (const char *a, const char *b);
 
 /* test if b is forbidden by pattern a */
-bool robotsMatch (char *a, char *b);
+bool robotsMatch (const char *a, const char *b);
 
 /* tests if b starts with a ignoring case */
-bool startWithIgnoreCase (char *a, char *b);
+bool startWithIgnoreCase (const char *a, const char *b);
 
 /* test if b end with a */
-bool endWith (char *a, char *b);
+bool endWith (const char *a, const char *b);
 
 /* test if b end with a ignoring case
  * a can use min char, '.' (a[i] = a[i] | 32)
  */
-bool endWithIgnoreCase (char *amin, char *b, int lb);
+bool endWithIgnoreCase (const char *amin, const char *b, int lb);
 
 /* tests if b contains a */
-bool caseContain (char *a, char *b);
+bool caseContain (const char *a, const char *b);
 
 /* create a copy of a string */
-char *newString (char *arg);
+char *newString (const char *arg);
 
 /* Read a whole file
  */
@@ -45,9 +45,9 @@ char *readfile (int fds);
 char *nextToken(char **posParse, char c=' ');
 
 /* does this char * match privilegedExt */
-bool matchPrivExt(char *file);
+bool matchPrivExt(const char *file);
 
 /* does this char * match contentType */
-int matchContentType(char *ct);
+int matchContentType(const char *ct);
 
 #endif // TEXT_H

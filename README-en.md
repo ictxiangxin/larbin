@@ -13,7 +13,11 @@ Develop:
 
 * Currently, I did some modify on Larbin v2.6.3, fix many compiling warning and fix a serious bug.
 
-* The most improve is that I use the newest adns v1.3 to replace the old adns v1.1 which used in origin Larbin v2.6.3.
+* I use the newest adns v1.3 to replace the old adns v1.1 which used in origin Larbin v2.6.3.
+
+* Add timer, you can set the uptime of Larbin.
+
+* Add HighLevelWebServer mode, when larbin is end, webserver still running, return the state information.
 
 * Add a new conf option: ignoreRobots, it can make Larbin ignore robots.txt, as you know.
 
@@ -44,10 +48,13 @@ You also need to check that you have installed some basic tools, such as g++, m4
 ```bash
 > sudo apt-get install g++ m4
 ``` 
+Adns 1.3 need lynx when compiling, if missing error occur, please install it in the same way.
 
 ###Configuring
 
 See larbin.conf. Please be sure to specify your mail.
+
+Some websites resist crawler, you need modify the UserAgent entry to pose as browser.
 
 Read the sentences of larbin.conf line by line, they will lead you configure your Larbin accurately and let your Larbin running successfully.
 

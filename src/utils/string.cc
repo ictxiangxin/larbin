@@ -66,14 +66,14 @@ void LarbinString::addChar (char c)
 }
 
 // append a char *
-void LarbinString::addString (char *s)
+void LarbinString::addString (const char *s)
 {
     uint len = strlen(s);
     addBuffer(s, len);
 }
 
 // append a buffer
-void LarbinString::addBuffer (char *s, uint len)
+void LarbinString::addBuffer (const char *s, uint len)
 {
     if (size <= pos + len)
     {

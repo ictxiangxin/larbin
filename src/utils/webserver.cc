@@ -95,9 +95,9 @@ static void writeHeader(int fds)
     ecrire(fds, global::userAgent);
     ecrire(fds, (char*)" real time statistic</title>\n</head>\n<body bgcolor=\"#FFFFFF\">\n<center><h1>Larbin is");
     if (!global::searchOn)
-        ecrire(fds, " end ");
+        ecrire(fds, (char*)" end ");
     else
-        ecrire(fds, " up and running ");
+        ecrire(fds, (char*)" up and running ");
     ecrire(fds, (char*)"!</h1></center>\n<pre>\n");
 }
 

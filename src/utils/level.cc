@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <iostream>
 #include <pthread.h>
 
 #include "global.h"
@@ -28,15 +28,16 @@ void closeLevelUp()
     switch(global::closeLevel)
     {
         case 0 :
-            printf("[Search] Closing... %s\n",
+            std::cout << "[Search] Closing... ";
 #ifndef NOWEBSERVER
-                   (global::webServerOn && global::highLevelWebServer) ? "([Webserver] still running)" :
+            if (global::webServerOn && global::highLevelWebServer)
+                std::cout << "([Webserver] still running)";
 #endif // NOWEBSERVER
-                   "");
+            std::cout << std::endl;
 #ifndef NOWEBSERVER
             if(!global::highLevelWebServer)
             {
-                printf("[Webserver] Closing...\n");
+                std::cout << "[Webserver] Closing..." << std::endl;
                 global::webServerOn = false;
                 pthread_cancel(global::webServerThread);
             }
@@ -48,7 +49,7 @@ void closeLevelUp()
 #ifndef NOWEBSERVER
             if(global::webServerOn)
             {
-                printf("[Webserver] Closing...\n");
+                std::cout << "[Webserver] Closing..." << std::endl;
                 global::webServerOn = false;
                 pthread_cancel(global::webServerThread);
             }
