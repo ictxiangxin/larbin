@@ -10,10 +10,10 @@
 /////////////////////////////////////////////////////////////
 // Select the output module you want to use
 
-//#define DEFAULT_OUTPUT   // do nothing...
+#define DEFAULT_OUTPUT   // do nothing...
 //#define SIMPLE_SAVE      // save in files named save/dxxxxxx/fyyyyyy
 //#define MIRROR_SAVE      // save in files (respect sites hierarchy)
-//#define STATS_OUTPUT     // do some stats on pages
+#define STATS_OUTPUT     // do some stats on pages
 
 ////////////////////////////////////////////////////////////
 // Set up a specific search

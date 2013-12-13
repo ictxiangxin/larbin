@@ -1,7 +1,3 @@
-// Larbin
-// Sebastien Ailleret
-// 15-11-99 -> 16-03-02
-
 /* This class describes an URL */
 
 #include <assert.h>
@@ -38,7 +34,7 @@ static uint siteHashCode (char *host)
 
 /* return the int with correspond to a char
  * -1 if not an hexa char */
-static int int_of_hexa (char c)
+static int hexToInt (char c)
 {
     if (c >= '0' && c <= '9')
         return (c - '0');
@@ -50,31 +46,45 @@ static int int_of_hexa (char c)
         return -1;
 }
 
+static void setHexStr (char *location, char c)
+{
+    char lc = c & 0xf;
+    char hc = (c >> 0x4) & 0xf;
+    if(hc > 9)
+        location[0] = hc - 0xa + 'a';
+    else
+        location[0] = hc + '0';
+    if(lc > 9)
+        location[1] = lc - 0xa + 'a';
+    else
+        location[1] = lc + '0';
+}
+
 /* normalize a file name : also called by robots.txt parser
  * return true if it is ok, false otherwise (cgi-bin)
  */
 bool fileNormalize (char *file)
 {
-    int i=0;
+    int i = 0;
     while (file[i] != 0 && file[i] != '#')
     {
 	    if (file[i] == '/')
         {
-	        if (file[i+1] == '.' && file[i+2] == '/')
+	        if (file[i + 1] == '.' && file[i + 2] == '/')
             {
 		        // suppress /./
                 uint j = i + 3;
 		        for (; file[j] != 0; j++)
-		            file[j-2] = file[j];
-		        file[j-2] = 0;
+		            file[j - 2] = file[j];
+		        file[j - 2] = 0;
             }
-            else if (file[i+1] == '/')
+            else if (file[i + 1] == '/')
             {
                 // replace // by /
                 uint j = i + 2;
                 for (; file[j] != 0; j++)
-                    file[j-1] = file[j];
-                file[j-1] = 0;
+                    file[j - 1] = file[j];
+                file[j - 1] = 0;
             }
             else if (file[i + 1] == '.' && file[i + 2] == '.' && file[i + 3] == '/')
             {
@@ -83,11 +93,12 @@ bool fileNormalize (char *file)
 		            return false;
                 else
                 {
-		            int j = i+4, dec;
+		            uint j = i + 4;
+                    uint dec;
 		            i--;
 		            while (file[i] != '/')
                         i--;
-		            dec = i+1-j; // dec < 0
+		            dec = i + 1 - j; // dec < 0
 		            for (; file[j] != 0; j++)
 			            file[j + dec] = file[j];
 		            file[j + dec] = 0;
@@ -118,8 +129,8 @@ bool fileNormalize (char *file)
 	    }
         else if (file[i] == '%')
         {
-            int v1 = int_of_hexa(file[i + 1]);
-            int v2 = int_of_hexa(file[i + 2]);
+            int v1 = hexToInt(file[i + 1]);
+            int v2 = hexToInt(file[i + 2]);
             if (v1 < 0 || v2 < 0)
                 return false;
             char c = 16 * v1 + v2;
@@ -129,7 +140,7 @@ bool fileNormalize (char *file)
                 int j = i + 3;
                 for (; file[j] != 0; j++)
                     file[j - 2] = file[j];
-                file[j-2] = 0;
+                file[j - 2] = 0;
                 i++;
             }
             else if (c == ' ' || c == '/') // keep it with the % notation
@@ -165,7 +176,7 @@ url::url (char *u, int8_t depth, url *base)
 	    // absolute url
 	    parse (u + 7);
         // normalize file name
-        if (file != NULL && !normalize(file))
+        if (file != NULL && !normalize())
         {
             delete [] file;
             file = NULL;
@@ -196,15 +207,15 @@ url::url (char *line,  int8_t depth)
     uint i = 0;
 #ifdef URL_TAGS
     tag = 0;
-    for (; line[i] >= '0' && line[i] <= '9'; i++;)
+    for (; line[i] >= '0' && line[i] <= '9'; i++)
         tag = 10 * tag + line[i] - '0';
     i++;
 #endif // URL_TAGS
     if (startWith((char*)"http://", line + i))
     {
-        parse(line+i+7);
+        parse(line + i + 7);
         // normalize file name
-        if (file != NULL && !normalize(file))
+        if (file != NULL && !normalize())
         {
             delete [] file;
             file = NULL;
@@ -366,8 +377,8 @@ url *url::giveBase ()
 char *url::giveUrl ()
 {
     char *tmp;
-    int i = strlen(file);
-    int j = strlen(host);
+    uint i = strlen(file);
+    uint j = strlen(host);
 
     tmp = new char[18 + i + j];  // 7 + j + 1 + 9 + i + 1
                            // http://(host):(port)(file)\0
@@ -378,7 +389,7 @@ char *url::giveUrl ()
         j += sprintf(tmp + j, ":%u", port);
     // Copy file name
     for (; i >= 0; i--)
-	    tmp [j+i] = file[i];
+	    tmp [j + i] = file[i];
     return tmp;
 }
 
@@ -398,7 +409,7 @@ int url::writeUrl (char *buf)
 char *url::serialize ()
 {
     // this buffer is protected by the lock of PersFifo
-    static char statstr[maxUrlSize+40+maxCookieSize];
+    static char statstr[maxUrlSize + 40 + maxCookieSize];
     int pos = sprintf(statstr, "%u ", depth);
 #ifdef URL_TAGS
     pos += sprintf(statstr+pos, "%u ", tag);
@@ -431,9 +442,9 @@ uint url::hostHashCode ()
 uint url::hashCode ()
 {
     uint h = port;
-    for (uint i=0; host[i] != 0; i++)
+    for (uint i = 0; host[i] != 0; i++)
 	    h = 31 * h + host[i];
-    for (uint i=0; file[i] != 0; i++)
+    for (uint i = 0; file[i] != 0; i++)
 	    h = 31 * h + file[i];
     return h % hashSize;
 }
@@ -452,8 +463,8 @@ void url::parse (char *arg)
         return;
 
   // get host name
-    host = new char[fin+1];
-    for (int  i=0; i<fin; i++)
+    host = new char[fin + 1];
+    for (uint i = 0; i < fin; i++)
         host[i] = lowerCase(arg[i]);
     host[fin] = 0;
 
@@ -464,7 +475,7 @@ void url::parse (char *arg)
         fin++;
 	    while (arg[fin] >= '0' && arg[fin] <= '9')
         {
-	        port = port*10 + arg[fin]-'0';
+	        port = port * 10 + arg[fin]-'0';
 	        fin++;
 	    }
     }
@@ -504,7 +515,7 @@ void url::parseWithBase (char *u, url *base)
         strcpy(tmp + lenb, u);
         file = tmp;
     }
-    if (!normalize(file))
+    if (!normalize())
     {
         delete [] file;
         file = NULL;
@@ -519,9 +530,34 @@ void url::parseWithBase (char *u, url *base)
 /** normalize file name
  * return true if it is ok, false otherwise (cgi-bin)
  */
-bool url::normalize (char *file)
+bool url::normalize ()
 {
-    return fileNormalize(file);
+    if(fileNormalize(file))
+    {
+        bool normal = true;
+        for (uint i = 0; file[i] != '\0' && normal; i++)
+            if(file[i] < 0)
+                normal = false;
+        if(normal)
+            return true;
+        char *extFile = new char[strlen(file) * 3 + 1];
+        uint i = 0;
+        uint j = 0;
+        while(file[i] != '\0')
+            if(file[i] < 0)
+            {
+                extFile[j++] = '%';
+                setHexStr(extFile + j, file[i++]);
+                j += 2;
+            }
+            else
+                extFile[j++] = file[i++];
+        extFile[j] = '\0';
+        delete [] file;
+        file = extFile;
+        return true;
+    }
+    return false;
 }
 
 /* Does this url starts with a protocol name */

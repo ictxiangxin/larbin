@@ -27,7 +27,7 @@ class url {
   /** parse a file with base */
   void parseWithBase (char *u, url *base);
   /* normalize file name */
-  bool normalize (char *file);
+  bool normalize ();
   /* Does this url starts with a protocol name */
   bool isProtocol (char *s);
   /* constructor used by giveBase */
