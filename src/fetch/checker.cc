@@ -1,6 +1,20 @@
-// Larbin
-// Sebastien Ailleret
-// 15-11-99 -> 09-12-01
+/*
+ *   Larbin - is a web crawler
+ *   Copyright (C) 2013  ictxiangxin
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* This modules is a filter
  * given some normalized URLs, it makes sure their extensions are OK
@@ -22,7 +36,8 @@
 
 #include "utils/debug.h"
 
-/** check if an url is allready known
+/*
+ * check if an url is allready known
  * if not send it
  * @param u the url to check
  */
@@ -50,7 +65,8 @@ void check (url *u)
     }
 }
 
-/** Check the extension of an url
+/*
+ * Check the extension of an url
  * @return true if it might be interesting, false otherwise
  */
 bool filter1 (char *host, char *file)

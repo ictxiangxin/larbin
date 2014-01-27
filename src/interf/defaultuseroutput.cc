@@ -15,7 +15,8 @@
 #include "utils/debug.h"
 #include "interf/output.h"
 
-/** A page has been loaded successfully
+/*
+ * A page has been loaded successfully
  * @param page the page that has been fetched
  */
 void loaded (html *page) {
@@ -32,7 +33,8 @@ void loaded (html *page) {
 #endif // BIGSTATS
 }
 
-/** The fetch failed
+/*
+ * The fetch failed
  * @param u the URL of the doc
  * @param reason reason of the fail
  */
@@ -44,13 +46,13 @@ void failure (url *u, FetchError reason) {
 #endif // BIGSTATS
 }
 
-/** initialisation function
- */
+/* initialisation function */
 void initUserOutput () {
 
 }
 
-/** stats, called in particular by the webserver
+/*
+ * stats, called in particular by the webserver
  * the webserver is in another thread, so be careful
  * However, if it only reads things, it is probably not useful
  * to use mutex, because incoherence in the webserver is not as critical

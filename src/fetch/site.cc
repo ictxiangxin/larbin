@@ -1,6 +1,20 @@
-// Larbin
-// Sebastien Ailleret
-// 08-02-00 -> 06-01-02
+/*
+ *   Larbin - is a web crawler
+ *   Copyright (C) 2013  ictxiangxin
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <unistd.h>
 #include <errno.h>
@@ -32,7 +46,8 @@ void initSite () {
   stataddr.sin_family = AF_INET;
 }
 
-/** connect to this addr using connection conn 
+/*
+ * connect to this addr using connection conn 
  * return the state of the socket
  */
 static char getFds (Connexion *conn, struct in_addr *addr, uint port) {
@@ -73,8 +88,7 @@ static char getFds (Connexion *conn, struct in_addr *addr, uint port) {
 // class NamedSite
 ///////////////////////////////////////////////////////////
 
-/** Constructor : initiate fields used by the program
- */
+/* Constructor : initiate fields used by the program */
 NamedSite::NamedSite () {
   name[0] = 0;
   nburls = 0;
@@ -243,7 +257,8 @@ void NamedSite::dnsAns (adns_answer *ans) {
   }
 }
 
-/** we've got a good dns answer
+/*
+ * we've got a good dns answer
  * get the robots.txt
  * assert there is a freeConn
  */

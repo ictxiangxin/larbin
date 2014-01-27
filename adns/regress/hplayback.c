@@ -193,12 +193,12 @@ static int Pbytes(byte *buf, int maxlen) {
     if (c=='\n') return done;
   }
 }
-
 void Q_vb(void) {
+  int r;
   const char *nl;
   Tensurerecordfile();
   if (!adns__vbuf_ensure(&vb2,vb.used+2)) Tnomem();
-  fread(vb2.buf,1,vb.used+2,Tinputfile);
+  r= fread(vb2.buf,1,vb.used+2,Tinputfile);
   if (feof(Tinputfile)) {
     fprintf(stderr,"adns test harness: input ends prematurely; program did:\n %.*s\n",
            vb.used,vb.buf);
@@ -218,7 +218,6 @@ void Q_vb(void) {
   nl= memchr(vb.buf,'\n',vb.used);
   fprintf(Treportfile," %.*s\n", (int)(nl ? nl - (const char*)vb.buf : vb.used), vb.buf);
 }
-
 int Hselect(	int max , fd_set *rfds , fd_set *wfds , fd_set *efds , struct timeval *to 	) {
  int r, amtread;
  char *ep;
