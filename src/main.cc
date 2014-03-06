@@ -223,8 +223,8 @@ static void cron ()
 
 #ifdef STATS
         printf("\n%surls : %d  (rate : %d)\npages : %d  (rate : %d)\nsuccess : %d  (rate : %d)\n",
-               ctime(&global::now), urls, urlsRate, pages, pagesRate,
-               answers[success], successRate);
+                ctime(&global::now), urls, urlsRate, pages, pagesRate,
+                answers[success], successRate);
 #endif // STATS
     }
 #endif // NOSTATS
