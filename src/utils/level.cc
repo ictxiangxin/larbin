@@ -57,11 +57,9 @@ void closeLevelUp()
             {
                 std::cout << "[Webserver] Closing..." << std::endl;
                 global::webServerOn = false;
-                pthread_cancel(global::webServerThread);
             }
 #endif // NOWEBSERVER
             global::searchOn = false;
-            pthread_cancel(global::limitTimeThread);
             break;
         case 1 :
 #ifndef NOWEBSERVER
@@ -69,7 +67,6 @@ void closeLevelUp()
             {
                 std::cout << "[Webserver] Closing..." << std::endl;
                 global::webServerOn = false;
-                pthread_cancel(global::webServerThread);
             }
 #endif // NOWEBSERVER
             break;

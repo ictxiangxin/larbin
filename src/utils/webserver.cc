@@ -65,32 +65,33 @@ void *startWebserver (void *none)
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_family = AF_INET;
     addr.sin_port = htons(global::httpPort);
-    if ((fds = socket(AF_INET, SOCK_STREAM, 0)) == -1
-	    || setsockopt(fds, SOL_SOCKET, SO_REUSEADDR, (char*)&nAllowReuse, sizeof(nAllowReuse))
-	    || bind(fds, (struct sockaddr *) &addr, sizeof(addr)) != 0
-	    || listen(fds, 4) != 0)
+    if (
+           (fds = socket(AF_INET, SOCK_STREAM, 0)) == -1
+        || setsockopt(fds, SOL_SOCKET, SO_REUSEADDR, (char*)&nAllowReuse, sizeof(nAllowReuse))
+        || bind(fds, (struct sockaddr *) &addr, sizeof(addr)) != 0
+        || listen(fds, 4) != 0)
     {
-	    std::cerr << "Unable to get the socket for the webserver (" << global::httpPort << ") : " << strerror(errno) << std::endl;
-	    webServerOff();
+        std::cerr << "Unable to get the socket for the webserver (" << global::httpPort << ") : " << strerror(errno) << std::endl;
+        webServerOff();
         pthread_exit(NULL);
     }
     webServerOn();
     // answer requests
     while (true)
     {
-	    struct sockaddr_in addrc;
-	    int fdc;
-	    uint len = sizeof(addr);
-	    fdc = accept(fds, (struct sockaddr *) &addrc, &len);
-	    if (fdc == -1)
-	        std::cerr << "Trouble with web server...\n";
+        struct sockaddr_in addrc;
+        int fdc;
+        uint len = sizeof(addr);
+        fdc = accept(fds, (struct sockaddr *) &addrc, &len);
+        if (fdc == -1)
+            std::cerr << "Trouble with web server...\n";
         else
         {
             manageAns(fdc, readRequest(fdc));
             close(fdc);
-	    }
+        }
     }
-    return NULL;
+    pthread_exit(NULL);
 }
 
 
