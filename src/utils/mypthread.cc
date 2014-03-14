@@ -35,7 +35,7 @@ pthread_t startThread (StartFun run, void *arg)
         || pthread_detach(t) != 0
        )
     {
-        std::cerr << "Unable to launch a thread\n";
+        std::cerr << "Unable to launch a thread" << std::endl;
         exit(1);
     }
     return t;

@@ -77,7 +77,7 @@ void *startWebserver (void *none)
     }
     webServerOn();
     // answer requests
-    while (true)
+    while (global::webServerOn)
     {
         struct sockaddr_in addrc;
         int fdc;
@@ -164,7 +164,7 @@ static void writeSpecStats(int fds) {
   if (privilegedExts[0] != NULL) {
     ecrire(fds, (char*)"\nprivileged links seen (");
     ecrire(fds, privilegedExts[0]);
-    int i=1;
+    uint i = 1;
     while (privilegedExts[i] != NULL) {
       ecrire(fds, (char*)", ");
       ecrire(fds, privilegedExts[i]);

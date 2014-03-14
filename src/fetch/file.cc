@@ -134,9 +134,7 @@ void robots::parse (bool isError)
             // The file could be incomplete, delete last token
             // We could have Disallow / instead of Disallow /blabla
             for (uint i = pos - 1; i > 0 && !isspace(buffer[i]); i--)
-            {
                 buffer[i] = ' ';
-            }
         }
         parseRobots();
     }
@@ -147,7 +145,7 @@ void robots::parse (bool isError)
  */
 bool robots::parseHeaders ()
 {
-    for(posParse = buffer+9; posParse[3] != 0; posParse++)
+    for(posParse = buffer + 9; posParse[3] != '\0'; posParse++)
         if (
                (
                    posParse[0] == '\n'
@@ -264,15 +262,29 @@ void robots::parseRobots ()
 
 #include "fetch/specbuf.cc"
 
-#define _newSpec() if (state==SPECIFIC) newSpec()
-#define _destructSpec() if (state==SPECIFIC) destructSpec()
-#define _endOfInput() if (state==SPECIFIC) return endOfInput()
+#define _newSpec() \
+            if (state==SPECIFIC) \
+                newSpec();
+
+#define _destructSpec() \
+            if (state==SPECIFIC) \
+                destructSpec();
+
+#define _endOfInput() \
+            if (state==SPECIFIC) \
+              return endOfInput();
+
 #define _getContent() \
-  if (state==SPECIFIC) return getContent(); \
-  else return contentStart
+            if (state==SPECIFIC) \
+                return getContent(); \
+            else \
+                return contentStart;
+
 #define _getSize() \
-  if (state==SPECIFIC) return getSize(); \
-  else return (buffer + pos - contentStart)
+            if (state==SPECIFIC) \
+                return getSize(); \
+            else \
+                return (buffer + pos - contentStart);
 
 ///////////////////////////////////////
 #else // not a SPECIFICSEARCH
@@ -464,7 +476,7 @@ int html::parseHeader ()
         state = HTML;
 #endif // SPECIFICSEARCH
         contentStart = posParse + 1;
-        *(posParse-1) = 0;
+        *(posParse - 1) = 0;
         _newSpec();
     }
     else
@@ -485,16 +497,22 @@ int html::parseHeader ()
  * return 1 (and set errno) if bad type, 0 otherwise
  * can toggle isInteresting
  */
-#define errorType() errno=badType; return 1
+#define errorType() \
+            errno = badType; \
+            return 1;
 
 #ifdef ANYTYPE
-#define checkType() return 0
+#    define checkType() \
+                return 0
 #elif defined(IMAGES)
-#define checkType() if (startWithIgnoreCase("image", area+14)) { \
-    return 0; \
-  } else { errorType (); }
+#    define checkType() \
+                if (startWithIgnoreCase("image", area + 14)) \
+                    return 0; \
+                else \
+                    errorType(); \
 #else
-#define checkType() errorType()
+#    define checkType() \
+                errorType()
 #endif
 
 int html::verifType ()
@@ -653,32 +671,35 @@ void html::parseComment()
 
 /* macros used by the following functions */
 #define skipSpace() \
-  while (*posParse == ' ' || *posParse == '\n' \
-         || *posParse == '\r' || *posParse == '\t') { \
-    posParse++; \
-  }
+            while (*posParse == ' ' || *posParse == '\n' || *posParse == '\r' || *posParse == '\t') \
+                posParse++;
+
 #define skipText() \
-  while (*posParse != ' ' && *posParse != '\n' && *posParse != '>' \
-         && *posParse != '\r' && *posParse != '\t' && *posParse != 0) { \
-    posParse++; \
-  }
-#define nextWord() skipText(); skipSpace()
-#define thisCharIs(i, c) (c == (posParse[i]|32))
-#define isTag(t, p, a, i) if (t) { \
-      param = p; \
-      action = a; \
-      posParse += i; \
-    } else { \
-      posParse++; \
-      return; \
-    }
+            while (*posParse != ' ' && *posParse != '\n' && *posParse != '>'  && *posParse != '\r' && *posParse != '\t' && *posParse != 0) \
+                posParse++;
+
+#define nextWord() \
+            skipText(); \
+            skipSpace();
+#define thisCharIs(i, c) (c == (posParse[i] | 32))
+#define isTag(t, p, a, i) if (t) \
+        { \
+            param = p; \
+            action = a; \
+            posParse += i; \
+        } \
+        else \
+        { \
+            posParse++; \
+            return; \
+        }
 
 /** Try to understand this tag */
 void html::parseTag ()
 {
     skipSpace();
-    const char *param=NULL; // what parameter are we looking for
-    int action=-1;
+    const char *param = NULL; // what parameter are we looking for
+    int action = -1;
     // read the name of the tag
     if (thisCharIs(0, 'a'))
     { // a href
@@ -687,35 +708,27 @@ void html::parseTag ()
         posParse++;
     }
     else if (thisCharIs(0, 'l'))
-    {
         isTag(thisCharIs(1, 'i') && thisCharIs(2, 'n') && thisCharIs(3, 'k'), "href", LINK, 4);
-    }
     else if (thisCharIs(0, 'b'))
-    { // base href
         isTag(thisCharIs(1, 'a') && thisCharIs(2, 's') && thisCharIs(3, 'e'), "href", BASE, 4);
-    }
     else if (thisCharIs(0, 'f'))
-    { // frame src
         isTag(thisCharIs(1, 'r') && thisCharIs(2, 'a') && thisCharIs(3, 'm') && thisCharIs(4, 'e'), "src", LINK, 5);
 #ifdef IMAGES
-    }
     else if (thisCharIs(0, 'i'))
-    { // img src
         isTag(thisCharIs(1, 'm') && thisCharIs(2, 'g'), "src", LINK, 3);
 #endif // IMAGES
-    }
     else
-    {
         return;
-    }
     // now find the parameter
     assert(param != NULL);
     skipSpace();
     for (;;)
     {
         int i = 0;
-        while (param[i]!= 0 && thisCharIs(i, param[i])) i++;
+        while (param[i]!= 0 && thisCharIs(i, param[i]))
+            i++;
         posParse += i;
+        skipSpace();
         if (posParse[i] == '>' || posParse[i] == 0)
             return;
         if (param[i] == 0)
@@ -724,10 +737,8 @@ void html::parseTag ()
             return;
         }
         else
-        {
             // not the good parameter
             nextWord();
-        }
     }
 }
 
@@ -755,7 +766,8 @@ void html::parseContent (int action)
            && notCgiChar(*posParse)
           )
     {
-        if (*posParse == '\\') *posParse = '/';    // Bye Bye DOS !
+        if (*posParse == '\\')
+            *posParse = '/';    // Bye Bye DOS !
         posParse++;
     }
     if (posParse == buffer + pos) // end of file => content may be truncated => forget it
