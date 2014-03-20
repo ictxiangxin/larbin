@@ -502,17 +502,17 @@ int html::parseHeader ()
             return 1;
 
 #ifdef ANYTYPE
-#    define checkType() \
-                return 0
+#define checkType() \
+            return 0;
 #elif defined(IMAGES)
-#    define checkType() \
-                if (startWithIgnoreCase("image", area + 14)) \
-                    return 0; \
-                else \
-                    errorType(); \
+#define checkType() \
+            if (startWithIgnoreCase("image", area + 14)) \
+                return 0; \
+            else \
+                errorType();
 #else
-#    define checkType() \
-                errorType()
+#define checkType() \
+            errorType();
 #endif
 
 int html::verifType ()
@@ -708,14 +708,22 @@ void html::parseTag ()
         posParse++;
     }
     else if (thisCharIs(0, 'l'))
+    {
         isTag(thisCharIs(1, 'i') && thisCharIs(2, 'n') && thisCharIs(3, 'k'), "href", LINK, 4);
+    }
     else if (thisCharIs(0, 'b'))
+    {
         isTag(thisCharIs(1, 'a') && thisCharIs(2, 's') && thisCharIs(3, 'e'), "href", BASE, 4);
+    }
     else if (thisCharIs(0, 'f'))
+    {
         isTag(thisCharIs(1, 'r') && thisCharIs(2, 'a') && thisCharIs(3, 'm') && thisCharIs(4, 'e'), "src", LINK, 5);
+    }
 #ifdef IMAGES
     else if (thisCharIs(0, 'i'))
+    {
         isTag(thisCharIs(1, 'm') && thisCharIs(2, 'g'), "src", LINK, 3);
+    }
 #endif // IMAGES
     else
         return;
