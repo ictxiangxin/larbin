@@ -33,7 +33,7 @@ void loaded (html *page)
     {
         int tmp = nbfile;
         int pos = endFileName;
-        for (; tmp != 0; tmp /= 10;)
+        for (; tmp != 0; tmp /= 10)
             fileName[pos--] = '0' + (tmp % 10);
     }
     else // new dir
@@ -43,7 +43,7 @@ void loaded (html *page)
         nbfile = 0;
         int pos = endFileName - 7;
         int tmp = nbdir;
-        for (; tmp != 0; tmp /= 10;)
+        for (; tmp != 0; tmp /= 10)
             fileName[pos--] = '0' + (tmp % 10);
         fileName[endFileName - 6] = 0;
         if (mkdir(fileName, S_IRWXU) != 0)
