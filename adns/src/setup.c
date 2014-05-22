@@ -201,7 +201,7 @@ static void ccf_sortlist(adns_state ads, const char *fn,
       }
     } else {
       baselocal= ntohl(base.s_addr);
-      if ((!baselocal) & 0x080000000UL) /* class A */
+      if (!baselocal & 0x080000000UL) /* class A */
 	mask.s_addr= htonl(0x0ff000000UL);
       else if ((baselocal & 0x0c0000000UL) == 0x080000000UL)
 	mask.s_addr= htonl(0x0ffff0000UL); /* class B */

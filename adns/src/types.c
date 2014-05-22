@@ -320,7 +320,7 @@ static int div_addr(void *context, const void *datap_a, const void *datap_b) {
 
 static adns_status csp_addr(vbuf *vb, const adns_rr_addr *rrp) {
   const char *ia;
-  static char buf[30];
+  char buf[30];
 
   switch (rrp->addr.inet.sin_family) {
   case AF_INET:
@@ -736,7 +736,7 @@ static void icb_ptr(adns_query parent, adns_query child) {
 
 static adns_status pa_ptr(const parseinfo *pai, int dmstart,
 			  int max, void *datap) {
-  static const char *(expectdomain[])= { DNS_INADDR_ARPA };
+  static const char *const (expectdomain[])= { DNS_INADDR_ARPA };
   
   char **rrp= datap;
   adns_status st;

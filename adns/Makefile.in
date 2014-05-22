@@ -22,7 +22,7 @@
 
 # Remember to change ADNS_VERSION_STRING in client/client.h too, and
 # possibly library soname (MAJOR and MINOR in settings.make.in).
-DISTVERSION=	1.3
+DISTVERSION=	1.4
 
 srcdir=		@srcdir@
 VPATH=		@srcdir@

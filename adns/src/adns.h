@@ -1,6 +1,6 @@
 /*
  * adns.h
- * - adns user-visible API (single-threaded, without any locking)
+ * - adns user-visible API
  */
 /*
  *
@@ -52,7 +52,7 @@
  *  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *
- *  $Id: adns.h,v 1.95 2006/04/08 14:36:57 ian Exp $
+ *  $Id: adns.h,v 1.96 2006/08/09 11:16:59 ian Exp $
  */
 
 #ifndef ADNS_H_INCLUDED
@@ -399,6 +399,18 @@ typedef struct {
  *  successful _wait or _check, if status is nonzero then nrrs will be
  *  0, otherwise it will be >0.  type will always be the type
  *  requested.
+ */
+
+/* Threads:
+ *  adns does not use any static modifiable state, so it
+ *   is safe to call adns_init several times and then use the
+ *   resulting adns_states concurrently.
+ *  However, it is NOT safe to make simultaneous calls into
+ *   adns using the same adns_state; a single adns_state must be used
+ *   only by one thread at a time.  You can solve this problem by
+ *   having one adns_state per thread, or if that isn't feasible, you
+ *   could maintain a pool of adns_states.  Unfortunately neither of
+ *   these approaches has optimal performance.
  */
 
 int adns_init(adns_state *newstate_r, adns_initflags flags,
