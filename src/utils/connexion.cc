@@ -93,28 +93,28 @@ int ecrireBuff (int fd, char *buf, int count)
  */
 int ecrireInt (int fd, int i)
 {
-    char buf[20];
+    char buf[32];
     sprintf(buf, "%d", i);
     return ecrire(fd, buf);
 }
 
 int ecrireInt2 (int fd, int i)
 {
-    char buf[20];
+    char buf[32];
     sprintf(buf, "%d%c", i / 10, i % 10 + '0');
     return ecrire(fd, buf);
 }
 
 int ecrireInti (int fd, int i, char *f)
 {
-    char buf[100];
+    char buf[128];
     sprintf(buf, f, i);
     return ecrire(fd, buf);
 }
 
 int ecrireIntl (int fd, long i, char *f)
 {
-    char buf[100];
+    char buf[128];
     sprintf(buf, f, i);
     return ecrire(fd, buf);
 }
@@ -124,7 +124,7 @@ int ecrireIntl (int fd, long i, char *f)
  */
 int ecrireLong (int fd, long i)
 {
-    char buf[30];
+    char buf[64];
     sprintf(buf, "%ld", i);
     return ecrire(fd, buf);
 }
@@ -140,8 +140,10 @@ int ecrireChar (int fd, char c)
     {
         int i = write(fd, &c, 1);
         if (i == -1)
+        {
             if (errno != EINTR)
 		        pos = 2;
+        }
         else
             pos += i;
 
