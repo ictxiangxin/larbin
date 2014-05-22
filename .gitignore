@@ -1,1 +1,14 @@
+# result directory
 save/
+
+# object files
+*.o
+
+# depend files
+.depend
+
+# larbin main
+larbin
+
+# fifo files
+fifo*

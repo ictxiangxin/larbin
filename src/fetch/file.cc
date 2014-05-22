@@ -484,9 +484,7 @@ int html::parseHeader ()
         *posParse = 0;
         here->addCookie(area);
         *posParse = '\n';
-        if (verifType ())
-            return 1;
-        if (verifLength())
+        if (verifType () || verifLength())
             return 1;
     }
     return 0;
@@ -682,7 +680,7 @@ void html::parseComment()
             skipText(); \
             skipSpace();
 #define thisCharIs(i, c) (c == (posParse[i] | 32))
-#define isTag(t, p, a, i) if (t) \
+#define ISTAG(t, p, a, i) if (t) \
         { \
             param = p; \
             action = a; \
@@ -709,20 +707,20 @@ void html::parseTag ()
     }
     else if (thisCharIs(0, 'l'))
     {
-        isTag(thisCharIs(1, 'i') && thisCharIs(2, 'n') && thisCharIs(3, 'k'), "href", LINK, 4);
+        ISTAG(thisCharIs(1, 'i') && thisCharIs(2, 'n') && thisCharIs(3, 'k'), "href", LINK, 4);
     }
     else if (thisCharIs(0, 'b'))
     {
-        isTag(thisCharIs(1, 'a') && thisCharIs(2, 's') && thisCharIs(3, 'e'), "href", BASE, 4);
+        ISTAG(thisCharIs(1, 'a') && thisCharIs(2, 's') && thisCharIs(3, 'e'), "href", BASE, 4);
     }
     else if (thisCharIs(0, 'f'))
     {
-        isTag(thisCharIs(1, 'r') && thisCharIs(2, 'a') && thisCharIs(3, 'm') && thisCharIs(4, 'e'), "src", LINK, 5);
+        ISTAG(thisCharIs(1, 'r') && thisCharIs(2, 'a') && thisCharIs(3, 'm') && thisCharIs(4, 'e'), "src", LINK, 5);
     }
 #ifdef IMAGES
     else if (thisCharIs(0, 'i'))
     {
-        isTag(thisCharIs(1, 'm') && thisCharIs(2, 'g'), "src", LINK, 3);
+        ISTAG(thisCharIs(1, 'm') && thisCharIs(2, 'g'), "src", LINK, 3);
     }
 #endif // IMAGES
     else

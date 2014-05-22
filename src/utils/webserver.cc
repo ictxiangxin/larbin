@@ -84,7 +84,7 @@ void *startWebserver (void *none)
         uint len = sizeof(addr);
         fdc = accept(fds, (struct sockaddr *) &addrc, &len);
         if (fdc == -1)
-            std::cerr << "Trouble with web server...\n";
+            std::cerr << "Trouble with web server..." << std::endl;
         else
         {
             manageAns(fdc, readRequest(fdc));
