@@ -16,9 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*********************************/
-/* various functions for writing */
-/*********************************/
+// various functions for writing
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,7 +33,8 @@
 
 #include "options.h"
 
-/* make write until everything is written
+/*
+ * make write until everything is written
  * return 0 on success, 1 otherwise
  * Don't work on non-blocking fds...
  */
@@ -57,7 +56,8 @@ int ecrire (int fd, char *buf)
     return pos != count;
 }
 
-/* make write until everything is written
+/*
+ * make write until everything is written
  * return 0 on success, 1 otherwise
  * Don't work on non-blocking fds...
  */
@@ -119,7 +119,8 @@ int ecrireIntl (int fd, long i, char *f)
     return ecrire(fd, buf);
 }
 
-/** Write an int on a fds
+/*
+ * Write an int on a fds
  * (uses ecrire)
  */
 int ecrireLong (int fd, long i)
@@ -129,7 +130,8 @@ int ecrireLong (int fd, long i)
     return ecrire(fd, buf);
 }
 
-/* Write a char on a fds
+/*
+ * Write a char on a fds
  * return 0 on success, 1 otherwise
  * Don't work on non-blocking fds...
  */

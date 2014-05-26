@@ -16,8 +16,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NOWEBSERVER
-
 #include <string.h>
 #include <unistd.h>
 #include <iostream>
@@ -492,5 +490,3 @@ static char *readRequest (int fds) {
   // never reached, but avoid gcc warning
   return NULL;
 }
-
-#endif // NOWEBSERVER

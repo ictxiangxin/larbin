@@ -45,9 +45,9 @@ void LarbinString::recycle (uint size)
 {
     if (this->size > size)
     {
-	    delete [] chaine;
-	    chaine = new char[size];
-	    this->size = size;
+        delete [] chaine;
+        chaine = new char[size];
+        this->size = size;
     }
     pos = 0;
     chaine[0] = '\0';
@@ -75,10 +75,10 @@ void LarbinString::addChar (char c)
     if (pos >= size)
     {
         size *= 2;
-	    char *tmp = new char[size];
-	    memcpy(tmp, chaine, pos);
-	    delete [] chaine;
-	    chaine = tmp;
+        char *tmp = new char[size];
+        memcpy(tmp, chaine, pos);
+        delete [] chaine;
+        chaine = tmp;
     }
     chaine[pos] = '\0';
 }
@@ -98,10 +98,10 @@ void LarbinString::addBuffer (const char *s, uint len)
         size *= 2;
         if (size <= pos + len)
             size = pos + len + 1;
-	    char *tmp = new char[size];
-	    memcpy(tmp, chaine, pos);
-	    delete [] chaine;
-	    chaine = tmp;
+        char *tmp = new char[size];
+        memcpy(tmp, chaine, pos);
+        delete [] chaine;
+        chaine = tmp;
     }
     memcpy(chaine + pos, s, len);
     pos += len;

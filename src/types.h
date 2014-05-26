@@ -113,7 +113,7 @@ enum FetchError
 };
 
 // standard types
-typedef	unsigned int        uint;
+typedef unsigned int        uint;
 typedef unsigned short int  ushort;
 
 #endif // TYPES_H

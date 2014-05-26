@@ -13,7 +13,7 @@ Develop:
 
 * Currently, I did some modify on Larbin v2.6.3, fix many compiling warning and fix a serious bug.
 
-* I use the newest adns v1.3 to replace the old adns v1.1 which used in origin Larbin v2.6.3.
+* I use the newest adns v1.4 to replace the old adns v1.1 which used in origin Larbin v2.6.3.
 
 * Add timer, you can set the uptime of Larbin.
 

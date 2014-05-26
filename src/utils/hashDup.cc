@@ -30,7 +30,7 @@
 #include "utils/hashDup.h"
 #include "utils/connexion.h"
 
-/* constructor */
+// constructor
 hashDup::hashDup (ssize_t size, char *init, bool scratch)
 {
     this->size = size;
@@ -42,9 +42,9 @@ hashDup::hashDup (ssize_t size, char *init, bool scratch)
     else
     {
         int fds = open(init, O_RDONLY);
-	    if (fds < 0)
+        if (fds < 0)
         {
-	        std::cerr << "Cannot find " << init << ", restart from scratch\n";
+            std::cerr << "Cannot find " << init << ", restart from scratch" << std::endl;
             for (ssize_t i = 0; i< size / 8; i++)
                 table[i] = 0;
         }
@@ -67,37 +67,38 @@ hashDup::hashDup (ssize_t size, char *init, bool scratch)
     }
 }
 
-/* destructor */
+// destructor
 hashDup::~hashDup ()
 {
     delete [] table;
 }
 
-/* set a page in the hashtable
+/*
+ * set a page in the hashtable
  * return false if it was already there
  * return true if it was not (ie it is new)
  */
 bool hashDup::testSet (char *doc)
 {
-    unsigned int code = 0;
+    uint code = 0;
     char c;
     for (uint i = 0; (c = doc[i])!= 0; i++)
         if (c > 'A' && c < 'z')
             code = (code * 23 + c) % size;
-    unsigned int pos = code / 8;
-    unsigned int bits = 1 << (code % 8);
+    uint pos = code / 8;
+    uint bits = 1 << (code % 8);
     int res = table[pos] & bits;
     table[pos] |= bits;
     return !res;
 }
 
-/* save in a file */
+// save in a file
 void hashDup::save ()
 {
     int fds = creat(file, 00600);
     if (fds >= 0)
     {
         ecrireBuff(fds, table, size / 8);
-	    close(fds);
+        close(fds);
     }
 }

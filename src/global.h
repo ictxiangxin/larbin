@@ -129,6 +129,8 @@ struct global
     static bool searchOn;
     /** web server is running */
     static bool webServerOn;
+    /** Use web server */
+    static bool webServer;
     /** high level web server mode */
     static bool highLevelWebServer;
     /** how many seconds should we wait beetween 2 calls at the same server 
@@ -192,9 +194,7 @@ struct global
     static long int remainBand;
 #endif // MAXBANDWIDTH
     static pthread_t limitTimeThread;
-#ifndef NOWEBSERVER
     static pthread_t webServerThread;
-#endif // NOWEBSERVER
 };
 
 /** set this fds for next poll */

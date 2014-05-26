@@ -16,15 +16,17 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-static int nbdir = -1;
-static int nbfile = filesPerDir;
+static int  nbdir = -1;
+static int  nbfile = filesPerDir;
 static char *fileName;
 static uint endFileName;
-static int indexFds = -1;
+static int  indexFds = -1;
 static char buf[maxUrlSize + 30];
 
-/** give the name of the file given dir and file number
- * this char * is static */
+/*
+ * give the name of the file given dir and file number
+ * this char * is static
+ */
 static void getSpecName(int nbdir, int nbfile, int extindex)
 {
     sprintf(fileName + endFileName, "d%5i/f%5i%s", nbdir, nbfile, privilegedExts[extindex]);
@@ -37,7 +39,7 @@ static void getSpecName(int nbdir, int nbfile, int extindex)
 
 static void getIndexName(int nbdir)
 {
-    sprintf(fileName+endFileName, "d%5i/index", nbdir);
+    sprintf(fileName + endFileName, "d%5i/index", nbdir);
     for (int i = endFileName + 1; fileName[i] == ' '; i++)
         fileName[i] = '0';
 }

@@ -45,23 +45,23 @@ void check (url *u)
 {
     if (global::seen->testSet(u))
     {
-	    hashUrls();  // stat
-	    // where should this link go ?
+        hashUrls();  // stat
+        // where should this link go ?
 #ifdef SPECIFICSEARCH
-	    if (privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
+        if (privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
         {
-	        interestingExtension();
-	        global::URLsPriority->put(u);
-	    }
+            interestingExtension();
+            global::URLsPriority->put(u);
+        }
         else
 #endif //SPECIFICSEARCH
             global::URLsDisk->put(u);
     }
     else
     {
-	    // This url has already been seen
+        // This url has already been seen
         answers(urlDup);
-	    delete u;
+        delete u;
     }
 }
 
@@ -73,21 +73,20 @@ bool filter1 (char *host, char *file)
 {
     if (global::domains != NULL)
     {
-	    bool ok = false;
-	    for (int i = 0; (*global::domains)[i] != NULL; i++)
-	        ok = ok || endWith((*global::domains)[i], host);
-	    if (!ok)
-	        return false;
+        bool ok = false;
+        for (int i = 0; (*global::domains)[i] != NULL; i++)
+            ok = ok || endWith((*global::domains)[i], host);
+        if (!ok)
+            return false;
     }
     int l = strlen(file);
-    if (
-           endWithIgnoreCase((char*)"html", file, l)
+    if (   endWithIgnoreCase((char*)"html", file, l)
         || endWithIgnoreCase((char*)"htm", file, l)
         || file[l-1] == '/'
        )
-           return true;
+        return true;
     for (int i = 0; global::forbExt[i] != NULL; i++)
-	    if (endWithIgnoreCase(global::forbExt[i], file, l))
-	        return false;
+        if (endWithIgnoreCase(global::forbExt[i], file, l))
+            return false;
     return true;
 }

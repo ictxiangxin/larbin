@@ -38,17 +38,17 @@ hashTable::hashTable (bool create)
     ssize_t total = hashSize / 8;
     table = new char[total];
     if (create)
-	    for (ssize_t i = 0; i<hashSize / 8; i++)
-	        table[i] = 0;
+        for (ssize_t i = 0; i<hashSize / 8; i++)
+            table[i] = 0;
     else
     {
-	    int fds = open("hashtable.bak", O_RDONLY);
-	    if (fds < 0)
+        int fds = open("hashtable.bak", O_RDONLY);
+        if (fds < 0)
         {
-	        std::cerr << "Cannot find hashtable.bak, restart from scratch\n";
+            std::cerr << "Cannot find hashtable.bak, restart from scratch\n";
             for (ssize_t i = 0; i < hashSize / 8; i++)
                 table[i] = 0;
-	    }
+        }
         else
         {
             ssize_t sr = 0;
@@ -82,7 +82,7 @@ void hashTable::save()
     if (fds >= 0)
     {
         ecrireBuff(fds, table, hashSize / 8);
-	    close(fds);
+        close(fds);
     }
     unlink("hashtable.old");
 }

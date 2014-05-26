@@ -124,11 +124,9 @@ int main (int argc, char *argv[])
         std::cerr << "Can not register" << std::endl;
         exit(-1);
     }
-#ifndef NOWEBSERVER
-    // launch the webserver if needeed
+    // launch the webserver
     if (global::httpPort != 0)
         global::webServerThread = startThread(startWebserver, NULL);
-#endif // NOWEBSERVER
     searchOn();
     if (global::limitTime != 0)
     {
@@ -210,21 +208,27 @@ static void cron ()
 
     if ((global::now & 7) == 0)
     {
-        urlsRate = (urls - urlsPrev) >> 3; urlsPrev = urls;
-        pagesRate = (pages - pagesPrev) >> 3; pagesPrev = pages;
+        urlsRate = (urls - urlsPrev) >> 3;
+        urlsPrev = urls;
+        pagesRate = (pages - pagesPrev) >> 3;
+        pagesPrev = pages;
         successRate = (answers[success] - successPrev) >> 3;
         successPrev = answers[success];
-        siteSeenRate = (siteSeen - siteSeenPrev) >> 3; siteSeenPrev = siteSeen;
-        siteDNSRate = (siteDNS - siteDNSPrev) >> 3; siteDNSPrev = siteDNS;
+        siteSeenRate = (siteSeen - siteSeenPrev) >> 3;
+        siteSeenPrev = siteSeen;
+        siteDNSRate = (siteDNS - siteDNSPrev) >> 3;
+        siteDNSPrev = siteDNS;
 #ifndef NDEBUG
-        readRate = (byte_read - readPrev) >> 3; readPrev = byte_read;
-        writeRate = (byte_write - writePrev) >> 3; writePrev = byte_write;
+        readRate = (byte_read - readPrev) >> 3;
+        readPrev = byte_read;
+        writeRate = (byte_write - writePrev) >> 3;
+        writePrev = byte_write;
 #endif // NDEBUG
 
 #ifdef STATS
         printf("\n%surls : %d  (rate : %d)\npages : %d  (rate : %d)\nsuccess : %d  (rate : %d)\n",
-                ctime(&global::now), urls, urlsRate, pages, pagesRate,
-                answers[success], successRate);
+               ctime(&global::now), urls, urlsRate, pages, pagesRate,
+               answers[success], successRate);
 #endif // STATS
     }
 #endif // NOSTATS

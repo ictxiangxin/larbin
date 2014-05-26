@@ -41,10 +41,7 @@
 #include "interf/output.h"
 #include "interf/input.h"
 
-
-///////////////////////////////////////////////////////////
 // Struct global
-///////////////////////////////////////////////////////////
 
 // define all the static variables
 time_t      global::now;
@@ -78,6 +75,7 @@ uint            global::closeLevel = 0;
 bool            global::searchOn = false;
 bool            global::webServerOn = false;
 bool            global::highLevelWebServer = false;
+bool            global::webServer = false;
 time_t          global::waitDuration;
 char            *global::userAgent;
 char            *global::sender;
@@ -99,12 +97,11 @@ uint            global::maxFds;
 long            global::remainBand = MAXBANDWIDTH;
 #endif // MAXBANDWIDTH
 pthread_t       global::limitTimeThread = 0;
-#ifndef NOWEBSERVER
 pthread_t       global::webServerThread = 0;
-#endif // NOWEBSERVER
 int             global::IPUrl = 0;
 
-/** Constructor : initialize almost everything
+/*
+ * Constructor : initialize almost everything
  * Everything is read from the config file (larbin.conf by default)
  */
 global::global (int argc, char *argv[])
@@ -227,13 +224,12 @@ global::global (int argc, char *argv[])
         std::cerr << "Unable to disable SIGPIPE : " << strerror(errno) << std::endl;
 }
 
-/** If time out, this function will be invoked.
- */
+// If time out, this function will be invoked.
 global::~global ()
 {
 }
 
-/** parse configuration file */
+// parse configuration file
 void global::parseFile (char *file)
 {
     printf("Configure: %s\n", file);
@@ -250,15 +246,15 @@ void global::parseFile (char *file)
     for (int i=0; tmp[i] != 0; i++)
         switch (tmp[i])
         {
-            case '\n':
-                eff = false;
-                break;
-            case '#':
-                eff = true;
-                // no break !!!
-            default:
-                if (eff)
-                    tmp[i] = ' ';
+        case '\n':
+            eff = false;
+            break;
+        case '#':
+            eff = true;
+        // no break !!!
+        default:
+            if (eff)
+                tmp[i] = ' ';
         }
     char *posParse = tmp;
     char *tok = nextToken(&posParse);
@@ -345,6 +341,8 @@ void global::parseFile (char *file)
             ignoreRobots = true;
         else if (!strcasecmp(tok, "highLevelWebServer"))
             highLevelWebServer = true;
+        else if (!strcasecmp(tok, "webServer"))
+            webServer = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);
@@ -360,7 +358,7 @@ void global::parseFile (char *file)
     delete [] tmp;
 }
 
-/** read the domain limit */
+// read the domain limit
 void global::manageDomain (char **posParse)
 {
     char *tok = nextToken(posParse);
@@ -378,7 +376,7 @@ void global::manageDomain (char **posParse)
     }
 }
 
-/** read the forbidden extensions */
+// read the forbidden extensions
 void global::manageExt (char **posParse)
 {
     char *tok = nextToken(posParse);
@@ -398,7 +396,7 @@ void global::manageExt (char **posParse)
     }
 }
 
-/** make sure the max fds has not been reached */
+// make sure the max fds has not been reached
 void global::verifMax (uint fd)
 {
     if (fd >= maxFds)
@@ -417,27 +415,22 @@ void global::verifMax (uint fd)
     }
 }
 
-///////////////////////////////////////////////////////////
 // Struct Connexion
-///////////////////////////////////////////////////////////
 
-/** put Connection in a coherent state
- */
+// put Connection in a coherent state
 Connexion::Connexion ()
 {
     state = emptyC;
     parser = NULL;
 }
 
-/** Destructor : never used : we recycle !!!
- */
+// Destructor : never used : we recycle !!!
 Connexion::~Connexion ()
 {
     assert(false);
 }
 
-/** Recycle a connexion
- */
+// Recycle a connexion
 void Connexion::recycle ()
 {
     delete parser;

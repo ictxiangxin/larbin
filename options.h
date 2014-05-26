@@ -90,10 +90,6 @@
 //////////////////////////////////////////////////////////
 // now it's just if you need to know how it works
 
-// do not launch the webserver
-// this can be usefull in order to launch no thread at all
-//#define NOWEBSERVER
-
 // do you want nice graphs for in the stats page
 #define GRAPH
 

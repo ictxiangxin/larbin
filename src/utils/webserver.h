@@ -19,8 +19,6 @@
 #ifndef WEBSERVER_H
 #define WEBSERVER_H
 
-#ifndef NOWEBSERVER
 void *startWebserver (void *none);
-#endif // NOWEBSERVER
 
 #endif // WEBSERVER_H
