@@ -129,8 +129,8 @@ struct global
     static bool searchOn;
     /** web server is running */
     static bool webServerOn;
-    /** Use web server */
-    static bool webServer;
+    /** Print stats on terminal */
+    static bool printStats;
     /** high level web server mode */
     static bool highLevelWebServer;
     /** how many seconds should we wait beetween 2 calls at the same server 

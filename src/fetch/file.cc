@@ -171,9 +171,7 @@ bool robots::parseHeaders ()
 void robots::parseRobots ()
 {
     robotsOK();
-#ifndef NOSTATS
     bool goodfile = true;
-#endif // NOSTATS
     server->forbidden.recycle();
     uint items = 0; // size of server->forbidden
     // state
@@ -239,13 +237,12 @@ void robots::parseRobots ()
         }
         else
         {
-#ifndef NOSTATS
-            if (goodfile)
-            {
-                robotsOKdec();
-                goodfile = false;
-            }
-#endif // NOSTATS
+            if (global::printStats)
+                if (goodfile)
+                {
+                    robotsOKdec();
+                    goodfile = false;
+                }
             tok = nextToken(&posParse, ':');
         }
     }

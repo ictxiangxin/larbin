@@ -44,8 +44,6 @@ unsigned long writePrev = 0;
 
 #endif // NDEBUG
 
-#ifndef NOSTATS
-
 uint siteSeen = 0;
 uint siteDNS = 0;         // has a DNS entry
 uint siteRobots = 0;
@@ -71,5 +69,3 @@ uint siteSeenRate = 0;
 uint siteSeenPrev = 0;
 uint siteDNSRate = 0;
 uint siteDNSPrev = 0;
-
-#endif // NOSTATS

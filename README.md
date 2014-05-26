@@ -21,6 +21,8 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 
 * 增加了一个配置选项ignoreRobots，它可以使Larbin在抽取网页时不受robots.txt的影响，你懂的。
 
+* 新版本larbin正在将所有功能开关以及设置移到larbin.conf中，而不是原来的option.h中, 你无需重新编译larbin就可以配置它的功能。
+
 内容提要：
 ----------
 

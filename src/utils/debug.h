@@ -98,8 +98,6 @@ extern unsigned long writePrev;
 // stats
 ////////////////////////////////////////////////
 
-#ifndef NOSTATS
-
 extern uint siteSeen;
 extern uint siteDNS;  // has a DNS entry
 extern uint siteRobots;
@@ -140,25 +138,6 @@ extern uint siteSeenRate;
 extern uint siteSeenPrev;
 extern uint siteDNSRate;
 extern uint siteDNSPrev;
-
-#else // NOSTATS
-
-#define siteSeen() ((void) 0)
-#define siteDNS() ((void) 0)
-#define siteRobots() ((void) 0)
-#define robotsOK() ((void) 0)
-#define robotsOKdec() ((void) 0)
-
-#define hashUrls() ((void) 0)
-#define urls() ((void) 0)
-#define pages() ((void) 0)
-#define interestingPage() ((void) 0)
-#define interestingSeen() ((void) 0)
-#define interestingExtension() ((void) 0)
-#define extensionTreated() ((void) 0)
-#define answers(i) ((void) 0)
-
-#endif // NOSTATS
 
 #ifdef CRASH
 #define crash(s) (cerr << s << "\n")

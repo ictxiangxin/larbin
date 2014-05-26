@@ -203,33 +203,32 @@ static void cron ()
         global::remainBand = global::remainBand + MAXBANDWIDTH;
 #endif // MAXBANDWIDTH
 
-#ifndef NOSTATS
-    histoHit(pages, answers[success]);
-
-    if ((global::now & 7) == 0)
+    if (global::printStats)
     {
-        urlsRate = (urls - urlsPrev) >> 3;
-        urlsPrev = urls;
-        pagesRate = (pages - pagesPrev) >> 3;
-        pagesPrev = pages;
-        successRate = (answers[success] - successPrev) >> 3;
-        successPrev = answers[success];
-        siteSeenRate = (siteSeen - siteSeenPrev) >> 3;
-        siteSeenPrev = siteSeen;
-        siteDNSRate = (siteDNS - siteDNSPrev) >> 3;
-        siteDNSPrev = siteDNS;
-#ifndef NDEBUG
-        readRate = (byte_read - readPrev) >> 3;
-        readPrev = byte_read;
-        writeRate = (byte_write - writePrev) >> 3;
-        writePrev = byte_write;
-#endif // NDEBUG
+        histoHit(pages, answers[success]);
 
-#ifdef STATS
-        printf("\n%surls : %d  (rate : %d)\npages : %d  (rate : %d)\nsuccess : %d  (rate : %d)\n",
-               ctime(&global::now), urls, urlsRate, pages, pagesRate,
-               answers[success], successRate);
-#endif // STATS
+        if ((global::now & 7) == 0)
+        {
+            urlsRate = (urls - urlsPrev) >> 3;
+            urlsPrev = urls;
+            pagesRate = (pages - pagesPrev) >> 3;
+            pagesPrev = pages;
+            successRate = (answers[success] - successPrev) >> 3;
+            successPrev = answers[success];
+            siteSeenRate = (siteSeen - siteSeenPrev) >> 3;
+            siteSeenPrev = siteSeen;
+            siteDNSRate = (siteDNS - siteDNSPrev) >> 3;
+            siteDNSPrev = siteDNS;
+    #ifndef NDEBUG
+            readRate = (byte_read - readPrev) >> 3;
+            readPrev = byte_read;
+            writeRate = (byte_write - writePrev) >> 3;
+            writePrev = byte_write;
+    #endif // NDEBUG
+
+            printf("\n%surls : %d  (rate : %d)\npages : %d  (rate : %d)\nsuccess : %d  (rate : %d)\n",
+                ctime(&global::now), urls, urlsRate, pages, pagesRate,
+                answers[success], successRate);
+        }
     }
-#endif // NOSTATS
 }

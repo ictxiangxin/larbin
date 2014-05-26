@@ -570,9 +570,10 @@ inline url *IPSite::getUrl ()
     urls();
     global::namedSiteList[u->hostHashCode()].nburls--;
     global::inter->getOne();
-#if defined(SPECIFICSEARCH) && !defined(NOSTATS)
-    if (privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
-        extensionTreated();
+#if defined(SPECIFICSEARCH)
+    if (global::printStats)
+        if (privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
+            extensionTreated();
 #endif
     return u;
 }

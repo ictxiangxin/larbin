@@ -140,9 +140,6 @@ static void writeTime (int fds) {
 }
 
 /* write stats information (if any) */
-#ifdef NOSTATS
-#define writeStats(fds) ((void) 0)
-#else
 
 // specific part
 #ifdef SPECIFICSEARCH
@@ -263,11 +260,10 @@ static void writeStats (int fds) {
   ecrire(fds, (char*)"\nsites without ip : ");
   ecrireInti(fds, global::dnsSites->getLength(), (char*)"%5d");
 }
-#endif // NOSTATS
 
 /** draw graphs
  */
-#if defined (NOSTATS) || !defined (GRAPH)
+#if !defined (GRAPH)
 #define writeGraph(fds) ((void) 0)
 #else
 static void writeGraph (int fds) {

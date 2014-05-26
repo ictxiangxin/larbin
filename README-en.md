@@ -21,6 +21,8 @@ Develop:
 
 * Add a new conf option: ignoreRobots, it can make Larbin ignore robots.txt, as you know.
 
+* new version larbin will move all functions to larbin.conf file, instead old option.h file, you needn't recompile larbin to change it's functions.
+
 Table of content :
 ------------------
 

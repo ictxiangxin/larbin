@@ -75,7 +75,7 @@ uint            global::closeLevel = 0;
 bool            global::searchOn = false;
 bool            global::webServerOn = false;
 bool            global::highLevelWebServer = false;
-bool            global::webServer = false;
+bool            global::printStats = false;
 time_t          global::waitDuration;
 char            *global::userAgent;
 char            *global::sender;
@@ -341,8 +341,8 @@ void global::parseFile (char *file)
             ignoreRobots = true;
         else if (!strcasecmp(tok, "highLevelWebServer"))
             highLevelWebServer = true;
-        else if (!strcasecmp(tok, "webServer"))
-            webServer = true;
+        else if (!strcasecmp(tok, "printStats"))
+            printStats = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);
