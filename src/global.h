@@ -195,6 +195,7 @@ struct global
 #endif // MAXBANDWIDTH
     static pthread_t limitTimeThread;
     static pthread_t webServerThread;
+    static bool reload;
 };
 
 /** set this fds for next poll */

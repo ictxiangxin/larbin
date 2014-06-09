@@ -179,12 +179,13 @@ void PersistentFifo::updateWrite () {
 	close(wfds);
 	makeName(++fin);
 	wfds = creat(fileName, S_IRUSR | S_IWUSR);
-#ifdef RELOAD
-	global::seen->save();
+    if(global::reload)
+    {
+        global::seen->save();
 #ifdef NO_DUP
-    global::hDuplicate->save();
+        global::hDuplicate->save();
 #endif
-#endif
+    }
   }
 }
 

@@ -99,6 +99,7 @@ long            global::remainBand = MAXBANDWIDTH;
 pthread_t       global::limitTimeThread = 0;
 pthread_t       global::webServerThread = 0;
 int             global::IPUrl = 0;
+bool            global::reload = false;
 
 /*
  * Constructor : initialize almost everything
@@ -107,11 +108,7 @@ int             global::IPUrl = 0;
 global::global (int argc, char *argv[])
 {
     char *configFile = (char*)"larbin.conf";
-#ifdef RELOAD
-    bool reload = true;
-#else
-    bool reload = false;
-#endif
+    bool reload = global::reload;
     now = time(NULL);
     // verification of arguments
     int pos = 1;
@@ -343,6 +340,8 @@ void global::parseFile (char *file)
             highLevelWebServer = true;
         else if (!strcasecmp(tok, "printStats"))
             printStats = true;
+        else if (!strcasecmp(tok, "reload"))
+            reload = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);

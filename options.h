@@ -81,12 +81,6 @@
 // (not needed if you did not add code yourself)
 //#define THREAD_OUTPUT
 
-// if this option is set, larbin saves the hashtable from time to time
-// this way it can restart from where it last stopped
-// by reloading the table
-//#define RELOAD
-
-
 //////////////////////////////////////////////////////////
 // now it's just if you need to know how it works
 
