@@ -30,7 +30,7 @@ Table of content :
 * [Configuring](#configuring)
 * [Running](#running)
 * [Platforms](#platforms)
-* [TODO](#TODO)
+* [TODO](#todo)
 * [Contact](#contact)
 
 ###Compiling
