@@ -21,7 +21,7 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 
 * 增加了一个配置选项ignoreRobots，它可以使Larbin在抽取网页时不受robots.txt的影响，你懂的。
 
-* 新版本larbin正在将所有功能开关以及设置移到larbin.conf中，而不是原来的option.h中, 你无需重新编译larbin就可以配置它的功能。
+* 新版本larbin正在将所有功能开关以及设置移到larbin.conf中，而不是原来的options.h中, 你无需重新编译larbin就可以配置它的功能。
 
 内容提要：
 ----------
@@ -30,11 +30,13 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 * [配置Larbin](#配置larbin)
 * [运行Larbin](#运行larbin)
 * [运行环境](#运行环境)
+* [计划开发](#计划开发)
 * [联系我](#联系我)
 
 ###编译Larbin
 
 查看options.h文件来进行功能选择，这些功能直接决定了Larbin的功能和工作方式，请仔细配置这个文件。每次修改该文件后需要重新编译Larbin以使其生效。
+（新版本的Larbin将逐步放弃使用options.h文件，而完全用larbin.conf对Larbin进行配置）
 
 执行如下命令进行:
 
@@ -46,11 +48,19 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 ```bash
 > sudo apt-get install xutils-dev
 ```
+如果你使用的系统是SUSE:
+```bash
+> sudo zypper in makedepend
+```
 你仍然需要注意一些常用程序是否安装，如g++，m4等，如果没有，在Debian/Ubuntu类操作系统下，执行下列命令进行安装：
 ```bash
 > sudo apt-get install g++ m4
 ```
-Adns 1.3 在编译时会用到lynx，如果出现缺失错误，用上述同样的方法进行安装。
+如果你使用的系统是SUSE:
+```bash
+> sudo zypper in gcc-g++ m4
+```
+Adns 1.4 在编译时会用到lynx，如果出现缺失错误，用上述同样的方法进行安装。
 
 ###配置Larbin
 
@@ -90,6 +100,12 @@ Larbin主要在Linux下进行开发。
 
 它可能在其他的平台下无法正确编译，但是我将在后续的版本中使其支持更多的平台。
 请向我汇报Larbin在任何平台下的工作情况。
+
+###计划开发
+
+* 首先还是要将代码重构一遍。
+* 一个全新的webserver，计划使用GNU libmicrohttpd实现。
+* 支持javascript，这将是一个非常庞大的功能。
 
 ###联系我
 

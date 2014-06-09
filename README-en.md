@@ -21,7 +21,7 @@ Develop:
 
 * Add a new conf option: ignoreRobots, it can make Larbin ignore robots.txt, as you know.
 
-* new version larbin will move all functions to larbin.conf file, instead old option.h file, you needn't recompile larbin to change it's functions.
+* new version larbin will move all functions to larbin.conf file, instead old options.h file, you needn't recompile larbin to change it's functions.
 
 Table of content :
 ------------------
@@ -30,11 +30,13 @@ Table of content :
 * [Configuring](#configuring)
 * [Running](#running)
 * [Platforms](#platforms)
+* [TODO](#TODO)
 * [Contact](#contact)
 
 ###Compiling
 
 Have a look at options.h to choose options you need, these function directly affect the ablilities of your Larbin, please configure this file seriously. After you change this file each time, you should rebuild Larbin so that these options can go into effect.
+(New version Larbin will give up use options.h file, all options will configured by larbin.conf)
 
 Excute the next commands to compile:
 
@@ -46,11 +48,19 @@ If you get error when doing configure, make sure that you have already installed
 ```bash
 > sudo apt-get install xutils-dev
 ```
+If you use SUSE:
+```bash
+> sudo zypper in makedepend
+```
 You also need to check that you have installed some basic tools, such as g++, m4, if not, on Debian/Ubuntu class OS, you can use next commands to install them:
 ```bash
 > sudo apt-get install g++ m4
 ``` 
-Adns 1.3 need lynx when compiling, if missing error occur, please install it in the same way.
+If you use SUSE:
+```bash
+> sudo zypper in gcc-g++ m4
+```
+Adns 1.4 need lynx when compiling, if missing error occur, please install it in the same way.
 
 ###Configuring
 
@@ -90,6 +100,12 @@ I've tested larbin with success on Linux and freeBSD.
 
 It probably won't compile right out of the box on any other platform,
 but i'll work on it for future versions. Please report success or failure on any platform.
+
+###TODO
+
+* First, I need to reconstruct the source code.
+* A new webserver, I want to use GNU libmicrohttdp to implement it.
+* Support javascript, this is a very big project.
 
 ###Contact
 
