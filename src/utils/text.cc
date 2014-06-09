@@ -112,8 +112,8 @@ bool caseContain (const char *a, const char *b)
 {
     size_t la = strlen(a);
     for (int i = strlen(b) - la; i >= 0; i--)
-	    if (!strncasecmp(a, b + i, la))
-	        return true;
+        if (!strncasecmp(a, b + i, la))
+            return true;
     return false;
 }
 
@@ -138,28 +138,28 @@ char *readfile (int fds)
     char *res = new char[size];
     while(cont == 1)
     {
-	    switch (nbRead = read(fds, &buf, 500))
+        switch (nbRead = read(fds, &buf, 500))
         {
-	        case 0 :
-                cont = 0;
-                break;
-	        case -1 :
-                if (errno != EINTR && errno != EIO)
-                    cont = -1;
-                break;
-	        default :
-	            if (pos + nbRead >= size)
-                {
-		            size *= 2;
-		            char *tmp = new char[size];
-		            memcpy(tmp, res, pos);
-		            delete res;
-		            res = tmp;
-	            }
-	            memcpy(res + pos, buf, nbRead);
-	            pos += nbRead;
-	            break;
-	    }
+        case 0 :
+            cont = 0;
+            break;
+        case -1 :
+            if (errno != EINTR && errno != EIO)
+                cont = -1;
+            break;
+        default :
+            if (pos + nbRead >= size)
+            {
+                size *= 2;
+                char *tmp = new char[size];
+                memcpy(tmp, res, pos);
+                delete res;
+                res = tmp;
+            }
+            memcpy(res + pos, buf, nbRead);
+            pos += nbRead;
+            break;
+        }
     }
     res[pos] = 0;
     return res;
@@ -224,7 +224,7 @@ bool matchPrivExt (const char *file)
 /* does this char * match contentType */
 int matchContentType (const char *ct)
 {
-    
+
     for (int i = 0; contentTypes[i] != NULL; i++)
         if (startWithIgnoreCase(contentTypes[i], ct))
             return i;

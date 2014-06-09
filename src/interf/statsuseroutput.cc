@@ -1,6 +1,20 @@
-// Larbin
-// Sebastien Ailleret
-// 03-01-02 -> 04-01-02
+/*
+ *   Larbin - is a web crawler
+ *   Copyright (C) 2013  ictxiangxin
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <iostream>
 #include <string.h>
@@ -31,34 +45,39 @@ static double totalbytes = 0;
 /** A page has been loaded successfully
  * @param page the page that has been fetched
  */
-void loaded (html *page) {
-  uint32_t l = page->getLength();
-  int t = l / taille;
-  if (t >= nb) {
-    t = nb-1;
-  }
-  tabs[t]++;
-  if (tabs[t] > maxs) maxs = tabs[t];
-  tabb[t] += (double) l;
-  if (tabb[t] > maxb) maxb = tabb[t];
-  totalpages++;
-  totalbytes += (double) l;
+void loaded (html *page)
+{
+    uint32_t l = page->getLength();
+    int t = l / taille;
+    if (t >= nb)
+    {
+        t = nb-1;
+    }
+    tabs[t]++;
+    if (tabs[t] > maxs) maxs = tabs[t];
+    tabb[t] += (double) l;
+    if (tabb[t] > maxb) maxb = tabb[t];
+    totalpages++;
+    totalbytes += (double) l;
 }
 
 /** The fetch failed
  * @param u the URL of the doc
  * @param reason reason of the fail
  */
-void failure (url *u, FetchError reason) {
+void failure (url *u, FetchError reason)
+{
 }
 
 /** initialisation function
  */
-void initUserOutput () {
-  for (int i=0; i<nb; i++) {
-    tabs[i] = 0;
-    tabb[i] = 0;
-  }
+void initUserOutput ()
+{
+    for (int i=0; i<nb; i++)
+    {
+        tabs[i] = 0;
+        tabb[i] = 0;
+    }
 }
 
 /** stats, called in particular by the webserver
@@ -67,26 +86,29 @@ void initUserOutput () {
  * to use mutex, because incoherence in the webserver is not as critical
  * as efficiency
  */
-static void dessine(int fds, double *tab, double *maxi) {
-  for (int i=0; i<nb; i++) {
-    ecrire(fds, (char*)"|");
-    int n = (int) ((tab[i] * larg) / (*maxi+1));
-    for (int j=0; j<n; j++) ecrire(fds, (char*)"*");
-    ecrire(fds, (char*)"\n");
-  }
+static void dessine(int fds, double *tab, double *maxi)
+{
+    for (int i=0; i<nb; i++)
+    {
+        ecrire(fds, (char*)"|");
+        int n = (int) ((tab[i] * larg) / (*maxi+1));
+        for (int j=0; j<n; j++) ecrire(fds, (char*)"*");
+        ecrire(fds, (char*)"\n");
+    }
 }
 
-void outputStats(int fds) {
-  ecrire(fds, (char*)"Stats for ");
-  ecrireInt(fds, totalpages);
-  ecrire(fds, (char*)" pages.\nMean size of a page : ");
-  ecrireInt(fds, ((int) totalbytes) / totalpages);
-  ecrire(fds, (char*)"\n\nProportion of pages per size (one row is ");
-  ecrireInt(fds, taille);
-  ecrire(fds, (char*)" bytes, max size is ");
-  ecrireInt(fds, taille*nb);
-  ecrire(fds, (char*)" bytes) :\n\n");
-  dessine(fds, tabs, &maxs);
-  ecrire(fds, (char*)"\n\nbytes transfered by size :\n\n");
-  dessine(fds, tabb, &maxb);
+void outputStats(int fds)
+{
+    ecrire(fds, (char*)"Stats for ");
+    ecrireInt(fds, totalpages);
+    ecrire(fds, (char*)" pages.\nMean size of a page : ");
+    ecrireInt(fds, ((int) totalbytes) / totalpages);
+    ecrire(fds, (char*)"\n\nProportion of pages per size (one row is ");
+    ecrireInt(fds, taille);
+    ecrire(fds, (char*)" bytes, max size is ");
+    ecrireInt(fds, taille*nb);
+    ecrire(fds, (char*)" bytes) :\n\n");
+    dessine(fds, tabs, &maxs);
+    ecrire(fds, (char*)"\n\nbytes transfered by size :\n\n");
+    dessine(fds, tabb, &maxb);
 }

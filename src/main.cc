@@ -219,16 +219,16 @@ static void cron ()
             siteSeenPrev = siteSeen;
             siteDNSRate = (siteDNS - siteDNSPrev) >> 3;
             siteDNSPrev = siteDNS;
-    #ifndef NDEBUG
+#ifndef NDEBUG
             readRate = (byte_read - readPrev) >> 3;
             readPrev = byte_read;
             writeRate = (byte_write - writePrev) >> 3;
             writePrev = byte_write;
-    #endif // NDEBUG
+#endif // NDEBUG
 
             printf("\n%surls : %d  (rate : %d)\npages : %d  (rate : %d)\nsuccess : %d  (rate : %d)\n",
-                ctime(&global::now), urls, urlsRate, pages, pagesRate,
-                answers[success], successRate);
+                   ctime(&global::now), urls, urlsRate, pages, pagesRate,
+                   answers[success], successRate);
         }
     }
 }

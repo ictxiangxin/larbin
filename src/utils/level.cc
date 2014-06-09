@@ -45,30 +45,30 @@ void closeLevelUp()
 {
     switch(global::closeLevel)
     {
-        case 0 :
-            std::cout << "[Search] Closing... ";
-            if (global::httpPort != 0)
-                if (global::webServerOn && global::highLevelWebServer)
-                    std::cout << "([Webserver] still running)";
-            std::cout << std::endl;
-            if (global::httpPort != 0)
-                if(!global::highLevelWebServer)
-                {
-                    std::cout << "[Webserver] Closing..." << std::endl;
-                    global::webServerOn = false;
-                }
-            global::searchOn = false;
-            break;
-        case 1 :
-            if (global::httpPort != 0)
-                if(global::webServerOn)
-                {
-                    std::cout << "[Webserver] Closing..." << std::endl;
-                    global::webServerOn = false;
-                }
-            break;
-        default :
-            break;
+    case 0 :
+        std::cout << "[Search] Closing... ";
+        if (global::httpPort != 0)
+            if (global::webServerOn && global::highLevelWebServer)
+                std::cout << "([Webserver] still running)";
+        std::cout << std::endl;
+        if (global::httpPort != 0)
+            if(!global::highLevelWebServer)
+            {
+                std::cout << "[Webserver] Closing..." << std::endl;
+                global::webServerOn = false;
+            }
+        global::searchOn = false;
+        break;
+    case 1 :
+        if (global::httpPort != 0)
+            if(global::webServerOn)
+            {
+                std::cout << "[Webserver] Closing..." << std::endl;
+                global::webServerOn = false;
+            }
+        break;
+    default :
+        break;
     }
     global::closeLevel++;
 }

@@ -48,7 +48,7 @@ int ecrire (int fd, char *buf)
         if (i == -1)
         {
             if (errno != EINTR)
-		        pos = count + 1;
+                pos = count + 1;
         }
         else
             pos += i;
@@ -71,12 +71,12 @@ int ecrireBuff (int fd, char *buf, int count)
         {
             switch (errno)
             {
-                case EINTR:
-                    break;
-                default:
-                    pos = count + 1;
-                    perror("Problem in ecrireBuff");
-                    break;
+            case EINTR:
+                break;
+            default:
+                pos = count + 1;
+                perror("Problem in ecrireBuff");
+                break;
             }
         }
         else
@@ -144,7 +144,7 @@ int ecrireChar (int fd, char c)
         if (i == -1)
         {
             if (errno != EINTR)
-		        pos = 2;
+                pos = 2;
         }
         else
             pos += i;

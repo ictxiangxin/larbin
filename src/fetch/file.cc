@@ -147,21 +147,21 @@ bool robots::parseHeaders ()
 {
     for(posParse = buffer + 9; posParse[3] != '\0'; posParse++)
         if (
-               (
-                   posParse[0] == '\n'
+            (
+                posParse[0] == '\n'
                 && (
-                       posParse[1] == '\n'
+                    posParse[1] == '\n'
                     || posParse[2] == '\n'
-                   )
-               )
+                )
+            )
             || (
-                   posParse[0] == '\r'
+                posParse[0] == '\r'
                 && (
-                       posParse[1] == '\r'
+                    posParse[1] == '\r'
                     || posParse[2] == '\r'
-                   )
-               )
-           )
+                )
+            )
+        )
             return true;
     return false;
 }
@@ -346,14 +346,14 @@ int html::getLength ()
 void html::manageUrl (url *nouv, bool isRedir)
 {
     if (
-           nouv->isValid()
+        nouv->isValid()
         && filter1(nouv->getHost(), nouv->getFile())
         && (
-               global::externalLinks
+            global::externalLinks
             || isRedir
             || !strcmp(nouv->getHost(), this->here->getHost())
-           )
-       )
+        )
+    )
     {
         // The extension is not stupid (gz, pdf...)
 #ifdef LINKS_INFO
@@ -389,40 +389,40 @@ int html::inputHeaders (int size)
     {
         switch (state)
         {
-            case ANSWER:
-                posn = strchr(posParse, '\n');
-                if (posn != NULL)
-                {
-                    posParse = posn;
-                    if (parseCmdline ())
-                        return 1;
-                    area = ++posParse;
-                }
-                else
-                    return 0;
-                break;
-            case HEADERS:
-            case HEADERS30X:
-                posn = strchr(posParse, '\n');
-                if (posn != NULL)
-                {
-                    posParse = posn;
-                    int tmp;
-                    if (state == HEADERS)
-                        tmp = parseHeader();
-                    else
-                        tmp = parseHeader30X();
-                    if (tmp)
-                        return 1;
-                    area = ++posParse;
-                }
-                else
-                    return 0;
-                break;
-            case SPECIFIC:
-                return pipeSpec();
-            default:
+        case ANSWER:
+            posn = strchr(posParse, '\n');
+            if (posn != NULL)
+            {
+                posParse = posn;
+                if (parseCmdline ())
+                    return 1;
+                area = ++posParse;
+            }
+            else
                 return 0;
+            break;
+        case HEADERS:
+        case HEADERS30X:
+            posn = strchr(posParse, '\n');
+            if (posn != NULL)
+            {
+                posParse = posn;
+                int tmp;
+                if (state == HEADERS)
+                    tmp = parseHeader();
+                else
+                    tmp = parseHeader30X();
+                if (tmp)
+                    return 1;
+                area = ++posParse;
+            }
+            else
+                return 0;
+            break;
+        case SPECIFIC:
+            return pipeSpec();
+        default:
+            return 0;
         }
     }
     return 0;
@@ -435,15 +435,15 @@ int html::parseCmdline ()
     {
         switch (buffer[9])
         {
-            case '2':
-                state = HEADERS;
-                break;
-            case '3':
-                state = HEADERS30X;
-                break;
-            default:
-                errno = err40X;
-                return 1;
+        case '2':
+            state = HEADERS;
+            break;
+        case '3':
+            state = HEADERS30X;
+            break;
+        default:
+            errno = err40X;
+            return 1;
         }
     }
     else
@@ -697,7 +697,8 @@ void html::parseTag ()
     int action = -1;
     // read the name of the tag
     if (thisCharIs(0, 'a'))
-    { // a href
+    {
+        // a href
         param = "href";
         action = LINK;
         posParse++;
@@ -758,16 +759,16 @@ void html::parseContent (int action)
     if (endItem > buffer + pos)
         endItem = buffer + pos;
     while (
-              posParse < endItem
-           && *posParse != '\"'
-           && *posParse != '\''
-           && *posParse != '\n'
-           && *posParse != ' '
-           && *posParse != '>'
-           && *posParse != '\r'
-           && *posParse != '\t'
-           && notCgiChar(*posParse)
-          )
+        posParse < endItem
+        && *posParse != '\"'
+        && *posParse != '\''
+        && *posParse != '\n'
+        && *posParse != ' '
+        && *posParse != '>'
+        && *posParse != '\r'
+        && *posParse != '\t'
+        && notCgiChar(*posParse)
+    )
     {
         if (*posParse == '\\')
             *posParse = '/';    // Bye Bye DOS !
@@ -782,38 +783,38 @@ void html::parseContent (int action)
         *posParse = 0;
         switch (action)
         {
-            case LINK:
-                // try to understand this new link
-                manageUrl(new url(area, here->getDepth() - 1, base), false);
+        case LINK:
+            // try to understand this new link
+            manageUrl(new url(area, here->getDepth() - 1, base), false);
+            break;
+        case BASE:
+        {
+            // This page has a BASE HREF tag
+            uint end = posParse - area - 1;
+            if(posParse == area)
                 break;
-            case BASE:
+            while (end > 7 && area[end] != '/') // 7 because http://
+                end--;
+            if (end > 7) // this base looks good
             {
-                // This page has a BASE HREF tag
-                uint end = posParse - area - 1;
-                if(posParse == area)
-                    break;
-                while (end > 7 && area[end] != '/') // 7 because http://
-                    end--;
-                if (end > 7) // this base looks good
+                end++;
+                char tmp = area[end];
+                area[end] = 0;
+                url *tmpbase = new url(area, 0, (url *) NULL);
+                area[end] = tmp;
+                delete base;
+                if (tmpbase->isValid())
+                    base = tmpbase;
+                else
                 {
-                    end++;
-                    char tmp = area[end];
-                    area[end] = 0;
-                    url *tmpbase = new url(area, 0, (url *) NULL);
-                    area[end] = tmp;
-                    delete base;
-                    if (tmpbase->isValid())
-                        base = tmpbase;
-                    else
-                    {
-                        delete tmpbase;
-                        base = NULL;
-                    }
+                    delete tmpbase;
+                    base = NULL;
                 }
-                break;
             }
-            default:
-                assert(false);
+            break;
+        }
+        default:
+            assert(false);
         }
         *posParse = oldchar;
     }

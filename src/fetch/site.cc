@@ -177,9 +177,9 @@ void NamedSite::putGenericUrl(url *u, int limit, bool prio)
     {
         nburls++;
         if (   dnsState == waitDns
-            || strcmp(name, u->getHost())
-            || port != u->getPort()
-            || global::now > dnsTimeout
+                || strcmp(name, u->getHost())
+                || port != u->getPort()
+                || global::now > dnsTimeout
            )
         {
             // dns not done or other site
