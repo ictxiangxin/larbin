@@ -203,10 +203,11 @@ static void cron ()
         global::remainBand = global::remainBand + MAXBANDWIDTH;
 #endif // MAXBANDWIDTH
 
-    if (global::printStats)
-    {
+    if(global::histograms)
         histoHit(pages, answers[success]);
 
+    if (global::printStats)
+    {
         if ((global::now & 7) == 0)
         {
             urlsRate = (urls - urlsPrev) >> 3;
