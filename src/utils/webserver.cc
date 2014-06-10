@@ -271,15 +271,14 @@ static void writeStats (int fds)
 
 /** draw graphs
  */
-#if !defined (GRAPH)
-#define writeGraph(fds) ((void) 0)
-#else
 static void writeGraph (int fds)
 {
-    ecrire(fds, (char*)"\n\n<h2>Histograms :</h2>");
-    histoWrite(fds);
+    if(global::histograms)
+    {
+        ecrire(fds, (char*)"\n\n<h2>Histograms :</h2>");
+        histoWrite(fds);
+    }
 }
-#endif
 
 /* write debug information (if any)
  */

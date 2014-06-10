@@ -20,8 +20,6 @@
 
 #include "options.h"
 
-#ifdef GRAPH
-
 #include <string.h>
 
 #include "global.h"
@@ -202,4 +200,3 @@ void Histogram::write (int fds)
     ecrire (fds, fin);
 }
 
-#endif // GRAPH

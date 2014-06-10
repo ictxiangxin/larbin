@@ -196,6 +196,7 @@ struct global
     static pthread_t limitTimeThread;
     static pthread_t webServerThread;
     static bool reload;
+    static bool histograms;
 };
 
 /** set this fds for next poll */
