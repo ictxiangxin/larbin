@@ -588,8 +588,11 @@ bool url::isProtocol (char *s)
         } while(0)
 
 /* see if a header contain a new cookie */
+
 void url::addCookie(char *header)
 {
+    if(!global::useCookies)
+        return;
     if (startWithIgnoreCase("set-cookie: ", header))
     {
         char *pos = strchr(header + 12, ';');
