@@ -28,8 +28,6 @@
 // debug
 ////////////////////////////////////////////////
 
-#ifndef NDEBUG
-
 // Where are the different threads
 extern uint stateMain;
 extern uint debug;
@@ -71,28 +69,6 @@ extern unsigned long readRate;
 extern unsigned long readPrev;
 extern unsigned long writeRate;
 extern unsigned long writePrev;
-
-#else // NDEBUG
-
-#define stateMain(i) ((void) 0)
-#define incDebug() ((void) 0)
-#define debug(i) ((void) 0)
-
-#define addsite() ((void) 0)
-#define addipsite() ((void) 0)
-#define newUrl() ((void) 0)
-#define delUrl() ((void) 0)
-#define newPars() ((void) 0)
-#define refUrl() ((void) 0)
-#define delPars() ((void) 0)
-
-#define addNamedUrl() ((void) 0)
-#define delNamedUrl() ((void) 0)
-
-#define addRead(i) ((void) 0)
-#define addWrite(i) ((void) 0)
-
-#endif // NDEBUG
 
 ////////////////////////////////////////////////
 // stats

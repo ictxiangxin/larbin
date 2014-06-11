@@ -67,7 +67,7 @@ static void waitBandwidth (time_t *old)
 #define waitBandwidth(x) ((void) 0)
 #endif // MAXBANDWIDTH
 
-static void printLimitTime(uint t)
+static void transTime(uint t, uint *d, uint *h, uint *m)
 {
     uint tm = t / 60;
     uint th = 0;
@@ -80,8 +80,17 @@ static void printLimitTime(uint t)
     if(th >= 24)
     {
         td = th /24;
-        td %= 24;
+        th %= 24;
     }
+    *d = td;
+    *h = th;
+    *m = tm;
+}
+
+static void printLimitTime(uint t)
+{
+    uint td, th, tm;
+    transTime(t, &td, &th, &tm);
     std::cout << "Limit Time: ";
     if(td != 0)
         std::cout << td << " Days, ";
@@ -90,9 +99,7 @@ static void printLimitTime(uint t)
     std::cout << tm << " Minutes." << std::endl;
 }
 
-#ifndef NDEBUG
 static uint count = 0;
-#endif // NDEBUG
 
 static void getSIGINT(int signo)
 {
@@ -130,6 +137,7 @@ int main (int argc, char *argv[])
     searchOn();
     if (global::limitTime != 0)
     {
+        global::startTime = time(NULL);
         global::limitTimeThread = startThread(pLimitTime, NULL);
         printLimitTime(global::limitTime);
     }
@@ -220,16 +228,30 @@ static void cron ()
             siteSeenPrev = siteSeen;
             siteDNSRate = (siteDNS - siteDNSPrev) >> 3;
             siteDNSPrev = siteDNS;
-#ifndef NDEBUG
-            readRate = (byte_read - readPrev) >> 3;
-            readPrev = byte_read;
-            writeRate = (byte_write - writePrev) >> 3;
-            writePrev = byte_write;
-#endif // NDEBUG
+            if(global::debug)
+            {
+                readRate = (byte_read - readPrev) >> 3;
+                readPrev = byte_read;
+                writeRate = (byte_write - writePrev) >> 3;
+                writePrev = byte_write;
+            }
 
-            printf("\n%surls : %d  (rate : %d)\npages : %d  (rate : %d)\nsuccess : %d  (rate : %d)\n",
-                   ctime(&global::now), urls, urlsRate, pages, pagesRate,
-                   answers[success], successRate);
+            uint td, th, tm;
+            std::cout << std::endl
+                      << ctime(&global::now)
+                      << "urls :    " << urls <<             "\t(rate : " << urlsRate <<    ")"
+                      << std::endl
+                      << "pages :   " << pages <<            "\t(rate : " << pagesRate <<   ")"
+                      << std::endl
+                      << "success : " << answers[success] << "\t(rate : " << successRate << ")"
+                      << std::endl
+                      << "Remaining Time: ";
+            transTime(global::limitTime - global::now + global::startTime, &td, &th, &tm);
+            if(td != 0)
+                std::cout << td << " Days, ";
+            if(th != 0)
+                std::cout << th << " Hours, ";
+            std::cout << tm << " Minutes." << std::endl;
         }
     }
 }

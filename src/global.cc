@@ -71,6 +71,7 @@ int8_t          global::depthInSite;
 bool            global::externalLinks = true;
 bool            global::ignoreRobots = false;
 uint            global::limitTime = 0;
+uint            global::startTime = 0;
 uint            global::closeLevel = 0;
 bool            global::searchOn = false;
 bool            global::webServerOn = false;
@@ -103,6 +104,7 @@ bool            global::reload = false;
 bool            global::histograms = false;
 bool            global::fetchInfo = false;
 bool            global::depthBySite = false;
+bool            global::debug = false;
 
 /*
  * Constructor : initialize almost everything
@@ -351,6 +353,8 @@ void global::parseFile (char *file)
             fetchInfo = true;
         else if (!strcasecmp(tok, "depthBySite"))
             depthBySite = true;
+        else if (!strcasecmp(tok, "debug"))
+            debug = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);

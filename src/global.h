@@ -123,6 +123,7 @@ struct global
     static bool ignoreRobots;
     /** Limit running time */
     static uint limitTime;
+    static uint startTime;
     /** close flag */
     static uint closeLevel;
     /** search is running */
@@ -199,6 +200,7 @@ struct global
     static bool histograms;
     static bool fetchInfo;
     static bool depthBySite;
+    static bool debug;
 };
 
 /** set this fds for next poll */

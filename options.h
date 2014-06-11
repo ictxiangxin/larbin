@@ -69,7 +69,6 @@
 // be carefull, larbin might use 10 to 20% more
 //#define MAXBANDWIDTH 200000
 
-
 //////////////////////////////////////////////////////////
 // Efficiency vs feature
 
@@ -77,12 +76,6 @@
 // This is compulsory if it can block
 // (not needed if you did not add code yourself)
 //#define THREAD_OUTPUT
-
-//////////////////////////////////////////////////////////
-// now it's just if you need to know how it works
-
-// uncomment if you are not interested in debugging information
-//#define NDEBUG
 
 // Please enable this option if you want to report a crash
 // then compile with "make debug"

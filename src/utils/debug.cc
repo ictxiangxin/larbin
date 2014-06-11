@@ -22,8 +22,6 @@
 
 #include "types.h"
 
-#ifndef NDEBUG
-
 uint stateMain;          // where is the main loop
 uint debug = 0;
 
@@ -41,8 +39,6 @@ unsigned long readRate = 0;
 unsigned long readPrev = 0;
 unsigned long writeRate = 0;
 unsigned long writePrev = 0;
-
-#endif // NDEBUG
 
 uint siteSeen = 0;
 uint siteDNS = 0;         // has a DNS entry

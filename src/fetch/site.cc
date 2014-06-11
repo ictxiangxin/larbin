@@ -407,12 +407,10 @@ void NamedSite::newId ()
 {
     // ip expires or new name or just new port
     // Change the identity of this site
-#ifndef NDEBUG
     if (name[0] == 0)
     {
         addsite();
     }
-#endif // NDEBUG
     url *u = fifo[outFifo];
     strcpy(name, u->getHost());
     port = u->getPort();
@@ -546,9 +544,8 @@ void IPSite::putUrl (url *u)
     // Put Site in fifo if not yet in
     if (!isInFifo)
     {
-#ifndef NDEBUG
-        if (lastAccess == 0) addipsite();
-#endif // NDEBUG
+        if (lastAccess == 0)
+            addipsite();
         isInFifo = true;
         if (lastAccess + global::waitDuration <= global::now
                 && global::freeConns->isNonEmpty())

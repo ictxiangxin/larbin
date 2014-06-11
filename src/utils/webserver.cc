@@ -282,11 +282,10 @@ static void writeGraph (int fds)
 
 /* write debug information (if any)
  */
-#ifdef NDEBUG
-#define writeDebug(fds) ((void) 0)
-#else
 static void writeDebug (int fds)
 {
+    if (!global::debug)
+        return;
     ecrire(fds, (char*)"\n\n<h2>Ressources Sharing :</h2>\n\nused connexions : ");
     ecrireInti(fds, global::nb_conn - global::freeConns->getLength(), (char*)"%8d");
 #ifdef THREAD_OUTPUT
@@ -356,7 +355,6 @@ static void writeDebug (int fds)
     close(status);
 #endif // HAS_PROC_SELF_STATUS
 }
-#endif // NDEBUG
 
 /* write urls of the first dnsSites
  */
