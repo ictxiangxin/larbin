@@ -54,10 +54,6 @@
 // downlaod everything (ie no check of content type in http headers)
 //#define ANYTYPE
 
-// do you want to manage cookies
-//#define COOKIES
-
-
 //////////////////////////////////////////////////////////
 // Various options
 
