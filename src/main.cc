@@ -46,7 +46,7 @@
 #include "utils/limitTime.h"
 #include "utils/level.h"
 
-static void cron ();
+static int cron ();
 
 // wait to limit bandwidth usage
 #ifdef MAXBANDWIDTH
@@ -150,7 +150,8 @@ int main (int argc, char *argv[])
         {
             // this block is called every second
             old = global::now;
-            cron();
+            if(!cron())
+                break;
         }
         stateMain(-count);
         waitBandwidth(&old);
@@ -182,12 +183,10 @@ int main (int argc, char *argv[])
 }
 
 // a lot of stats and profiling things
-static void cron ()
+static int cron ()
 {
-#ifdef EXIT_AT_END
     if (global::URLsDisk->getLength() == 0 && global::URLsDiskWait->getLength() == 0 && debUrl == 0)
-        exit(0);
-#endif // EXIT_AT_END
+        return FALSE;
 
     // look for timeouts
     checkTimeout();
@@ -254,4 +253,5 @@ static void cron ()
             std::cout << tm << " Minutes." << std::endl;
         }
     }
+    return TRUE;
 }
