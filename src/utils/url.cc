@@ -591,8 +591,6 @@ bool url::isProtocol (char *s)
 
 void url::addCookie(char *header)
 {
-    if(!global::useCookies)
-        return;
     if (startWithIgnoreCase("set-cookie: ", header))
     {
         char *pos = strchr(header + 12, ';');

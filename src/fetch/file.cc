@@ -479,7 +479,8 @@ int html::parseHeader ()
     else
     {
         *posParse = 0;
-        here->addCookie(area);
+        if (global::useCookies)
+            here->addCookie(area);
         *posParse = '\n';
         if (verifType () || verifLength())
             return 1;
