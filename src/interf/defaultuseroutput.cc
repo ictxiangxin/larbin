@@ -41,11 +41,12 @@ void loaded (html *page)
     // those char* are statically allocated, so you should copy
     // them if you want to keep them
     // in order to accept \000 in the page, you can use page->getLength()
-#ifdef BIGSTATS
-    cout << "fetched : ";
-    page->getUrl()->print();
+    if(global::fetchInfo)
+    {
+        std::cout << "fetched : ";
+        page->getUrl()->print();
+    }
     // cout << page->getHeaders() << "\n" << page->getPage() << "\n";
-#endif // BIGSTATS
 }
 
 /*
@@ -56,10 +57,11 @@ void loaded (html *page)
 void failure (url *u, FetchError reason)
 {
     // Here should be the code for managing everything
-#ifdef BIGSTATS
-    cout << "fetched failed (" << (int) reason << ") : ";
-    u->print();
-#endif // BIGSTATS
+    if(global::fetchInfo)
+    {
+        std::cout << "fetched failed (" << (int) reason << ") : ";
+        u->print();
+    }
 }
 
 /* initialisation function */

@@ -197,6 +197,7 @@ struct global
     static pthread_t webServerThread;
     static bool reload;
     static bool histograms;
+    static bool fetchInfo;
 };
 
 /** set this fds for next poll */

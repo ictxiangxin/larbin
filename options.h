@@ -13,7 +13,7 @@
 #define DEFAULT_OUTPUT   // do nothing...
 //#define SIMPLE_SAVE      // save in files named save/dxxxxxx/fyyyyyy
 //#define MIRROR_SAVE      // save in files (respect sites hierarchy)
-#define STATS_OUTPUT     // do some stats on pages
+//#define STATS_OUTPUT     // do some stats on pages
 
 ////////////////////////////////////////////////////////////
 // Set up a specific search
@@ -84,18 +84,8 @@
 //////////////////////////////////////////////////////////
 // now it's just if you need to know how it works
 
-// do you want nice graphs for in the stats page
-#define GRAPH
-
 // uncomment if you are not interested in debugging information
 //#define NDEBUG
-
-// enable this if you really dislike stats (in the webserver)
-//#define NOSTATS
-
-// enable this if you really like stats (on stdout)
-//#define STATS
-//#define BIGSTATS
 
 // Please enable this option if you want to report a crash
 // then compile with "make debug"

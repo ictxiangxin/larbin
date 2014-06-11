@@ -101,6 +101,7 @@ pthread_t       global::webServerThread = 0;
 int             global::IPUrl = 0;
 bool            global::reload = false;
 bool            global::histograms = false;
+bool            global::fetchInfo = false;
 
 /*
  * Constructor : initialize almost everything
@@ -345,6 +346,8 @@ void global::parseFile (char *file)
             reload = true;
         else if (!strcasecmp(tok, "histograms"))
             histograms = true;
+        else if (!strcasecmp(tok, "fetchInfo"))
+            fetchInfo = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);
