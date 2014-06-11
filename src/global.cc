@@ -105,6 +105,7 @@ bool            global::histograms = false;
 bool            global::fetchInfo = false;
 bool            global::depthBySite = false;
 bool            global::debug = false;
+bool            global::useCookies = false;
 
 /*
  * Constructor : initialize almost everything
@@ -355,6 +356,8 @@ void global::parseFile (char *file)
             depthBySite = true;
         else if (!strcasecmp(tok, "debug"))
             debug = true;
+        else if (!strcasecmp(tok, "useCookies"))
+            useCookies = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);

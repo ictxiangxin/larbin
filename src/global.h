@@ -201,6 +201,7 @@ struct global
     static bool fetchInfo;
     static bool depthBySite;
     static bool debug;
+    static bool useCookies;
 };
 
 /** set this fds for next poll */

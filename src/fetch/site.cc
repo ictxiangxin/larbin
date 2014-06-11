@@ -622,13 +622,12 @@ int IPSite::fetch ()
                 }
                 conn->request.addString((char*)" HTTP/1.0\r\nHost: ");
                 conn->request.addString(u->getHost());
-#ifdef COOKIES
-                if (u->cookie != NULL)
-                {
-                    conn->request.addString((char*)"\r\nCookie: ");
-                    conn->request.addString(u->cookie);
-                }
-#endif // COOKIES
+                if (global::useCookies)
+                    if (u->cookie != NULL)
+                    {
+                        conn->request.addString((char*)"\r\nCookie: ");
+                        conn->request.addString(u->cookie);
+                    }
                 conn->request.addString(global::headers);
                 conn->parser = new html (u, conn);
                 conn->pos = 0;

@@ -33,11 +33,7 @@
 #include "utils/connexion.h"
 #include "utils/debug.h"
 
-#ifdef COOKIES
-#define initCookie() cookie=NULL
-#else // COOKIES
-#define initCookie() ((void) 0)
-#endif // COOKIES
+#define initCookie() cookie = NULL
 
 /* small functions used later */
 static uint siteHashCode (char *host)
@@ -269,23 +265,24 @@ url::url (char *line)
     port = 0;
     for (; line[i] >= '0' && line[i] <= '9'; i++)
         port = 10*port + line[i] - '0';
-#ifndef COOKIES
     // Read file name
-    file = newString(line + i);
-#else // COOKIES
-    char *cpos = strchr(line + i, ' ');
-    if (cpos == NULL)
-        cookie = NULL;
+    if(!global::useCookies)
+        file = newString(line + i);
     else
     {
-        *cpos = 0;
-        // read cookies
-        cookie = new char[maxCookieSize];
-        strcpy(cookie, cpos + 1);
+        char *cpos = strchr(line + i, ' ');
+        if (cpos == NULL)
+            cookie = NULL;
+        else
+        {
+            *cpos = 0;
+            // read cookies
+            cookie = new char[maxCookieSize];
+            strcpy(cookie, cpos + 1);
+        }
+        // Read file name
+        file = newString(line + i);
     }
-    // Read file name
-    file = newString(line + i);
-#endif // COOKIES
 }
 
 /* constructor used by giveBase */
@@ -304,9 +301,8 @@ url::~url ()
     delUrl();
     delete [] host;
     delete [] file;
-#ifdef COOKIES
-    delete [] cookie;
-#endif // COOKIES
+    if(global::useCookies)
+        delete [] cookie;
 }
 
 /* Is it a valid url ? */
@@ -338,13 +334,12 @@ bool url::initOK (url *from)
     else
     {
         // same site
-#ifdef COOKIES
-        if (from->cookie != NULL)
-        {
-            cookie = new char[maxCookieSize];
-            strcpy(cookie, from->cookie);
-        }
-#endif // COOKIES
+        if(global::useCookies)
+            if (from->cookie != NULL)
+            {
+                cookie = new char[maxCookieSize];
+                strcpy(cookie, from->cookie);
+            }
     }
     if (depth < 0)
     {
@@ -431,10 +426,9 @@ char *url::serialize ()
     pos += sprintf(statstr+pos, "%u ", tag);
 #endif // URL_TAGS
     pos += sprintf(statstr+pos, "%s:%u%s", host, port, file);
-#ifdef COOKIES
-    if (cookie != NULL)
-        pos += sprintf(statstr+pos, " %s", cookie);
-#endif // COOKIES
+    if(global::useCookies)
+        if (cookie != NULL)
+            pos += sprintf(statstr+pos, " %s", cookie);
     statstr[pos] = '\n';
     statstr[pos+1] = 0;
     return statstr;
@@ -586,10 +580,12 @@ bool url::isProtocol (char *s)
     return s[i] == ':';
 }
 
-#ifdef COOKIES
-#define addToCookie(s) len = strlen(cookie); \
-    strncpy(cookie+len, s, maxCookieSize-len); \
-    cookie[maxCookieSize-1] = 0;
+#define addToCookie(s) \
+    do { \
+        len = strlen(cookie); \
+        strncpy(cookie + len, s, maxCookieSize - len); \
+        cookie[maxCookieSize - 1] = 0; \
+        } while(0)
 
 /* see if a header contain a new cookie */
 void url::addCookie(char *header)
@@ -608,9 +604,8 @@ void url::addCookie(char *header)
             else
                 addToCookie("; ");
             *pos = 0;
-            addToCookie(header+12);
+            addToCookie(header + 12);
             *pos = ';';
         }
     }
 }
-#endif // COOKIES

@@ -117,13 +117,9 @@ class url {
   uint tag;
 #endif // URL_TAGS
 
-#ifdef COOKIES
   /* cookies associated with this page */
   char *cookie;
   void addCookie(char *header);
-#else // COOKIES
-  inline void addCookie(char *header) {}
-#endif // COOKIES
 };
 
 #endif // URL_H
