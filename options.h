@@ -69,9 +69,6 @@
 // be carefull, larbin might use 10 to 20% more
 //#define MAXBANDWIDTH 200000
 
-// the depth is initialized each time a link goes to another site
-#define DEPTHBYSITE
-
 
 //////////////////////////////////////////////////////////
 // Efficiency vs feature

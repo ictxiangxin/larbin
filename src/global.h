@@ -198,6 +198,7 @@ struct global
     static bool reload;
     static bool histograms;
     static bool fetchInfo;
+    static bool depthBySite;
 };
 
 /** set this fds for next poll */

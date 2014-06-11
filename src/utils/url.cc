@@ -329,13 +329,11 @@ void url::print ()
  * answer false if forbidden by robots.txt, true otherwise */
 bool url::initOK (url *from)
 {
-#if defined(DEPTHBYSITE) || defined(COOKIES)
     if (strcmp(from->getHost(), host))
     {
         // different site
-#ifdef DEPTHBYSITE
-        depth = global::depthInSite;
-#endif // DEPTHBYSITE
+        if(global::depthBySite)
+            depth = global::depthInSite;
     }
     else
     {
@@ -348,7 +346,6 @@ bool url::initOK (url *from)
         }
 #endif // COOKIES
     }
-#endif // defined(DEPTHBYSITE) || defined(COOKIES)
     if (depth < 0)
     {
         errno = tooDeep;
