@@ -44,9 +44,6 @@
 // do you want to suppress duplicate pages
 //#define NO_DUP
 
-// do you want larbin to stop when everything has been fetched
-//#define EXIT_AT_END
-
 // do you want to fetch images
 // if you enable this option, update forbiddenExtensions in larbin.conf
 //#define IMAGES
