@@ -494,21 +494,25 @@ int html::parseHeader ()
  * can toggle isInteresting
  */
 #define errorType() \
-            errno = badType; \
-            return 1;
+            do { \
+                errno = badType; \
+                return 1; \
+            } while(0)
 
 #ifdef ANYTYPE
-#define checkType() \
-            return 0;
+#    define checkType() \
+                return 0
 #elif defined(IMAGES)
-#define checkType() \
-            if (startWithIgnoreCase("image", area + 14)) \
-                return 0; \
-            else \
-                errorType();
+#    define checkType() \
+               do { \
+                   if (startWithIgnoreCase("image", area + 14)) \
+                       return 0; \
+                   else \
+                       errorType(); \
+               } while(0)
 #else
-#define checkType() \
-            errorType();
+#    define checkType() \
+               errorType()
 #endif
 
 int html::verifType ()
@@ -667,28 +671,37 @@ void html::parseComment()
 
 /* macros used by the following functions */
 #define skipSpace() \
-            while (*posParse == ' ' || *posParse == '\n' || *posParse == '\r' || *posParse == '\t') \
-                posParse++;
+            do { \
+                while (*posParse == ' ' || *posParse == '\n' || *posParse == '\r' || *posParse == '\t') \
+                    posParse++; \
+            } while(0)
 
 #define skipText() \
-            while (*posParse != ' ' && *posParse != '\n' && *posParse != '>'  && *posParse != '\r' && *posParse != '\t' && *posParse != 0) \
-                posParse++;
+            do { \
+                while (*posParse != ' ' && *posParse != '\n' && *posParse != '>'  && *posParse != '\r' && *posParse != '\t' && *posParse != 0) \
+                    posParse++; \
+            } while(0)
 
 #define nextWord() \
-            skipText(); \
-            skipSpace();
+            do { \
+                skipText(); \
+                skipSpace(); \
+            } while(0)
 #define thisCharIs(i, c) (c == (posParse[i] | 32))
-#define ISTAG(t, p, a, i) if (t) \
-        { \
-            param = p; \
-            action = a; \
-            posParse += i; \
-        } \
-        else \
-        { \
-            posParse++; \
-            return; \
-        }
+#define ISTAG(t, p, a, i) \
+            do { \
+                if (t) \
+                { \
+                    param = p; \
+                    action = a; \
+                    posParse += i; \
+                } \
+                else \
+                { \
+                    posParse++; \
+                    return; \
+                } \
+            } while(0)
 
 /** Try to understand this tag */
 void html::parseTag ()
