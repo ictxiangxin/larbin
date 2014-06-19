@@ -137,8 +137,8 @@ global::global (int argc, char *argv[])
     }
     if (pos != argc)
     {
-        std::cerr << "usage : " << argv[0];
-        std::cerr << " [-c configFile] [-scratch]\n";
+        std::cerr << "\e[1;33mUsage :\e[0m " << argv[0];
+        std::cerr << " \e[1;37m[-c configFile] [-scratch]\e[0m" << std::endl;
         exit(1);
     }
 
@@ -226,7 +226,7 @@ global::global (int argc, char *argv[])
     sn.sa_flags = SA_RESTART;
     sn.sa_handler = SIG_IGN;
     if (sigaction(SIGPIPE, &sn, &so))
-        std::cerr << "Unable to disable SIGPIPE : " << strerror(errno) << std::endl;
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Unable to disable \e[1;33mSIGPIPE\e[0m : " << strerror(errno) << std::endl;
 }
 
 // If time out, this function will be invoked.
@@ -237,12 +237,12 @@ global::~global ()
 // parse configuration file
 void global::parseFile (char *file)
 {
-    printf("Configure: %s\n", file);
+    std::cout << "\e[1;37m[\e[1;32mInfo\e[1;37m]\e[0m Configure: " << file << std::endl;
     int fds = open(file, O_RDONLY);
     if (fds < 0)
     {
-        std::cerr << "Cannot open config file (" << file << ") : " << strerror(errno) << std::endl;
-        exit(1);
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Cannot open config file (" << file << ") : " << strerror(errno) << std::endl;
+        exit(-1);
     }
     char *tmp = readfile(fds);
     close(fds);
@@ -279,8 +279,8 @@ void global::parseFile (char *file)
             }
             else
             {
-                std::cerr << "The start url " << tok << " is invalid\n";
-                exit(1);
+                std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m The start url " << tok << " is invalid" << std::endl;
+                exit(-1);
             }
         }
         else if (!strcasecmp(tok, "waitduration"))
@@ -298,8 +298,8 @@ void global::parseFile (char *file)
             if ((hp = gethostbyname(tok)) == NULL)
             {
                 endhostent();
-                std::cerr << "Unable to find proxy ip address (" << tok << ")\n";
-                exit(1);
+                std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  Unable to find proxy ip address (" << tok << ")" << std::endl;
+                exit(-1);
             }
             else
             {
@@ -371,7 +371,7 @@ void global::parseFile (char *file)
         }
         else
         {
-            std::cerr << "bad configuration file : " << tok << "\n";
+            std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  bad configuration file : " << tok << std::endl;
             exit(1);
         }
         tok = nextToken(&posParse);
@@ -392,8 +392,8 @@ void global::manageDomain (char **posParse)
     }
     if (tok == NULL)
     {
-        std::cerr << "Bad configuration file : no end to limitToDomain\n";
-        exit(1);
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  Bad configuration file : no end to limitToDomain" << std::endl;
+        exit(-1);
     }
 }
 
@@ -412,7 +412,7 @@ void global::manageExt (char **posParse)
     }
     if (tok == NULL)
     {
-        std::cerr << "Bad configuration file : no end to forbiddenExtensions\n";
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  Bad configuration file : no end to forbiddenExtensions" << std::endl;
         exit(1);
     }
 }

@@ -91,7 +91,7 @@ static void printLimitTime(uint t)
 {
     uint td, th, tm;
     transTime(t, &td, &th, &tm);
-    std::cout << "Limit Time: ";
+    std::cout << "\e[1;37m[\e[1;32mInfo\e[1;37m]\e[0m Limit Time: ";
     if(td != 0)
         std::cout << td << " Days, ";
     if(th != 0)
@@ -110,25 +110,25 @@ static void getSIGINT(int signo)
 static void welcome()
 {
     std::cout << "####################################" << std::endl;
-    std::cout << "#        Larbin Web Crawler        #" << std::endl;
-    std::cout << "#                           v2.6.4 #" << std::endl;
+    std::cout << "#        \e[1;33mLarbin Web Crawler\e[0m        #" << std::endl;
+    std::cout << "#                           \e[1;31mv2.6.4\e[0m #" << std::endl;
     std::cout << "####################################" << std::endl;
 }
 
 int main (int argc, char *argv[])
 {
     welcome();
+
     // create all the structures
     global glob(argc, argv);
-
-    std::cout << "User Agent: " << global::userAgent << std::endl;
+    
     // Start the search
     time_t old = global::now;
 
-    std::cerr << "[Search] Starting..." << std::endl;
+    std::cout << "\e[1;37m[\e[1;32mSearch\e[1;37m]\e[0m Starting..." << std::endl;
     if(signal(SIGINT, getSIGINT) == SIG_ERR)
     {
-        std::cerr << "Can not register" << std::endl;
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Can not register \e[1;33mSIGINT\e[0m handle." << std::endl;
         exit(-1);
     }
     // launch the webserver
@@ -176,10 +176,10 @@ int main (int argc, char *argv[])
         poll(global::pollfds, global::posPoll, 10);
         stateMain(7);
     }
-    std::cout << "[Search] End." << std::endl;
+    std::cout << "\e[1;37m[\e[1;32mSearch\e[1;37m]\e[0m End." << std::endl;
     while(global::webServerOn)
         sleep(1);
-    std::cout << "*** Larbin Close ***" << std::endl;
+    std::cout << "\e[1;37m*** Larbin Close ***\e[0m" << std::endl;
 }
 
 // a lot of stats and profiling things
