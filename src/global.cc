@@ -106,6 +106,7 @@ bool            global::fetchInfo = false;
 bool            global::depthBySite = false;
 bool            global::debug = false;
 bool            global::useCookies = false;
+bool            global::getImage = false;
 
 /*
  * Constructor : initialize almost everything
@@ -183,7 +184,7 @@ global::global (int argc, char *argv[])
         strtmp.addString((char*)", ");
         strtmp.addString(contentTypes[i]);
     }
-#elif !defined(IMAGES) && !defined(ANYTYPE)
+#elif !defined(ANYTYPE)
     strtmp.addString((char*)"\r\nAccept: text/html");
 #endif // SPECIFICSEARCH
     strtmp.addString((char*)"\r\n\r\n");
@@ -358,6 +359,8 @@ void global::parseFile (char *file)
             debug = true;
         else if (!strcasecmp(tok, "useCookies"))
             useCookies = true;
+        else if (!strcasecmp(tok, "getImage"))
+            getImage = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);

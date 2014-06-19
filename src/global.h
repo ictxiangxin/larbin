@@ -202,6 +202,7 @@ struct global
     static bool depthBySite;
     static bool debug;
     static bool useCookies;
+    static bool getImage;
 };
 
 /** set this fds for next poll */

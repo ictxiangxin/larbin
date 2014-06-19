@@ -502,17 +502,14 @@ int html::parseHeader ()
 #ifdef ANYTYPE
 #    define checkType() \
                 return 0
-#elif defined(IMAGES)
+#else
 #    define checkType() \
                do { \
-                   if (startWithIgnoreCase("image", area + 14)) \
+                   if (global::getImage && startWithIgnoreCase("image", area + 14)) \
                        return 0; \
                    else \
                        errorType(); \
                } while(0)
-#else
-#    define checkType() \
-               errorType()
 #endif
 
 int html::verifType ()
@@ -729,12 +726,10 @@ void html::parseTag ()
     {
         ISTAG(thisCharIs(1, 'r') && thisCharIs(2, 'a') && thisCharIs(3, 'm') && thisCharIs(4, 'e'), "src", LINK, 5);
     }
-#ifdef IMAGES
-    else if (thisCharIs(0, 'i'))
+    else if (global::getImage && thisCharIs(0, 'i'))
     {
         ISTAG(thisCharIs(1, 'm') && thisCharIs(2, 'g'), "src", LINK, 3);
     }
-#endif // IMAGES
     else
         return;
     // now find the parameter

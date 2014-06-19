@@ -10,8 +10,8 @@
 /////////////////////////////////////////////////////////////
 // Select the output module you want to use
 
-#define DEFAULT_OUTPUT   // do nothing...
-//#define SIMPLE_SAVE      // save in files named save/dxxxxxx/fyyyyyy
+//#define DEFAULT_OUTPUT   // do nothing...
+#define SIMPLE_SAVE      // save in files named save/dxxxxxx/fyyyyyy
 //#define MIRROR_SAVE      // save in files (respect sites hierarchy)
 //#define STATS_OUTPUT     // do some stats on pages
 
@@ -43,10 +43,6 @@
 
 // do you want to suppress duplicate pages
 //#define NO_DUP
-
-// do you want to fetch images
-// if you enable this option, update forbiddenExtensions in larbin.conf
-//#define IMAGES
 
 // downlaod everything (ie no check of content type in http headers)
 //#define ANYTYPE
