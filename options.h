@@ -10,8 +10,8 @@
 /////////////////////////////////////////////////////////////
 // Select the output module you want to use
 
-//#define DEFAULT_OUTPUT   // do nothing...
-#define SIMPLE_SAVE      // save in files named save/dxxxxxx/fyyyyyy
+#define DEFAULT_OUTPUT   // do nothing...
+//#define SIMPLE_SAVE      // save in files named save/dxxxxxx/fyyyyyy
 //#define MIRROR_SAVE      // save in files (respect sites hierarchy)
 //#define STATS_OUTPUT     // do some stats on pages
 
@@ -49,10 +49,6 @@
 
 //////////////////////////////////////////////////////////
 // Various options
-
-// do you want to get cgi
-// 0 : yes ; 1 : no ; 2 : NO !
-#define CGILEVEL 1
 
 // limit bandwith usage (in octets/sec)
 // be carefull, larbin might use 10 to 20% more

@@ -107,6 +107,7 @@ bool            global::depthBySite = false;
 bool            global::debug = false;
 bool            global::useCookies = false;
 bool            global::getImage = false;
+bool            global::getCGI = false;
 
 /*
  * Constructor : initialize almost everything
@@ -361,6 +362,8 @@ void global::parseFile (char *file)
             useCookies = true;
         else if (!strcasecmp(tok, "getImage"))
             getImage = true;
+        else if (!strcasecmp(tok, "getCGI"))
+            getCGI = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);

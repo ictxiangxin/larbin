@@ -301,11 +301,7 @@ void initSpecific ()
 #endif // SPECIFICSEARCH
 /////////////////////////////////////////
 
-#if CGILEVEL >= 1
-#define notCgiChar(c) (c!='?' && c!='=' && c!='*')
-#else
-#define notCgiChar(c) true
-#endif // CGILEVEL
+#define notCgiChar(c) (global::getCGI || (c!='?' && c!='=' && c!='*'))
 
 /** Constructor
  */
