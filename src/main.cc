@@ -243,14 +243,17 @@ static int cron ()
                       << "pages :   " << pages <<            "\t(rate : " << pagesRate <<   ")"
                       << std::endl
                       << "success : " << answers[success] << "\t(rate : " << successRate << ")"
-                      << std::endl
-                      << "Remaining Time: ";
-            transTime(global::limitTime - global::now + global::startTime, &td, &th, &tm);
-            if(td != 0)
-                std::cout << td << " Days, ";
-            if(th != 0)
-                std::cout << th << " Hours, ";
-            std::cout << tm << " Minutes." << std::endl;
+                      << std::endl;
+            if (global::limitTime != 0)
+            {
+                std::cout << "Remaining Time: ";
+                transTime(global::limitTime - global::now + global::startTime, &td, &th, &tm);
+                if(td != 0)
+                    std::cout << td << " Days, ";
+                if(th != 0)
+                    std::cout << th << " Hours, ";
+                std::cout << tm << " Minutes." << std::endl;
+            }
         }
     }
     return TRUE;
