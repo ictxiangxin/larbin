@@ -145,9 +145,8 @@ static void pipeWrite (Connexion *conn)
         if (wrtn >= 0)
         {
             addWrite(wrtn);
-#ifdef MAXBANDWIDTH
-            global::remainBand -= wrtn;
-#endif // MAXBANDWIDTH
+            if (global::limitBand)
+                global::remainBand -= wrtn;
             conn->pos += wrtn;
             if (conn->pos < len)
             {
@@ -208,9 +207,8 @@ static void pipeRead (Connexion *conn)
         // Something has been read
         conn->timeout += size / timeoutIncr;
         addRead(size);
-#ifdef MAXBANDWIDTH
-        global::remainBand -= size;
-#endif // MAXBANDWIDTH
+        if (global::limitBand != 0)
+            global::remainBand -= size;
         if (conn->parser->inputHeaders(size) == 0)
         {
             // nothing special

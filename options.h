@@ -48,13 +48,6 @@
 //#define ANYTYPE
 
 //////////////////////////////////////////////////////////
-// Various options
-
-// limit bandwith usage (in octets/sec)
-// be carefull, larbin might use 10 to 20% more
-//#define MAXBANDWIDTH 200000
-
-//////////////////////////////////////////////////////////
 // Efficiency vs feature
 
 // do we need a special thread for output
