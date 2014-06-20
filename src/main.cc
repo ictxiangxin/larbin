@@ -49,7 +49,6 @@
 static int cron ();
 
 // wait to limit bandwidth usage
-#ifdef MAXBANDWIDTH
 static void waitBandwidth (time_t *old)
 {
     while (global::remainBand < 0)
@@ -63,9 +62,6 @@ static void waitBandwidth (time_t *old)
         }
     }
 }
-#else
-#define waitBandwidth(x) ((void) 0)
-#endif // MAXBANDWIDTH
 
 static void transTime(uint t, uint *d, uint *h, uint *m)
 {
@@ -154,7 +150,8 @@ int main (int argc, char *argv[])
                 break;
         }
         stateMain(-count);
-        waitBandwidth(&old);
+        if (global::limitBand != 0)
+            waitBandwidth(&old);
         stateMain(1);
         for (uint i = 0; i < global::maxFds; i++)
             global::ansPoll[i] = 0;
@@ -202,13 +199,13 @@ static int cron ()
         global::readWait = 0;
     }
 
-#ifdef MAXBANDWIDTH
-    // give bandwidth
-    if (global::remainBand > 0)
-        global::remainBand = MAXBANDWIDTH;
-    else
-        global::remainBand = global::remainBand + MAXBANDWIDTH;
-#endif // MAXBANDWIDTH
+    if (global::limitBand != 0)
+    {
+        if (global::remainBand > 0)
+            global::remainBand = global::limitBand;
+        else
+            global::remainBand = global::remainBand + global::limitBand;
+    }
 
     if(global::histograms)
         histoHit(pages, answers[success]);

@@ -94,9 +94,8 @@ uint            global::posPoll;
 uint            global::sizePoll;
 short           *global::ansPoll;
 uint            global::maxFds;
-#ifdef MAXBANDWIDTH
-long            global::remainBand = MAXBANDWIDTH;
-#endif // MAXBANDWIDTH
+long            global::limitBand = 0;
+long            global::remainBand = 0;
 pthread_t       global::limitTimeThread = 0;
 pthread_t       global::webServerThread = 0;
 int             global::IPUrl = 0;
@@ -369,10 +368,16 @@ void global::parseFile (char *file)
             tok = nextToken(&posParse);
             limitTime = atoi(tok) * 60;
         }
+        else if (!strcasecmp(tok, "bondWidth"))
+        {
+            tok = nextToken(&posParse);
+            limitBand = atoi(tok);
+            remainBand = limitBand;
+        }
         else
         {
             std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  bad configuration file : " << tok << std::endl;
-            exit(1);
+            exit(-1);
         }
         tok = nextToken(&posParse);
     }

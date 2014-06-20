@@ -190,10 +190,9 @@ struct global
     static uint maxFds;
     /** make sure the new socket is not too big for ansPoll */
     static void verifMax (uint fd);
-#ifdef MAXBANDWIDTH
     /** number of bits still allowed during this second */
-    static long int remainBand;
-#endif // MAXBANDWIDTH
+    static long limitBand;
+    static long remainBand;
     static pthread_t limitTimeThread;
     static pthread_t webServerThread;
     static bool reload;
