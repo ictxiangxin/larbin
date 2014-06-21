@@ -176,6 +176,8 @@ int main (int argc, char *argv[])
     std::cout << "\e[1;37m[\e[1;32mSearch\e[1;37m]\e[0m End." << std::endl;
     while(global::webServerOn)
         sleep(1);
+    if (global::httpPort != 0)
+        std::cout << "\e[1;37m[\e[1;32mWebserver\e[1;37m]\e[0m End." << std::endl;
     std::cout << "\e[1;37m*** Larbin Close ***\e[0m" << std::endl;
 }
 

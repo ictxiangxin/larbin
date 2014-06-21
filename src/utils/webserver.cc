@@ -69,7 +69,7 @@ void *startWebserver (void *none)
         || bind(fds, (struct sockaddr *) &addr, sizeof(addr)) != 0
         || listen(fds, 4) != 0)
     {
-        std::cerr << "Unable to get the socket for the webserver (" << global::httpPort << ") : " << strerror(errno) << std::endl;
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Unable to get the socket for the webserver (" << global::httpPort << ") : " << strerror(errno) << std::endl;
         webServerOff();
         pthread_exit(NULL);
     }
@@ -82,7 +82,7 @@ void *startWebserver (void *none)
         uint len = sizeof(addr);
         fdc = accept(fds, (struct sockaddr *) &addrc, &len);
         if (fdc == -1)
-            std::cerr << "Trouble with web server..." << std::endl;
+            std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Trouble with web server..." << std::endl;
         else
         {
             manageAns(fdc, readRequest(fdc));
