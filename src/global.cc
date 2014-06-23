@@ -107,6 +107,7 @@ bool            global::debug = false;
 bool            global::useCookies = false;
 bool            global::getImage = false;
 bool            global::getCGI = false;
+bool            global::anyType = false;
 
 /*
  * Constructor : initialize almost everything
@@ -184,9 +185,9 @@ global::global (int argc, char *argv[])
         strtmp.addString((char*)", ");
         strtmp.addString(contentTypes[i]);
     }
-#elif !defined(ANYTYPE)
-    strtmp.addString((char*)"\r\nAccept: text/html");
 #endif // SPECIFICSEARCH
+    if (!global::anyType)
+        strtmp.addString((char*)"\r\nAccept: text/html");
     strtmp.addString((char*)"\r\n\r\n");
     headers = strtmp.giveString();
     // Headers robots.txt
@@ -363,6 +364,8 @@ void global::parseFile (char *file)
             getImage = true;
         else if (!strcasecmp(tok, "getCGI"))
             getCGI = true;
+        else if (!strcasecmp(tok, "anyType"))
+            anyType = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);

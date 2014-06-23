@@ -203,6 +203,7 @@ struct global
     static bool useCookies;
     static bool getImage;
     static bool getCGI;
+    static bool anyType;
 };
 
 /** set this fds for next poll */

@@ -484,30 +484,6 @@ int html::parseHeader ()
     return 0;
 }
 
-/** function called by parseHeader
- * parse content-type
- * return 1 (and set errno) if bad type, 0 otherwise
- * can toggle isInteresting
- */
-#define errorType() \
-            do { \
-                errno = badType; \
-                return 1; \
-            } while(0)
-
-#ifdef ANYTYPE
-#    define checkType() \
-                return 0
-#else
-#    define checkType() \
-               do { \
-                   if (global::getImage && startWithIgnoreCase("image", area + 14)) \
-                       return 0; \
-                   else \
-                       errorType(); \
-               } while(0)
-#endif
-
 int html::verifType ()
 {
     if (startWithIgnoreCase((char*)"content-type: ", area))
@@ -522,7 +498,17 @@ int html::verifType ()
             }
             else
 #endif // SPECIFICSEARCH
-                checkType();
+            {
+                if (global::anyType)
+                    return 0;
+                if (global::getImage && startWithIgnoreCase("image", area + 14))
+                    return 0;
+                else
+                {
+                    errno = badType;
+                    return 1;
+                }
+            }
         }
     return 0;
 }

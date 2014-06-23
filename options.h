@@ -44,9 +44,6 @@
 // do you want to suppress duplicate pages
 //#define NO_DUP
 
-// downlaod everything (ie no check of content type in http headers)
-//#define ANYTYPE
-
 //////////////////////////////////////////////////////////
 // Efficiency vs feature
 
