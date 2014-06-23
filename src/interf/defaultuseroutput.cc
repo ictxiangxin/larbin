@@ -43,7 +43,7 @@ void loaded (html *page)
     // in order to accept \000 in the page, you can use page->getLength()
     if(global::fetchInfo)
     {
-        std::cout << "fetched : ";
+        std::cout << "\e[1;37m[\e[1;32mSuccess\e[1;37m]\e[0m ";
         page->getUrl()->print();
     }
     // cout << page->getHeaders() << "\n" << page->getPage() << "\n";
@@ -59,7 +59,7 @@ void failure (url *u, FetchError reason)
     // Here should be the code for managing everything
     if(global::fetchInfo)
     {
-        std::cout << "fetched failed (" << (int) reason << ") : ";
+        std::cout << "\e[1;37m[\e[1;31mFailed : " << (int) reason << "\e[1;37m]\e[0m ";
         u->print();
     }
 }
