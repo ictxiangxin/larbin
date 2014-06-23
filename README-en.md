@@ -1,6 +1,8 @@
 Larbin Web Crawler
 ==================
 
+[![Build Status](https://travis-ci.org/ictxiangxin/larbin.svg?branch=integrate-test)](https://travis-ci.org/ictxiangxin/larbin)
+
 [简体中文版](/README.md)
 
 Version: 2.6.4

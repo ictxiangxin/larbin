@@ -1,6 +1,8 @@
 Larbin网络爬虫
 ==============
 
+[![Build Status](https://travis-ci.org/ictxiangxin/larbin.svg?branch=integrate-test)](https://travis-ci.org/ictxiangxin/larbin)
+
 [See the English edition](/README-en.md)
 
 版本：2.6.4
