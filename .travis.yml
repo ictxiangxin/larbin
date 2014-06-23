@@ -1,0 +1,10 @@
+language:
+    - cpp
+    - m4
+
+os:
+    - linux
+
+install:
+    ./configure
+    make
