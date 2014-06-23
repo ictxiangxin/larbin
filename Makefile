@@ -11,6 +11,9 @@ all debug prof:
 	(cd src; $(MAKE) $@)
 	cp src/larbin .
 
+test:
+	./larbin -c larbin-test.conf
+
 clean: cleanhere
 	(cd src; $(MAKE) clean)
 	(cd adns; $(MAKE) clean)
