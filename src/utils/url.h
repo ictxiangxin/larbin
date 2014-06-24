@@ -31,6 +31,7 @@ bool fileNormalize (char *file);
 class url {
  private:
   char *host;
+  char *punycode;
   char *file;
   uint16_t port; // the order of variables is important for physical size
   int8_t depth;
@@ -66,6 +67,9 @@ class url {
 
   /* print an URL */
   void print ();
+
+  /* get punycode host */
+  char *getPunycode();
 
   /* return the host */
   inline char *getHost () { return host; }

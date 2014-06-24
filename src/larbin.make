@@ -13,7 +13,7 @@ MAIN-OBJ:=global.o main.o
 ABS-UTILS-OBJ:=utils/string.o utils/debug.o utils/url.o \
     utils/connexion.o utils/text.o utils/histogram.o \
     utils/webserver.o utils/PersistentFifo.o utils/hashDup.o \
-    utils/mypthread.o utils/limitTime.o utils/level.o
+    utils/mypthread.o utils/limitTime.o utils/level.o utils/punycode.o
 ABS-INTERF-OBJ:=interf/input.o interf/useroutput.o interf/output.o
 ABS-FETCH-OBJ:=fetch/site.o fetch/sequencer.o fetch/hashTable.o \
     fetch/checker.o fetch/file.o fetch/fetchOpen.o fetch/fetchPipe.o

@@ -31,6 +31,7 @@
 #include "utils/url.h"
 #include "utils/text.h"
 #include "utils/connexion.h"
+#include "utils/punycode.h"
 #include "utils/debug.h"
 
 #define initCookie() cookie = NULL
@@ -206,6 +207,7 @@ url::url (char *u, int8_t depth, url *base)
         else
             parseWithBase(u, base);
     }
+    punycode = NULL;
 }
 
 /* constructor used by input */
@@ -236,6 +238,7 @@ url::url (char *line,  int8_t depth)
             host = NULL;
         }
     }
+    punycode = NULL;
 }
 
 // Constructor : read the url from a file (cf serialize)
@@ -283,6 +286,7 @@ url::url (char *line)
         // Read file name
         file = newString(line + i);
     }
+    punycode = NULL;
 }
 
 /* constructor used by giveBase */
@@ -293,6 +297,7 @@ url::url (char *host, uint port, char *file)
     this->host = host;
     this->port = port;
     this->file = file;
+    this->punycode = NULL;
 }
 
 /* Destructor */
@@ -301,6 +306,8 @@ url::~url ()
     delUrl();
     delete [] host;
     delete [] file;
+    if (punycode && punycode != host)
+        delete [] punycode;
     if(global::useCookies)
         delete [] cookie;
 }
@@ -318,6 +325,14 @@ bool url::isValid ()
 void url::print ()
 {
     printf("http://%s:%u%s\n", host, port, file);
+}
+
+/* get punycode host */
+char *url::getPunycode()
+{
+    if (punycode == NULL)
+        punycode = punycode_host(host);
+    return punycode;
 }
 
 /* Set depth to max if necessary

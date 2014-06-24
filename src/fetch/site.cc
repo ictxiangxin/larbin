@@ -139,7 +139,7 @@ void NamedSite::putGenericUrl(url *u, int limit, bool prio)
     {
         // Already enough Urls in memory for this Site
         // first check if it can already be forgotten
-        if (!strcmp(name, u->getHost()))
+        if (!strcmp(name, u->getPunycode()))
         {
             if (dnsState == errorDns)
             {
@@ -177,7 +177,7 @@ void NamedSite::putGenericUrl(url *u, int limit, bool prio)
     {
         nburls++;
         if (   dnsState == waitDns
-                || strcmp(name, u->getHost())
+                || strcmp(name, u->getPunycode())
                 || port != u->getPort()
                 || global::now > dnsTimeout
            )
@@ -369,7 +369,7 @@ void NamedSite::dnsErr ()
     for (int i=0; i<ss; i++)
     {
         url *u = getInFifo();
-        if (!strcmp(name, u->getHost()))
+        if (!strcmp(name, u->getPunycode()))
         {
             delNamedUrl();
             forgetUrl(u, theErr);
@@ -412,7 +412,7 @@ void NamedSite::newId ()
         addsite();
     }
     url *u = fifo[outFifo];
-    strcpy(name, u->getHost());
+    strcpy(name, u->getPunycode());
     port = u->getPort();
     dnsTimeout = global::now + dnsValidTime;
     dnsState = waitDns;
@@ -455,7 +455,7 @@ void NamedSite::robotsResult (FetchError res)
     for (int i=0; i<ss; i++)
     {
         url *u = getInFifo();
-        if (!strcmp(name, u->getHost()))
+        if (!strcmp(name, u->getPunycode()))
         {
             delNamedUrl();
             if (ok)
@@ -621,7 +621,7 @@ int IPSite::fetch ()
                     conn->request.addString(u->getFile());
                 }
                 conn->request.addString((char*)" HTTP/1.0\r\nHost: ");
-                conn->request.addString(u->getHost());
+                conn->request.addString(u->getPunycode());
                 if (global::useCookies)
                     if (u->cookie != NULL)
                     {
