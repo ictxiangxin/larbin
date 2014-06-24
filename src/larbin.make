@@ -20,7 +20,7 @@ ABS-FETCH-OBJ:=fetch/site.o fetch/sequencer.o fetch/hashTable.o \
 ABS-MAIN-OBJ:=$(MAIN-OBJ)
 
 CFLAGS:=-O3 -Wall -D_REENTRANT
-CXXFLAGS:= -Wno-deprecated -Wall -O3 -D_REENTRANT -iquote- -I$(BASEDIR) -I$(ADNSDIR)
+CXXFLAGS:= -Wno-deprecated -Wall -O3 -std=c++11 -D_REENTRANT -iquote- -I$(BASEDIR) -I$(ADNSDIR)
 RM:=rm -f
 
 first: all

@@ -17,7 +17,7 @@
  */
 
 #include <string.h>
-#include <stdint.h>
+#include <cstdint>
 
 #include "utils/text.h"
 
