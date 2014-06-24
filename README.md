@@ -5,7 +5,7 @@ Larbin网络爬虫
 
 [See the English edition](/README-en.md)
 
-版本：2.6.4
+版本：2.6.5
 
 Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本是2.6.3。
 我将继续开发这一优秀的软件，并在Github上开放源代码。
@@ -24,6 +24,8 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 * 增加了一个配置选项ignoreRobots，它可以使Larbin在抽取网页时不受robots.txt的影响，你懂的。
 
 * 新版本larbin正在将所有功能开关以及设置移到larbin.conf中，而不是原来的options.h中, 你无需重新编译larbin就可以配置它的功能。
+
+* 增加了对中文(unicode)的支持，包括URI中出现的中文编码以及中文域名（如：[http://哈尔滨工业大学。中国](http://哈尔滨工业大学。中国)）。
 
 内容提要：
 ----------

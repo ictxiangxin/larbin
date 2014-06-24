@@ -5,7 +5,7 @@ Larbin Web Crawler
 
 [简体中文版](/README.md)
 
-Version: 2.6.4
+Version: 2.6.5
 
 Larbin is a web crawler and stop develop, the least version is 2.6.3.
 We will continue develop this nice software and open the source on Github.
@@ -24,6 +24,8 @@ Develop:
 * Add a new conf option: ignoreRobots, it can make Larbin ignore robots.txt, as you know.
 
 * new version larbin will move all functions to larbin.conf file, instead old options.h file, you needn't recompile larbin to change it's functions.
+
+* supporting chinese, such as chinese words appear in URI and chinese domain name (e.g. [http://哈尔滨工业大学。中国](http://哈尔滨工业大学。中国)).
 
 Table of content :
 ------------------

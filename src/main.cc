@@ -107,7 +107,7 @@ static void welcome()
 {
     std::cout << "####################################" << std::endl;
     std::cout << "#        \e[1;33mLarbin Web Crawler\e[0m        #" << std::endl;
-    std::cout << "#                           \e[1;31mv2.6.4\e[0m #" << std::endl;
+    std::cout << "#                           \e[1;31mv2.6.5\e[0m #" << std::endl;
     std::cout << "####################################" << std::endl;
 }
 
