@@ -330,6 +330,8 @@ void url::print ()
 /* get punycode host */
 char *url::getPunycode()
 {
+    if (!global::punycode)
+        return host;
     if (punycode == NULL)
         punycode = punycode_host(host);
     return punycode;

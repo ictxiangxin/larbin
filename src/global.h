@@ -204,6 +204,7 @@ struct global
     static bool getImage;
     static bool getCGI;
     static bool anyType;
+    static bool punycode;
 };
 
 /** set this fds for next poll */

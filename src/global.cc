@@ -108,6 +108,7 @@ bool            global::useCookies = false;
 bool            global::getImage = false;
 bool            global::getCGI = false;
 bool            global::anyType = false;
+bool            global::punycode = false;
 
 /*
  * Constructor : initialize almost everything
@@ -366,6 +367,8 @@ void global::parseFile (char *file)
             getCGI = true;
         else if (!strcasecmp(tok, "anyType"))
             anyType = true;
+        else if (!strcasecmp(tok, "punycode"))
+            punycode = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);
