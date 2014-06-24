@@ -10,6 +10,8 @@ before_install:
     - sudo apt-get update
     - sudo apt-get install g++-4.8 -y
     - sudo apt-get install lynx m4 xutils-dev
+    - sudo rm -f /usr/bin/g++
+    - sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++
 
 install:
     ./configure
