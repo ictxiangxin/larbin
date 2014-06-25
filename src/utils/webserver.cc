@@ -222,10 +222,11 @@ static void writeStats (int fds)
     ecrireInti(fds, answers[err30X], (char*)"%18d");
     ecrire(fds, (char*)"\nerr 40X : ");
     ecrireInti(fds, answers[err40X], (char*)"%18d");
-#ifdef NO_DUP
-    ecrire(fds, (char*)"\nduplicate : ");
-    ecrireInti(fds, answers[duplicate], (char*)"%16d");
-#endif // NO_DUP
+    if (global::pageNoDuplicate)
+    {
+        ecrire(fds, (char*)"\nduplicate : ");
+        ecrireInti(fds, answers[duplicate], (char*)"%16d");
+    }
     ecrire(fds, (char*)"\n\nurls accepted : ");
     ecrireInt(fds, hashUrls);
     ecrire(fds, (char*)" / ");

@@ -594,13 +594,12 @@ int html::endInput ()
         errno = err40X;
         return 1;
     }
-#ifdef NO_DUP
-    if (!global::hDuplicate->testSet(posParse))
-    {
-        errno = duplicate;
-        return 1;
-    }
-#endif // NO_DUP
+    if (global::pageNoDuplicate)
+        if (!global::hDuplicate->testSet(posParse))
+        {
+            errno = duplicate;
+            return 1;
+        }
     buffer[pos] = 0;
     _endOfInput();
     // now parse the html

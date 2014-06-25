@@ -46,9 +46,7 @@
 // define all the static variables
 time_t      global::now;
 hashTable   *global::seen;
-#ifdef NO_DUP
 hashDup *global::hDuplicate;
-#endif // NO_DUP
 SyncFifo<url>   *global::URLsPriority;
 SyncFifo<url>   *global::URLsPriorityWait;
 uint            global::readPriorityWait = 0;
@@ -109,6 +107,7 @@ bool            global::getImage = false;
 bool            global::getCGI = false;
 bool            global::anyType = false;
 bool            global::punycode = false;
+bool            global::pageNoDuplicate = false;
 
 /*
  * Constructor : initialize almost everything
@@ -165,12 +164,11 @@ global::global (int argc, char *argv[])
     okSites = new Fifo<IPSite>(2000);
     dnsSites = new Fifo<NamedSite>(2000);
     seen = new hashTable(!reload);
-#ifdef NO_DUP
-    hDuplicate = new hashDup(dupSize, dupFile, !reload);
-#endif // NO_DUP
     // Read the configuration file
     crash("Read the configuration file");
     parseFile(configFile);
+    if (global::pageNoDuplicate)
+        hDuplicate = new hashDup(dupSize, dupFile, !reload);
     // Initialize everything
     crash("Create global values");
     // Headers
@@ -369,6 +367,8 @@ void global::parseFile (char *file)
             anyType = true;
         else if (!strcasecmp(tok, "punycode"))
             punycode = true;
+        else if (!strcasecmp(tok, "pageNoDuplicate"))
+            pageNoDuplicate = true;
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);

@@ -215,9 +215,8 @@ void PersistentFifo::updateWrite ()
         if(global::reload)
         {
             global::seen->save();
-#ifdef NO_DUP
-            global::hDuplicate->save();
-#endif
+            if (global::pageNoDuplicate)
+                global::hDuplicate->save();
         }
     }
 }

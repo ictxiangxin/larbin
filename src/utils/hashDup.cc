@@ -37,8 +37,10 @@ hashDup::hashDup (ssize_t size, char *init, bool scratch)
     file = init;
     table = new char[size / 8];
     if (init == NULL || scratch)
+    {
         for (ssize_t i = 0; i < size / 8; i++)
             table[i] = 0;
+    }
     else
     {
         int fds = open(init, O_RDONLY);

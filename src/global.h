@@ -78,10 +78,8 @@ struct global
     static time_t now;
     /** List of pages allready seen (one bit per page) */
     static hashTable *seen;
-#ifdef NO_DUP
     /** Hashtable for suppressing duplicates */
     static hashDup *hDuplicate;
-#endif // NO_DUP
     /** URLs for the sequencer with high priority */
     static SyncFifo<url> *URLsPriority;
     static SyncFifo<url> *URLsPriorityWait;
@@ -205,6 +203,7 @@ struct global
     static bool getCGI;
     static bool anyType;
     static bool punycode;
+    static bool pageNoDuplicate;
 };
 
 /** set this fds for next poll */
