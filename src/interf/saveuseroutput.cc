@@ -69,21 +69,21 @@ void loaded (html *page)
         indexFds = creat(fileName, S_IRWXU);
         if (indexFds < 0)
         {
-            std::cerr << "Cannot open file " << fileName << std::endl;
-            exit(1);
+            std::cerr << "\e[1;37m[\e[1;31mError\e[1;37m]\e[0m Cannot open file " << fileName << std::endl;
+            exit(-1);
         }
         // new filename
         fileName[endFileName - 5] = 'f';
-        for (uint i = endFileName; i > endFileName-5; i--)
+        for (uint i = endFileName; i > endFileName - 5; i--)
             fileName[i] = '0';
     }
     int fd = creat(fileName, S_IRWXU);
     if (fd < 0)
     {
-        std::cerr << "Cannot open file " << fileName << std::endl;
-        exit(1);
+        std::cerr << "\e[1;37m[\e[1;31mError\e[1;37m]\e[0m Cannot open file " << fileName << std::endl;
+        exit(-1);
     }
-    int s=0;
+    int s = 0;
     s = sprintf(buf, "%4u ", nbfile);
 #ifdef URL_TAGS
     s += sprintf(buf + s, "(%u) ", page->getUrl()->tag);

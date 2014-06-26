@@ -41,9 +41,6 @@
 // this allows to follow a page from input to output (and follow redirection)
 //#define URL_TAGS
 
-// do you want to suppress duplicate pages
-//#define NO_DUP
-
 //////////////////////////////////////////////////////////
 // Efficiency vs feature
 
