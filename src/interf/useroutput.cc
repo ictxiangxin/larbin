@@ -22,19 +22,110 @@
  * See useroutput.h for the interface
  *
  * See the files XXXuserouput.cc for examples */
+#include <iostream>
+#include <string.h>
+#include <unistd.h>
 
 #include "options.h"
 
-#ifdef SIMPLE_SAVE
-#include "interf/saveuseroutput.cc"
+#include "types.h"
+#include "global.h"
+#include "fetch/file.h"
+#include "utils/text.h"
+#include "utils/debug.h"
+#include "interf/output.h"
+#include "interf/useroutputrecall.h"
 
-#elif defined(MIRROR_SAVE)
-#include "interf/mirrorsaveuseroutput.cc"
+void loaded (html *page)
+{
+    switch (global::outputMode)
+    {
+        case OM_DEFAULT :
+            default_loaded(page);
+            break;
+        case OM_SAVE :
+            save_loaded(page);
+            break;
+        case OM_MIRROR :
+            mirror_loaded(page);
+            break;
+        case OM_STATS :
+            stats_loaded(page);
+            break;
+        default :
+            ;
+    }
+    if(global::fetchInfo)
+    {
+        std::cout << "\e[1;37m[\e[1;32mSuccess\e[1;37m]\e[0m ";
+        page->getUrl()->print();
+    }
+}
 
-#elif defined(STATS_OUTPUT)
-#include "interf/statsuseroutput.cc"
+void failure (url *u, FetchError reason)
+{
+    switch (global::outputMode)
+    {
+        case OM_DEFAULT :
+            default_failure(u, reason);
+            break;
+        case OM_SAVE :
+            save_failure(u, reason);
+            break;
+        case OM_MIRROR :
+            mirror_failure(u, reason);
+            break;
+        case OM_STATS :
+            stats_failure(u, reason);
+            break;
+        default :
+            ;
+    }
+    if(global::fetchInfo)
+    {
+        std::cout << "\e[1;37m[\e[1;31mFailed : " << (int) reason << "\e[1;37m]\e[0m ";
+        u->print();
+    }
+}
 
-#else // DEFAULT_OUTPUT
-#include "interf/defaultuseroutput.cc"
+void initUserOutput ()
+{
+    switch (global::outputMode)
+    {
+        case OM_DEFAULT :
+            default_initUserOutput();
+            break;
+        case OM_SAVE :
+            save_initUserOutput();
+            break;
+        case OM_MIRROR :
+            mirror_initUserOutput();
+            break;
+        case OM_STATS :
+            stats_initUserOutput();
+            break;
+        default :
+            ;
+    }
+}
 
-#endif
+void outputStats (int fds)
+{
+    switch (global::outputMode)
+    {
+        case OM_DEFAULT :
+            default_outputStats(fds);
+            break;
+        case OM_SAVE :
+            save_outputStats(fds);
+            break;
+        case OM_MIRROR :
+            mirror_outputStats(fds);
+            break;
+        case OM_STATS :
+            stats_outputStats(fds);
+            break;
+        default :
+            ;
+    }
+}

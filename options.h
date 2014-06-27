@@ -7,14 +7,6 @@
  * see doc/custom-eng.html for more details
  */
 
-/////////////////////////////////////////////////////////////
-// Select the output module you want to use
-
-#define DEFAULT_OUTPUT   // do nothing...
-//#define SIMPLE_SAVE      // save in files named save/dxxxxxx/fyyyyyy
-//#define MIRROR_SAVE      // save in files (respect sites hierarchy)
-//#define STATS_OUTPUT     // do some stats on pages
-
 ////////////////////////////////////////////////////////////
 // Set up a specific search
 
@@ -40,9 +32,6 @@
 // do you want to associate a tag to pages (given in input)
 // this allows to follow a page from input to output (and follow redirection)
 //#define URL_TAGS
-
-//////////////////////////////////////////////////////////
-// Efficiency vs feature
 
 // do we need a special thread for output
 // This is compulsory if it can block

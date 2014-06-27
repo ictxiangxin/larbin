@@ -115,6 +115,12 @@ enum FetchError
     urlDup
 };
 
+// output mode
+#define OM_DEFAULT 0
+#define OM_SAVE    1
+#define OM_MIRROR  2
+#define OM_STATS   3
+
 // standard types
 typedef unsigned int        uint;
 typedef unsigned short int  ushort;

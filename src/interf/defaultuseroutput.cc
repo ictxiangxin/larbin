@@ -33,20 +33,8 @@
  * A page has been loaded successfully
  * @param page the page that has been fetched
  */
-void loaded (html *page)
+void default_loaded (html *page)
 {
-    // Here should be the code for managing everything
-    // page->getHeaders() gives a char* containing the http headers
-    // page->getPage() gives a char* containing the page itself
-    // those char* are statically allocated, so you should copy
-    // them if you want to keep them
-    // in order to accept \000 in the page, you can use page->getLength()
-    if(global::fetchInfo)
-    {
-        std::cout << "\e[1;37m[\e[1;32mSuccess\e[1;37m]\e[0m ";
-        page->getUrl()->print();
-    }
-    // cout << page->getHeaders() << "\n" << page->getPage() << "\n";
 }
 
 /*
@@ -54,20 +42,13 @@ void loaded (html *page)
  * @param u the URL of the doc
  * @param reason reason of the fail
  */
-void failure (url *u, FetchError reason)
+void default_failure (url *u, FetchError reason)
 {
-    // Here should be the code for managing everything
-    if(global::fetchInfo)
-    {
-        std::cout << "\e[1;37m[\e[1;31mFailed : " << (int) reason << "\e[1;37m]\e[0m ";
-        u->print();
-    }
 }
 
 /* initialisation function */
-void initUserOutput ()
+void default_initUserOutput ()
 {
-
 }
 
 /*
@@ -77,7 +58,7 @@ void initUserOutput ()
  * to use mutex, because incoherence in the webserver is not as critical
  * as efficiency
  */
-void outputStats(int fds)
+void default_outputStats(int fds)
 {
     ecrire(fds, (char*)"Nothing to declare");
 }

@@ -45,7 +45,7 @@ static double totalbytes = 0;
 /** A page has been loaded successfully
  * @param page the page that has been fetched
  */
-void loaded (html *page)
+void stats_loaded (html *page)
 {
     uint32_t l = page->getLength();
     int t = l / taille;
@@ -65,13 +65,13 @@ void loaded (html *page)
  * @param u the URL of the doc
  * @param reason reason of the fail
  */
-void failure (url *u, FetchError reason)
+void stats_failure (url *u, FetchError reason)
 {
 }
 
 /** initialisation function
  */
-void initUserOutput ()
+void stats_initUserOutput ()
 {
     for (int i=0; i<nb; i++)
     {
@@ -97,7 +97,7 @@ static void dessine(int fds, double *tab, double *maxi)
     }
 }
 
-void outputStats(int fds)
+void stats_outputStats(int fds)
 {
     ecrire(fds, (char*)"Stats for ");
     ecrireInt(fds, totalpages);

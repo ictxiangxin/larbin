@@ -108,6 +108,7 @@ bool            global::getCGI = false;
 bool            global::anyType = false;
 bool            global::punycode = false;
 bool            global::pageNoDuplicate = false;
+uint            global::outputMode = 0;
 
 /*
  * Constructor : initialize almost everything
@@ -369,6 +370,11 @@ void global::parseFile (char *file)
             punycode = true;
         else if (!strcasecmp(tok, "pageNoDuplicate"))
             pageNoDuplicate = true;
+        else if (!strcasecmp(tok, "outputMode"))
+        {
+            tok = nextToken(&posParse);
+            outputMode = atoi(tok);
+        }
         else if (!strcasecmp(tok, "limitTime"))
         {
             tok = nextToken(&posParse);

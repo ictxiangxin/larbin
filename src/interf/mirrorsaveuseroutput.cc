@@ -35,7 +35,7 @@ static uint endFileName;
 /** A page has been loaded successfully
  * @param page the page that has been fetched
  */
-void loaded (html *page)
+void mirror_loaded (html *page)
 {
     // get file name and create needed directories
     url *u = page->getUrl();
@@ -102,13 +102,13 @@ void loaded (html *page)
  * @param u the URL of the doc
  * @param reason reason of the fail
  */
-void failure (url *u, FetchError reason)
+void mirror_failure (url *u, FetchError reason)
 {
 }
 
 /** initialisation function
  */
-void initUserOutput ()
+void mirror_initUserOutput ()
 {
     mkdir(saveDir, S_IRWXU);
     endFileName = strlen(saveDir);
@@ -125,7 +125,7 @@ void initUserOutput ()
  * to use mutex, because incoherence in the webserver is not as critical
  * as efficiency
  */
-void outputStats(int fds)
+void mirror_outputStats(int fds)
 {
     ecrire(fds, "Nothing to declare");
 }
