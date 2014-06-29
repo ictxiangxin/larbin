@@ -6,12 +6,11 @@ os:
     - linux
 
 before_install:
-    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    - sudo apt-get update
-    - sudo apt-get install g++-4.8 -y
+    - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+    - sudo apt-get update -qq
+    - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+    - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
     - sudo apt-get install lynx m4 xutils-dev
-    - sudo rm -f /usr/bin/g++
-    - sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++
 
 install:
     ./configure
