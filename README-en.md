@@ -56,15 +56,14 @@ If you use SUSE:
 ```bash
 > sudo zypper in makedepend
 ```
-You also need to check that you have installed some basic tools, such as g++, m4, if not, on Debian/Ubuntu class OS, you can use next commands to install them:
+You also need to check that you have installed some basic tools, such as g++, if not, on Debian/Ubuntu class OS, you can use next commands to install them:
 ```bash
-> sudo apt-get install g++ m4
+> sudo apt-get install g++
 ``` 
 If you use SUSE:
 ```bash
-> sudo zypper in gcc-g++ m4
+> sudo zypper in gcc-g++
 ```
-Adns 1.4 need lynx when compiling, if missing error occur, please install it in the same way.
 
 ###Configuring
 

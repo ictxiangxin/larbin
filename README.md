@@ -56,15 +56,14 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 ```bash
 > sudo zypper in makedepend
 ```
-你仍然需要注意一些常用程序是否安装，如g++，m4等，如果没有，在Debian/Ubuntu类操作系统下，执行下列命令进行安装：
+你仍然需要注意一些常用程序是否安装，如g++等，如果没有，在Debian/Ubuntu类操作系统下，执行下列命令进行安装：
 ```bash
-> sudo apt-get install g++ m4
+> sudo apt-get install g++
 ```
 如果你使用的系统是SUSE:
 ```bash
-> sudo zypper in gcc-g++ m4
+> sudo zypper in gcc-g++
 ```
-Adns 1.4 在编译时会用到lynx，如果出现缺失错误，用上述同样的方法进行安装。
 
 ###配置Larbin
 
