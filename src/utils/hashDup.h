@@ -28,11 +28,11 @@ class hashDup
     private:
         ssize_t size;
         char *table;
-        char *file;
+        const char *file;
 
     public:
         /* constructor */
-        hashDup (ssize_t size, char *init, bool scratch);
+        hashDup (ssize_t size, const char *init, bool scratch);
 
         /* destructor */
         ~hashDup ();

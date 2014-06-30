@@ -31,7 +31,7 @@
 #include "utils/connexion.h"
 
 // constructor
-hashDup::hashDup (ssize_t size, char *init, bool scratch)
+hashDup::hashDup (ssize_t size, const char *init, bool scratch)
 {
     this->size = size;
     file = init;

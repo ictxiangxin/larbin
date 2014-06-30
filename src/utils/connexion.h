@@ -23,7 +23,7 @@
  * return 0 on success, 1 otherwise
  * Don't work on non-blocking fds...
  */
-int ecrire (int fd, char *buf);
+int ecrire (int fd, const char *buf);
 
 /* make write until everything is written
  * return 0 on success, 1 otherwise
