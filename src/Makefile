@@ -17,7 +17,7 @@ clean distclean dep prof debug: options.h config.h
 
 larbin: $(ABS-UTILS-OBJ) $(ABS-FETCH-OBJ) $(ABS-INTERF-OBJ) $(ABS-MAIN-OBJ)
 	$(CXX) $(MF) $(LIBS) -o larbin $(ABS-UTILS-OBJ) \
-	$(ABS-FETCH-OBJ) $(ABS-INTERF-OBJ) $(ABS-MAIN-OBJ) ../adns/src/libadns.a
+	$(ABS-FETCH-OBJ) $(ABS-INTERF-OBJ) $(ABS-MAIN-OBJ) ../adns/libadns.a
 
 dep-here:
 	makedepend -f- -I$(BASEDIR) -Y *.cc 2> /dev/null > .depend

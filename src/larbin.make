@@ -1,4 +1,4 @@
-ADNSDIR=$(BASEDIR)/../adns/src/
+ADNSDIR=$(BASEDIR)/../adns/
 LIBS:=
 
 include $(BASEDIR)/../config.make

@@ -52,7 +52,6 @@ rm -f test test.c test.o
 
 # run make dep
 touch .depend
-touch adns/.depend
 touch src/.depend
 touch src/fetch/.depend
 touch src/interf/.depend

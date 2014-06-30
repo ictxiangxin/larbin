@@ -1,6 +1,0 @@
-Makefile
-*_record
-*_playback
-output-*.*
-pipe.out
-pipe.err
