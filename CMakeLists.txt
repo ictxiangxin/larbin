@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 2.8)
+
+PROJECT(LARBIN C CXX)
+
+ADD_SUBDIRECTORY(adns)
+ADD_SUBDIRECTORY(src)

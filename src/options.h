@@ -1,7 +1,7 @@
 #ifndef LARBIN_CONFIG
 #define LARBIN_CONFIG
 
-#include "config.h"
+#define HAS_PROC_SELF_STATUS
 
 /* This files allows a lot of customizations of larbin
  * see doc/custom-eng.html for more details
