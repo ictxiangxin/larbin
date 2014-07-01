@@ -1,13 +1,15 @@
 language:
+    - c
     - cpp
-    - m4
 
 os:
     - linux
 
 before_install:
-    - sudo apt-get install lynx m4 xutils-dev
+    - sudo apt-get install cmake
 
 install:
-    ./configure
+    mkdir build
+    cd build
+    cmake ..
     make
