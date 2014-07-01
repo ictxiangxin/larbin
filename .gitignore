@@ -1,6 +1,9 @@
 # result directory
 save/
 
+# build directory
+build/
+
 # object files
 *.o
 
