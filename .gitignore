@@ -12,3 +12,6 @@ larbin
 
 # fifo files
 fifo*
+
+# lib files
+*.a

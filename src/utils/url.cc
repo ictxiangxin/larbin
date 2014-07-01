@@ -482,7 +482,7 @@ uint url::hashCode ()
  */
 void url::parse (char *arg)
 {
-    int deb = 0, fin = deb;
+    uint deb = 0, fin = deb;
     // Find the end of host name (put it into lowerCase)
     while (arg[fin] != '/' && arg[fin] != ':' && arg[fin] != 0)
         fin++;

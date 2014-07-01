@@ -39,7 +39,7 @@ bool endWith (const char *a, const char *b);
 /* test if b end with a ignoring case
  * a can use min char, '.' (a[i] = a[i] | 32)
  */
-bool endWithIgnoreCase (const char *amin, const char *b, int lb);
+bool endWithIgnoreCase (const char *amin, const char *b, uint lb);
 
 /* tests if b contains a */
 bool caseContain (const char *a, const char *b);

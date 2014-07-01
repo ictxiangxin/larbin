@@ -26,17 +26,17 @@
 #include "utils/histogram.h"
 #include "utils/connexion.h"
 
-#define size 80
-#define height 15
+#define SIZE 80
+#define HEIGHT 15
 
-static char curve[height+2][size+17];
+static char curve[HEIGHT+2][SIZE+17];
 
 /* definition of class histogram */
 class Histogram
 {
 protected:
-    int tab1[size];
-    int tab2[size];
+    int tab1[SIZE];
+    int tab2[SIZE];
     int maxv;
     int beg, end;
     time_t period, count, beg_time;
@@ -48,7 +48,7 @@ public:
     /* Specific constructor : the number of pages retrieved during
      *   an interval is traced
      * @param period : time length of an interval (in seconds)
-     * @param size : number of intervals remembered
+     * @param SIZE : number of intervals remembered
      */
     Histogram (time_t period);
 
@@ -93,38 +93,36 @@ void histoWrite (int fds)
 /* Specific constructor : the number of pages retrieved during
  *   an interval is traced
  * @param period : time length of an interval (in seconds)
- * @param size : number of intervals remembered
+ * @param SIZE : number of intervals remembered
  */
 Histogram::Histogram (time_t period)
 {
-    for (int i=0; i<size; ++i)
+    for (int i=0; i<SIZE; ++i)
     {
         tab1[i] = 0;
         tab2[i] = 0;
     }
     beg = 0;
     end = 0;
-    maxv = height;
+    maxv = HEIGHT;
     this->period = period;
     count = 0;
     beg_time = time (NULL);
-    for (int i=0; i<height; i++)
+    for (int i=0; i<HEIGHT; i++)
     {
         sprintf(curve[i], "                ");
-        curve[i][size+16] = '\n';
+        curve[i][SIZE+16] = '\n';
     }
     curve[0][13] = '-';
     curve[0][14] = '>';
-    sprintf(curve[height], "           0 -> ");
-    for (int i=16; i<size+16; i++) curve[height][i] = '-';
-    curve[height][size+16] = 0;
+    sprintf(curve[HEIGHT], "           0 -> ");
+    for (int i=16; i<SIZE+16; i++) curve[HEIGHT][i] = '-';
+    curve[HEIGHT][SIZE+16] = 0;
 }
 
 /* Destructor */
 Histogram::~Histogram ()
 {
-    delete [] tab1;
-    delete [] tab2;
 }
 
 /* A page is retrieved, add to stats */
@@ -144,11 +142,11 @@ void Histogram::pageHit (int x, int y)
 void Histogram::incrementEnd ()
 {
     end += 1;
-    if (end >= size) end = 0;
+    if (end >= SIZE) end = 0;
     if (end <= beg)   /* have to delete the oldest interval */
     {
         beg += 1;
-        if (beg >= size) beg = 0;
+        if (beg >= SIZE) beg = 0;
         beg_time += period;
     }
     tab1[end] = 0;
@@ -160,21 +158,21 @@ void Histogram::write (int fds)
 {
     /* Compute the curve */
     int maxvbis = maxv;
-    maxv = height; /* let's recompute it for next time */
-    for (int i=beg, c=0; c<size; ++i, ++c)
+    maxv = HEIGHT; /* let's recompute it for next time */
+    for (int i=beg, c=0; c<SIZE; ++i, ++c)
     {
-        if (i == size) i = 0;
+        if (i == SIZE) i = 0;
         if (tab1[i] > maxv) maxv = tab1[i];
-        int h1 = (tab1[i] * height) / maxvbis;
-        int h2 = (tab2[i] * height) / maxvbis;
-        for (int j=0; j<height; ++j)
+        int h1 = (tab1[i] * HEIGHT) / maxvbis;
+        int h2 = (tab2[i] * HEIGHT) / maxvbis;
+        for (int j=0; j<HEIGHT; ++j)
         {
             if (j >= h1)
-                curve[height-1-j][c+16] = ' ';
+                curve[HEIGHT-1-j][c+16] = ' ';
             else if (j >= h2)
-                curve[height-1-j][c+16] = 'x';
+                curve[HEIGHT-1-j][c+16] = 'x';
             else
-                curve[height-1-j][c+16] = '*';
+                curve[HEIGHT-1-j][c+16] = '*';
         }
     }
 
@@ -185,17 +183,17 @@ void Histogram::write (int fds)
     sprintf(curve[0], "%12d", maxvbis);
     curve[0][12] = ' ';
     int now_col = (global::now - beg_time) / period + 16;
-    curve[height][now_col] = '|';
+    curve[HEIGHT][now_col] = '|';
     ecrire(fds, curve[0]);
-    curve[height][now_col] = '-';
+    curve[HEIGHT][now_col] = '-';
     ecrireChar(fds, '\n');
     /* Show time bounds : */
     char *deb = asctime (localtime (&beg_time));
     deb[strlen(deb)-1] = 0;
     ecrire (fds, deb);
-    snprintf(curve[height+1], size + 3 - strlen(deb), "%10000s", "");
-    ecrire(fds, curve[height+1]);
-    time_t fin_time = beg_time + period * size;
+    snprintf(curve[HEIGHT+1], SIZE + 3 - strlen(deb), "%10000s", "");
+    ecrire(fds, curve[HEIGHT+1]);
+    time_t fin_time = beg_time + period * SIZE;
     char *fin = asctime (localtime (&fin_time));
     ecrire (fds, fin);
 }

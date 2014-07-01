@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# configure adns
-(cd adns; ./configure)
-
 #configure larbin itself
 cat /dev/null > config.h
 cat /dev/null > config.make
