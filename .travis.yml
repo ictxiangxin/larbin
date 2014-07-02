@@ -15,3 +15,6 @@ before_script:
 
 script:
     - make
+
+after_script:
+    - if [ -f CTestTestfile.cmake ]; then ctest -V; fi
