@@ -9,7 +9,7 @@ before_install:
     - sudo apt-get install cmake
 
 install:
-    mkdir build
-    cd build
-    cmake ..
-    make
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
