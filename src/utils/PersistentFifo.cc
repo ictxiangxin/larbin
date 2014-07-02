@@ -237,8 +237,9 @@ char *PersistentFifo::readLine ()
     {
         if (!(bufEnd - bufPos < maxUrlSize + 40 + maxCookieSize))
         {
-            printf((char*)fileName);
-            printf((char*)(buf+bufPos));
+            std::cout << fileName << std::endl;
+            std::cout << buf + bufPos << std::endl;
+
         }
         if (bufPos*2 > BUF_SIZE)
         {
