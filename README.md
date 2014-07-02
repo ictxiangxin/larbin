@@ -27,6 +27,8 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 
 * 增加了对中文(unicode)的支持，包括URI中出现的中文编码以及中文域名（如：[http://哈尔滨工业大学。中国](http://哈尔滨工业大学。中国)）。
 
+* 使用cmake来构建larbin。
+
 内容提要：
 ----------
 
@@ -39,24 +41,17 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 
 ###编译Larbin
 
-查看options.h文件来进行功能选择，这些功能直接决定了Larbin的功能和工作方式，请仔细配置这个文件。每次修改该文件后需要重新编译Larbin以使其生效。
-（新版本的Larbin将逐步放弃使用options.h文件，而完全用larbin.conf对Larbin进行配置）
+新版larbin将使用cmake来构建，使用c和c++两种语言，请确保系统中已经安装了cmake以及编译器。
 
-执行如下命令进行:
-
+如果cmake没有安装，在Debian/Ubuntu类操作系统下，执行下列命令进行安装：
 ```bash
-> ./configure
-> make
-```
-如果configure时出现错误，确保已经安装了makedepend，在Debian/Ubuntu类操作系统下，执行下列命令进行安装：
-```bash
-> sudo apt-get install xutils-dev
+> sudo apt-get install cmake
 ```
 如果你使用的系统是SUSE:
 ```bash
-> sudo zypper in makedepend
+> sudo zypper in cmake
 ```
-你仍然需要注意一些常用程序是否安装，如g++等，如果没有，在Debian/Ubuntu类操作系统下，执行下列命令进行安装：
+你仍然需要注意g++是否安装，如果没有，在Debian/Ubuntu类操作系统下，执行下列命令进行安装：
 ```bash
 > sudo apt-get install g++
 ```
@@ -64,6 +59,20 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 ```bash
 > sudo zypper in gcc-g++
 ```
+
+强烈建议larbin进行外部构建（由于cmake）， 具体安装步骤如下：
+```bash
+> git clone httpsL//github.com/ictxiangxin/larbin
+> cd larbin
+> mkdir build
+> cmake ..
+> make
+```
+如果想确定larbin是否构建正确，执行：
+```bash
+> make test
+```
+现在，larbin已经构建完成并可以使用了。
 
 ###配置Larbin
 
@@ -93,7 +102,7 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 > ./larbin -c your_conf_filename
 ```
 
-查看它的工作情况，访问http://localhost:8081/
+默认情况下，查看它的工作情况，访问http://localhost:8081/
 
 ###运行环境
 
