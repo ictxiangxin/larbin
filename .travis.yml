@@ -8,8 +8,10 @@ os:
 before_install:
     - sudo apt-get install cmake
 
-install:
+before_script:
     - mkdir build
     - cd build
     - cmake ..
+
+script:
     - make
