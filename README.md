@@ -62,7 +62,7 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 
 强烈建议larbin进行外部构建（由于cmake）， 具体安装步骤如下：
 ```bash
-> git clone httpsL//github.com/ictxiangxin/larbin
+> git clone https://github.com/ictxiangxin/larbin
 > cd larbin
 > mkdir build
 > cmake ..

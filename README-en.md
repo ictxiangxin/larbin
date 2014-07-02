@@ -62,7 +62,7 @@ If you use SUSE:
 
 I strongly recommend that use out-of-source build (depend on cmake), the particular build steps are:
 ```bash
-> git clone httpsL//github.com/ictxiangxin/larbin
+> git clone https://github.com/ictxiangxin/larbin
 > cd larbin
 > mkdir build
 > cmake ..
