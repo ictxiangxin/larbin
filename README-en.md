@@ -1,5 +1,4 @@
-Larbin Web Crawler
-==================
+#Larbin Web Crawler
 
 [![Build Status](https://travis-ci.org/ictxiangxin/larbin.svg?branch=master)](https://travis-ci.org/ictxiangxin/larbin)
 
@@ -10,8 +9,9 @@ Version: 2.6.5
 Larbin is a web crawler and stop develop, the least version is 2.6.3.
 We will continue develop this nice software and open the source on Github.
 
-Develop:
---------
+[Documentation](/doc/index-en.md)
+
+##Develop:
 
 * Currently, I did some modify on Larbin v2.6.3, fix many compiling warning and fix a serious bug.
 
@@ -29,8 +29,7 @@ Develop:
 
 * Use cmake to build larbin
 
-Table of content :
-------------------
+##Table of content :
 
 * [Compiling](#compiling)
 * [Configuring](#configuring)
