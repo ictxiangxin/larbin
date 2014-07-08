@@ -24,6 +24,7 @@
 #include <ctype.h>
 
 #include "options.h"
+#include "global.h"
 
 #include "utils/text.h"
 #include "utils/string.h"
@@ -210,11 +211,11 @@ char *nextToken(char **posParse, char c)
     return deb;
 }
 
-#ifdef SPECIFICSEARCH
-
 /* does this char * match privilegedExt */
 bool matchPrivExt (const char *file)
 {
+    if (!global::specificSearch)
+        return false;
     for (int len = strlen(file), i = 0; privilegedExts[i] != NULL; i++)
         if (endWithIgnoreCase(privilegedExts[i], file, len))
             return true;
@@ -224,26 +225,12 @@ bool matchPrivExt (const char *file)
 /* does this char * match contentType */
 int matchContentType (const char *ct)
 {
-
+    if (!global::specificSearch)
+        return false;
     for (int i = 0; contentTypes[i] != NULL; i++)
         if (startWithIgnoreCase(contentTypes[i], ct))
             return i;
     return -1;
 }
-
-#else // SPECIFICSEARCH is not defined
-
-bool matchPrivExt (const char *file)
-{
-    return false;
-}
-
-int matchContentType (const char *ct)
-{
-    assert(false);
-    return -1;
-}
-
-#endif // SPECIFICSEARCH
 
 // end of text.cc

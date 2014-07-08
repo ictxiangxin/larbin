@@ -109,6 +109,7 @@ bool            global::anyType = false;
 bool            global::punycode = false;
 bool            global::pageNoDuplicate = false;
 uint            global::outputMode = 0;
+bool            global::specificSearch = false;
 
 /*
  * Constructor : initialize almost everything
@@ -178,14 +179,15 @@ global::global (int argc, char *argv[])
     strtmp.addString(userAgent);
     strtmp.addString((char*)" ");
     strtmp.addString(sender);
-#ifdef SPECIFICSEARCH
-    strtmp.addString((char*)"\r\nAccept: text/html");
-    for (uint i = 0; contentTypes[i] != NULL; i++)
+    if (global::specificSearch)
     {
-        strtmp.addString((char*)", ");
-        strtmp.addString(contentTypes[i]);
+        strtmp.addString((char*)"\r\nAccept: text/html");
+        for (uint i = 0; contentTypes[i] != NULL; i++)
+        {
+            strtmp.addString((char*)", ");
+            strtmp.addString(contentTypes[i]);
+        }
     }
-#endif // SPECIFICSEARCH
     if (!global::anyType)
         strtmp.addString((char*)"\r\nAccept: text/html");
     strtmp.addString((char*)"\r\n\r\n");
@@ -370,6 +372,8 @@ void global::parseFile (char *file)
             punycode = true;
         else if (!strcasecmp(tok, "pageNoDuplicate"))
             pageNoDuplicate = true;
+        else if (!strcasecmp(tok, "specificSearch"))
+            specificSearch = true;
         else if (!strcasecmp(tok, "outputMode"))
         {
             tok = nextToken(&posParse);

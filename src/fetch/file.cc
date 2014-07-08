@@ -255,51 +255,41 @@ void robots::parseRobots ()
 
 
 /////////////////////////////////////////
-#ifdef SPECIFICSEARCH
-
 #include "fetch/specbuf.cc"
 
 #define _newSpec() \
-            if (state==SPECIFIC) \
-                newSpec();
+            do { \
+                if (state==SPECIFIC) \
+                    newSpec(); \
+            } while(0)
 
 #define _destructSpec() \
-            if (state==SPECIFIC) \
-                destructSpec();
+            do { \
+                if (state==SPECIFIC) \
+                    destructSpec(); \
+            } while(0)
 
 #define _endOfInput() \
-            if (state==SPECIFIC) \
-              return endOfInput();
+            do { \
+                if (state==SPECIFIC) \
+                    return endOfInput(); \
+            } while(0)
 
 #define _getContent() \
-            if (state==SPECIFIC) \
-                return getContent(); \
-            else \
-                return contentStart;
+            do { \
+                if (state==SPECIFIC) \
+                    return getContent(); \
+                else \
+                    return contentStart; \
+            } while(0)
 
 #define _getSize() \
-            if (state==SPECIFIC) \
-                return getSize(); \
-            else \
-                return (buffer + pos - contentStart);
-
-///////////////////////////////////////
-#else // not a SPECIFICSEARCH
-
-void initSpecific ()
-{
-}
-
-#define constrSpec() ((void) 0)
-#define _newSpec() ((void) 0)
-#define pipeSpec() 0
-#define _endOfInput() ((void) 0)
-#define _destructSpec() ((void) 0)
-#define _getContent() return contentStart
-#define _getSize() return (buffer + pos - contentStart)
-
-#endif // SPECIFICSEARCH
-/////////////////////////////////////////
+            do { \
+                if (state==SPECIFIC) \
+                    return getSize(); \
+                else \
+                    return (buffer + pos - contentStart); \
+            } while(0)
 
 #define notCgiChar(c) (global::getCGI || (c!='?' && c!='=' && c!='*'))
 
@@ -460,14 +450,17 @@ int html::parseHeader ()
         // end of http headers
 #ifndef FOLLOW_LINKS
         state = SPECIFIC;
-#elif defined(SPECIFICSEARCH)
-        if (isInteresting)
-            state = SPECIFIC;
+#else
+        if (global::specificSearch)
+        {
+            if (isInteresting)
+                state = SPECIFIC;
+            else
+                state = HTML;
+        }
         else
             state = HTML;
-#else // not a SPECIFICSEARCH
-        state = HTML;
-#endif // SPECIFICSEARCH
+#endif
         contentStart = posParse + 1;
         *(posParse - 1) = 0;
         _newSpec();
@@ -490,14 +483,12 @@ int html::verifType ()
         // Let's read the type of this doc
         if (!startWithIgnoreCase((char*)"text/html", area + 14))
         {
-#ifdef SPECIFICSEARCH
-            if ((extIndex = matchContentType(area + 14)) != -1)
+            if (global::specificSearch && (extIndex = matchContentType(area + 14)) != -1)
             {
                 interestingSeen();
                 isInteresting = true;
             }
             else
-#endif // SPECIFICSEARCH
             {
                 if (global::anyType)
                     return 0;
@@ -519,8 +510,7 @@ int html::verifType ()
  */
 int html::verifLength ()
 {
-#ifndef SPECIFICSEARCH
-    if (startWithIgnoreCase((char*)"content-length: ", area))
+    if (!global::specificSearch && startWithIgnoreCase((char*)"content-length: ", area))
     {
         int len = 0;
         char *p = area + 16;
@@ -535,7 +525,6 @@ int html::verifLength ()
             return 1;
         }
     }
-#endif // SPECIFICSEARCH
     return 0;
 }
 

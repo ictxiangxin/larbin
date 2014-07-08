@@ -37,9 +37,12 @@
  */
 void fetchFail (url *u, FetchError err, bool interesting=false)
 {
-#ifdef SPECIFICSEARCH
-    if (interesting || (privilegedExts[0] != NULL && matchPrivExt(u->getFile())))
-#endif
+    if (global::specificSearch)
+    {
+        if (interesting || (privilegedExts[0] != NULL && matchPrivExt(u->getFile())))
+            failure(u, err);
+    }
+    else
         failure(u, err);
 }
 
@@ -52,15 +55,16 @@ void endOfLoad (html *parser, FetchError err)
     switch (err)
     {
     case success:
-#ifdef SPECIFICSEARCH
-        if (parser->isInteresting)
+        if (global::specificSearch)
         {
-            interestingPage();
-            loaded(parser);
+            if (parser->isInteresting)
+            {
+                interestingPage();
+                loaded(parser);
+            }
         }
-#else // not a SPECIFICSEARCH
-        loaded(parser);
-#endif // SPECIFICSEARCH
+        else
+            loaded(parser);
         break;
     default:
         fetchFail(parser->getUrl(), err, parser->isInteresting);

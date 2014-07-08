@@ -3,25 +3,13 @@
 
 #define HAS_PROC_SELF_STATUS
 
-/* This files allows a lot of customizations of larbin
- * see doc/custom-eng.html for more details
- */
-
-////////////////////////////////////////////////////////////
-// Set up a specific search
-
-//#define SPECIFICSEARCH
-//#define contentTypes ((char *[]) { "audio/mpeg", "image/jpeg", NULL })
-//#define privilegedExts ((char *[]) { ".mp3", ".jpg", NULL })
+#define contentTypes ((char *[]) { "audio/mpeg", "image/jpeg", NULL })
+#define privilegedExts ((char *[]) { ".mp3", ".jpg", NULL })
 
 // how do you want to manage specific pages (select one of the followings)
 //#define DEFAULT_SPECIFIC
-//#define SAVE_SPECIFIC
+#define SAVE_SPECIFIC
 //#define DYNAMIC_SPECIFIC
-
-
-//////////////////////////////////////////////////////////
-// What do you want the crawler to do
 
 // do you want to follow links in pages
 #define FOLLOW_LINKS

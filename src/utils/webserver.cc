@@ -145,9 +145,10 @@ static void writeTime (int fds)
 /* write stats information (if any) */
 
 // specific part
-#ifdef SPECIFICSEARCH
 static void writeSpecStats(int fds)
 {
+    if (!global::specificSearch)
+        return;
     ecrire(fds, (char*)"\n\n<h2>Interesting pages (");
     ecrire(fds, contentTypes[0]);
     int i=1;
@@ -178,9 +179,6 @@ static void writeSpecStats(int fds)
         ecrireInti(fds, extensionTreated, (char*)"%5d");
     }
 }
-#else
-#define writeSpecStats(fds) ((void) 0)
-#endif
 
 // main part
 static void writeStats (int fds)

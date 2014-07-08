@@ -205,6 +205,7 @@ struct global
     static bool punycode;
     static bool pageNoDuplicate;
     static uint outputMode;
+    static bool specificSearch;
 };
 
 /** set this fds for next poll */

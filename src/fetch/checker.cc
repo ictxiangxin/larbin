@@ -47,14 +47,12 @@ void check (url *u)
     {
         hashUrls();  // stat
         // where should this link go ?
-#ifdef SPECIFICSEARCH
-        if (privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
+        if (global::specificSearch && privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
         {
             interestingExtension();
             global::URLsPriority->put(u);
         }
         else
-#endif //SPECIFICSEARCH
             global::URLsDisk->put(u);
     }
     else

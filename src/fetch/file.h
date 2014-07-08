@@ -75,9 +75,7 @@ class html : public file {
   Vector<char> links;
 #endif // LINKS_INFO
 
-#ifdef SPECIFICSEARCH
 #include "fetch/specbuf.h"
-#endif
 
  public:
   // Constructor
