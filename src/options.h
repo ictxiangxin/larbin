@@ -3,9 +3,6 @@
 
 #define HAS_PROC_SELF_STATUS
 
-#define contentTypes ((char *[]) { "audio/mpeg", "image/jpeg", NULL })
-#define privilegedExts ((char *[]) { ".mp3", ".jpg", NULL })
-
 // how do you want to manage specific pages (select one of the followings)
 //#define DEFAULT_SPECIFIC
 #define SAVE_SPECIFIC

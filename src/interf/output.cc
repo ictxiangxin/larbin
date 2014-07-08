@@ -39,7 +39,7 @@ void fetchFail (url *u, FetchError err, bool interesting=false)
 {
     if (global::specificSearch)
     {
-        if (interesting || (privilegedExts[0] != NULL && matchPrivExt(u->getFile())))
+        if (interesting || (global::privilegedExts[0] != NULL && matchPrivExt(u->getFile())))
             failure(u, err);
     }
     else

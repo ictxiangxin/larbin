@@ -29,7 +29,7 @@ static char buf[maxUrlSize + 30];
  */
 static void getSpecName(int nbdir, int nbfile, int extindex)
 {
-    sprintf(fileName + endFileName, "d%5i/f%5i%s", nbdir, nbfile, privilegedExts[extindex]);
+    sprintf(fileName + endFileName, "d%5i/f%5i%s", nbdir, nbfile, global::privilegedExts[extindex]);
     printf("%s\n", fileName + endFileName);
     for (int i = endFileName + 1; fileName[i] == ' '; i++)
         fileName[i] = '0';

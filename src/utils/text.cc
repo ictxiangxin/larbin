@@ -216,8 +216,8 @@ bool matchPrivExt (const char *file)
 {
     if (!global::specificSearch)
         return false;
-    for (int len = strlen(file), i = 0; privilegedExts[i] != NULL; i++)
-        if (endWithIgnoreCase(privilegedExts[i], file, len))
+    for (int len = strlen(file), i = 0; global::privilegedExts[i] != NULL; i++)
+        if (endWithIgnoreCase(global::privilegedExts[i], file, len))
             return true;
     return false;
 }
@@ -227,8 +227,8 @@ int matchContentType (const char *ct)
 {
     if (!global::specificSearch)
         return false;
-    for (int i = 0; contentTypes[i] != NULL; i++)
-        if (startWithIgnoreCase(contentTypes[i], ct))
+    for (int i = 0; global::contentTypes[i] != NULL; i++)
+        if (startWithIgnoreCase(global::contentTypes[i], ct))
             return i;
     return -1;
 }

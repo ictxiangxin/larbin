@@ -83,6 +83,8 @@ char            *global::headersRobots;
 sockaddr_in     *global::proxyAddr;
 Vector<char>    *global::domains;
 Vector<char>    global::forbExt;
+Vector<char>    global::contentTypes;
+Vector<char>    global::privilegedExts;
 uint            global::nb_conn;
 uint            global::dnsConn;
 ushort          global::httpPort;
@@ -342,6 +344,8 @@ void global::parseFile (char *file)
             manageDomain(&posParse);
         else if (!strcasecmp(tok, "forbiddenExtensions"))
             manageExt(&posParse);
+        else if (!strcasecmp(tok, "specificSet"))
+            manageSpec(&posParse);
         else if (!strcasecmp(tok, "noExternalLinks"))
             externalLinks = false;
         else if (!strcasecmp(tok, "ignoreRobots"))
@@ -434,7 +438,25 @@ void global::manageExt (char **posParse)
     if (tok == NULL)
     {
         std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  Bad configuration file : no end to forbiddenExtensions" << std::endl;
-        exit(1);
+        exit(-1);
+    }
+}
+
+void global::manageSpec (char **posParse)
+{
+    char *tokType = nextToken(posParse);
+    char *tokExt = nextToken(posParse);
+    while (tokType != NULL && tokExt != NULL && strcasecmp(tokType, "end") && strcasecmp(tokExt, "end"))
+    {
+        contentTypes.addElement(newString(tokType));
+        privilegedExts.addElement(newString(tokExt));
+        tokType = nextToken(posParse);
+        tokExt = nextToken(posParse);
+    }
+    if (tokType == NULL || tokExt == NULL)
+    {
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  Bad configuration file : no end to specific search content types and exts" << std::endl;
+        exit(-1);
     }
 }
 

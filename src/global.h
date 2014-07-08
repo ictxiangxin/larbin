@@ -157,6 +157,8 @@ struct global
      * extensions which are allways to avoid : .ps, .pdf...
      */
     static Vector<char> forbExt;
+    static Vector<char> contentTypes;
+    static Vector<char> privilegedExts;
     /** number of parallel connexions
      * your kernel must support a little more than nb_conn file descriptors
      */
@@ -175,6 +177,7 @@ struct global
     static void manageDomain (char **posParse);
     /** read the forbidden extensions */
     static void manageExt (char **posParse);
+    static void manageSpec (char **posParse);
     /////////// POLL ///////////////////////////////////
     /** array used by poll */
     static struct pollfd *pollfds;

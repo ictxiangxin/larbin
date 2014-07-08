@@ -150,27 +150,27 @@ static void writeSpecStats(int fds)
     if (!global::specificSearch)
         return;
     ecrire(fds, (char*)"\n\n<h2>Interesting pages (");
-    ecrire(fds, contentTypes[0]);
+    ecrire(fds, global::contentTypes[0]);
     int i=1;
-    while (contentTypes[i] != NULL)
+    while (global::contentTypes[i] != NULL)
     {
         ecrire(fds, (char*)", ");
-        ecrire(fds, contentTypes[i]);
+        ecrire(fds, global::contentTypes[i]);
         i++;
     }
     ecrire(fds, (char*)") :</h2>\ntotal fetched (success)          : ");
     ecrireInti(fds, interestingPage, (char*)"%5d");
     ecrire(fds, (char*)"\ntotal fetched (error or success) : ");
     ecrireInti(fds, interestingSeen, (char*)"%5d");
-    if (privilegedExts[0] != NULL)
+    if (global::privilegedExts[0] != NULL)
     {
         ecrire(fds, (char*)"\nprivileged links seen (");
-        ecrire(fds, privilegedExts[0]);
+        ecrire(fds, global::privilegedExts[0]);
         uint i = 1;
-        while (privilegedExts[i] != NULL)
+        while (global::privilegedExts[i] != NULL)
         {
             ecrire(fds, (char*)", ");
-            ecrire(fds, privilegedExts[i]);
+            ecrire(fds, global::privilegedExts[i]);
             i++;
         }
         ecrire(fds, (char*)") :     ");

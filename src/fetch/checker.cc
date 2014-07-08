@@ -47,7 +47,7 @@ void check (url *u)
     {
         hashUrls();  // stat
         // where should this link go ?
-        if (global::specificSearch && privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
+        if (global::specificSearch && global::privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
         {
             interestingExtension();
             global::URLsPriority->put(u);

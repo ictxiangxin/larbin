@@ -568,7 +568,7 @@ inline url *IPSite::getUrl ()
     global::namedSiteList[u->hostHashCode()].nburls--;
     global::inter->getOne();
     if (global::specificSearch && global::printStats)
-        if (privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
+        if (global::privilegedExts[0] != NULL && matchPrivExt(u->getFile()))
             extensionTreated();
     return u;
 }
