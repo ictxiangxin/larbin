@@ -36,6 +36,26 @@
 #include "interf/output.h"
 #include "interf/useroutputrecall.h"
 
+static char errorMsg[][32] =
+{
+    "Success",
+    "No DNS",
+    "No Connect",
+    "Robots",
+    "Timeout",
+    "Bad Type",
+    "Too Big",
+    "Err 30X",
+    "Err 40X",
+    "Unknow",
+    "Site Dup",
+    "<fast>Robots",
+    "<fast>No Connect",
+    "<fast>No DNS",
+    "Too Deep",
+    "URL Dup"
+};
+
 void loaded (html *page)
 {
     switch (global::outputMode)
@@ -83,7 +103,7 @@ void failure (url *u, FetchError reason)
     }
     if(global::fetchInfo)
     {
-        std::cout << "\e[1;37m[\e[1;31mFailed : " << (int) reason << "\e[1;37m]\e[0m ";
+        std::cout << "\e[1;37m[\e[1;31m" << errorMsg[reason] << "\e[1;37m]\e[0m ";
         u->print();
     }
 }

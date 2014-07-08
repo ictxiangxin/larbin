@@ -48,15 +48,15 @@
 #define dnsValidTime (2 * 24 * 3600)
 
 // Maximum size of a page
-#define maxPageSize     100000
-#define nearlyFullPage  90000
+#define maxPageSize    2 * 1024 * 1024
+#define nearlyFullPage (maxPageSize - 512 * 1024)
 
 // Maximum size of a robots.txt that is read
 // the value used is min(maxPageSize, maxRobotsSize)
-#define maxRobotsSize 10000
+#define maxRobotsSize 64 * 1024
 
 // How many forbidden items do we accept in a robots.txt
-#define maxRobotsItem 100
+#define maxRobotsItem 256
 
 // file name used for storing urls on disk
 #define fifoFile     "fifo"
@@ -67,12 +67,12 @@
 #define urlByFile ramUrls
 
 // Size of the buffer used to read sockets
-#define BUF_SIZE    16384
+#define BUF_SIZE    64 * 1024
 #define STRING_SIZE 1024
 
 // Max size for a url
 #define maxUrlSize  512
-#define maxSiteSize 40    // max size for the name of a site
+#define maxSiteSize 64   // max size for the name of a site
 
 // max size for cookies
 #define maxCookieSize 128
@@ -91,10 +91,11 @@
 
 // options for SPECIFICSEARCH (except with DEFAULT_SPECIFIC)
 #define specDir     "specific/"
-#define maxSpecSize 5000000
+#define maxSpecSize 32 * 1024 * 1024
 
 // Various reasons of error when getting a page
 #define nbAnswers 16
+
 enum FetchError
 {
     success,
