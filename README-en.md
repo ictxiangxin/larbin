@@ -2,14 +2,13 @@
 
 [![Build Status](https://travis-ci.org/ictxiangxin/larbin.svg?branch=master)](https://travis-ci.org/ictxiangxin/larbin)
 
-[简体中文版](/README.md)
+[简体中文版](/README.md) |
+[Documentation](/doc/index-en.md)
 
 Version: 2.6.5
 
 Larbin is a web crawler and stop develop, the least version is 2.6.3.
 We will continue develop this nice software and open the source on Github.
-
-[Documentation](/doc/index-en.md)
 
 ##Develop:
 

@@ -2,14 +2,13 @@
 
 [![Build Status](https://travis-ci.org/ictxiangxin/larbin.svg?branch=master)](https://travis-ci.org/ictxiangxin/larbin)
 
-[See the English edition](/README-en.md)
+[See the English edition](/README-en.md) |
+[文档](/doc/index.md)
 
 版本：2.6.5
 
 Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本是2.6.3。
 我将继续开发这一优秀的软件，并在Github上开放源代码。
-
-[文档](/doc/index.md)
 
 ##开发概况：
 
