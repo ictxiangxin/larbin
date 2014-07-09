@@ -417,7 +417,7 @@ void global::manageDomain (char **posParse)
     }
     if (tok == NULL)
     {
-        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  Bad configuration file : no end to limitToDomain" << std::endl;
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Bad configuration file : no end to limitToDomain" << std::endl;
         exit(-1);
     }
 }
@@ -437,7 +437,7 @@ void global::manageExt (char **posParse)
     }
     if (tok == NULL)
     {
-        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  Bad configuration file : no end to forbiddenExtensions" << std::endl;
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Bad configuration file : no end to forbiddenExtensions" << std::endl;
         exit(-1);
     }
 }
@@ -455,7 +455,7 @@ void global::manageSpec (char **posParse)
     }
     if (tokType == NULL || tokExt == NULL)
     {
-        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  Bad configuration file : no end to specific search content types and exts" << std::endl;
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Bad configuration file : no end to specific search content types and exts" << std::endl;
         exit(-1);
     }
 }

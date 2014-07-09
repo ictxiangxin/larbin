@@ -11,6 +11,7 @@ SET(FETCH_SRC
         fetch/file.cc
         fetch/fetchOpen.cc
         fetch/fetchPipe.cc
+        fetch/savespecbuf.cc
         )
 
 SET(INTERF_SRC

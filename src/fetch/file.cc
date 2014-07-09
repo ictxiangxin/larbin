@@ -38,14 +38,15 @@
 #include "fetch/file.h"
 #include "fetch/fetchOpen.h"
 #include "fetch/checker.h"
+#include "fetch/savespecbuf.h"
 
 #include "utils/debug.h"
 
-#define ANSWER 0
-#define HEADERS 1
+#define ANSWER     0
+#define HEADERS    1
 #define HEADERS30X 2
-#define HTML 3
-#define SPECIFIC 4
+#define HTML       3
+#define SPECIFIC   4
 
 #define LINK 0
 #define BASE 1
@@ -252,10 +253,6 @@ void robots::parseRobots ()
 /*************************************
  * implementation of html
  *************************************/
-
-
-/////////////////////////////////////////
-#include "fetch/specbuf.cc"
 
 #define _newSpec() \
             do { \

@@ -16,6 +16,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
+#include <stdio.h>
+
+#include "types.h"
+#include "global.h"
+#include "fetch/file.h"
+
 static int  nbdir = -1;
 static int  nbfile = filesPerDir;
 static char *fileName;
@@ -27,20 +34,20 @@ static char buf[maxUrlSize + 30];
  * give the name of the file given dir and file number
  * this char * is static
  */
-static void getSpecName(int nbdir, int nbfile, int extindex)
+void getSpecName(int nbdir, int nbfile, int extindex)
 {
     sprintf(fileName + endFileName, "d%5i/f%5i%s", nbdir, nbfile, global::privilegedExts[extindex]);
-    printf("%s\n", fileName + endFileName);
-    for (int i = endFileName + 1; fileName[i] == ' '; i++)
+    std::cout << fileName + endFileName << std::endl;
+    for (uint i = endFileName + 1; fileName[i] == ' '; i++)
         fileName[i] = '0';
-    for (int i = endFileName + 8; fileName[i] == ' '; i++)
+    for (uint i = endFileName + 8; fileName[i] == ' '; i++)
         fileName[i] = '0';
 }
 
-static void getIndexName(int nbdir)
+void getIndexName(int nbdir)
 {
     sprintf(fileName + endFileName, "d%5i/index", nbdir);
-    for (int i = endFileName + 1; fileName[i] == ' '; i++)
+    for (uint i = endFileName + 1; fileName[i] == ' '; i++)
         fileName[i] = '0';
 }
 
@@ -74,8 +81,8 @@ void html::newSpec ()
         indexFds = creat(fileName, S_IRWXU);
         if (indexFds < 0)
         {
-            std::cerr << "Cannot open file " << fileName << " : " << strerror(errno) << std::endl;
-            exit(1);
+            std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Cannot open file " << fileName << " : " << strerror(errno) << std::endl;
+            exit(-1);
         }
     }
     mydir = nbdir;
@@ -90,8 +97,8 @@ void html::newSpec ()
     fdsSpec = creat(fileName, S_IRWXU);
     if (fdsSpec < 0)
     {
-        std::cerr << "Cannot open file " << fileName << " : " << strerror(errno) << std::endl;
-        exit(1);
+        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Cannot open file " << fileName << " : " << strerror(errno) << std::endl;
+        exit(-1);
     }
     nbSpec = 0;
 }
@@ -136,12 +143,3 @@ char *html::getContent ()
         return contentStart;
 }
 
-#define getSize() nbSpec
-
-#define constrSpec() \
-  fdsSpec = -1; \
-  mydir = -1;   // indicate no save
-
-#define endOfInput() 0
-
-#define destructSpec() if (fdsSpec != -1) close(fdsSpec);
