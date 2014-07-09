@@ -79,7 +79,7 @@ void *startWebserver (void *none)
     {
         struct sockaddr_in addrc;
         int fdc;
-        uint len = sizeof(addr);
+        socklen_t len = sizeof(addr);
         fdc = accept(fds, (struct sockaddr *) &addrc, &len);
         if (fdc == -1)
             std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Trouble with web server..." << std::endl;
