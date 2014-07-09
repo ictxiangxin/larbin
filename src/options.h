@@ -3,11 +3,6 @@
 
 #define HAS_PROC_SELF_STATUS
 
-// how do you want to manage specific pages (select one of the followings)
-//#define DEFAULT_SPECIFIC
-#define SAVE_SPECIFIC
-//#define DYNAMIC_SPECIFIC
-
 // do you want to follow links in pages
 #define FOLLOW_LINKS
 
