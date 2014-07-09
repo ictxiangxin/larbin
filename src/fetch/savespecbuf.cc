@@ -37,7 +37,6 @@ static char buf[maxUrlSize + 30];
 void getSpecName(int nbdir, int nbfile, int extindex)
 {
     sprintf(fileName + endFileName, "d%5i/f%5i%s", nbdir, nbfile, global::privilegedExts[extindex]);
-    std::cout << fileName + endFileName << std::endl;
     for (uint i = endFileName + 1; fileName[i] == ' '; i++)
         fileName[i] = '0';
     for (uint i = endFileName + 8; fileName[i] == ' '; i++)
