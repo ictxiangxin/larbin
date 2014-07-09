@@ -59,7 +59,6 @@ TARGET_LINK_LIBRARIES(
         larbin
         pthread
         resolv
-        nsl
         adns
         )
 
