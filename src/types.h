@@ -24,10 +24,12 @@
 
 // Size of the HashSize (max number of urls that can be fetched)
 #define hashSize 64000000
+#define hashFile "hashtable.bin"
+#define hashFileOld "hashtable.old"
 
 // Size of the duplicate hashTable
 #define dupSize hashSize
-#define dupFile "dupfile.bak"
+#define dupFile "dupfile.bin"
 
 // Size of the arrays of Sites in main memory
 #define namedSiteListSize 20000

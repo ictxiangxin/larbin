@@ -31,10 +31,10 @@
 
 PersistentFifo::PersistentFifo (bool reload, char *baseName)
 {
-    fileNameLength = strlen(baseName)+5;
-    fileName = new char[fileNameLength+2];
+    fileNameLength = strlen(baseName) + 5;
+    fileName = new char[fileNameLength + 2];
     strcpy(fileName, baseName);
-    fileName[fileNameLength+1] = 0;
+    fileName[fileNameLength + 1] = 0;
     outbufPos = 0;
     bufPos = 0;
     bufEnd = 0;
@@ -60,13 +60,9 @@ PersistentFifo::PersistentFifo (bool reload, char *baseName)
                 else
                 {
                     if (tmp > fin)
-                    {
                         fin = tmp;
-                    }
                     if (tmp < fout)
-                    {
                         fout = tmp;
-                    }
                 }
             }
             name = readdir(dir);
@@ -78,9 +74,11 @@ PersistentFifo::PersistentFifo (bool reload, char *baseName)
         }
         if (fin == fout && fin != 0)
         {
-            std::cerr << "previous crawl was too little, cannot reload state\n"
-                      << "please restart larbin with -scratch option\n";
-            exit(1);
+            std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m previous crawl was too little, cannot reload state"
+                      << std::endl
+                      << "please restart larbin with --scratch option"
+                      << std::endl;
+            exit(-1);
         }
         closedir(dir);
         in = (fin - fout) * urlByFile;
@@ -99,9 +97,7 @@ PersistentFifo::PersistentFifo (bool reload, char *baseName)
         while (name != NULL)
         {
             if (startWith(fileName, name->d_name))
-            {
                 unlink(name->d_name);
-            }
             name = readdir(dir);
         }
         closedir(dir);
@@ -171,7 +167,7 @@ int PersistentFifo::getLength ()
 
 void PersistentFifo::makeName (uint nb)
 {
-    for (uint i=fileNameLength; i>=fileNameLength-5; i--)
+    for (uint i = fileNameLength; i >= fileNameLength - 5; i--)
     {
         fileName[i] = (nb % 10) + '0';
         nb /= 10;
@@ -182,10 +178,8 @@ int PersistentFifo::getNumber (char *file)
 {
     uint len = strlen(file);
     int res = 0;
-    for (uint i=len-6; i<=len-1; i++)
-    {
+    for (uint i = len - 6; i <= len - 1; i++)
         res = (res * 10) + file[i] - '0';
-    }
     return res;
 }
 
@@ -241,17 +235,17 @@ char *PersistentFifo::readLine ()
             std::cout << buf + bufPos << std::endl;
 
         }
-        if (bufPos*2 > BUF_SIZE)
+        if (bufPos * 2 > BUF_SIZE)
         {
             bufEnd -= bufPos;
-            memmove(buf, buf+bufPos, bufEnd);
+            memmove(buf, buf + bufPos, bufEnd);
             bufPos = 0;
         }
         int postmp = bufEnd;
         bool noRead = true;
         while (noRead)
         {
-            int rd = read(rfds, buf+bufEnd, BUF_SIZE-1-bufEnd);
+            int rd = read(rfds, buf + bufEnd, BUF_SIZE - 1 - bufEnd);
             switch (rd)
             {
             case 0 :
@@ -262,14 +256,12 @@ char *PersistentFifo::readLine ()
                 // We have a trouble here
                 if (errno != EINTR)
                 {
-                    std::cerr << "Big Problem while reading (persistentFifo.h)\n";
+                    std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Big Problem while reading (persistentFifo.h)\n";
                     perror("reason");
                     assert(false);
                 }
                 else
-                {
                     perror("Warning in PersistentFifo: ");
-                }
                 break;
             default:
                 noRead = false;

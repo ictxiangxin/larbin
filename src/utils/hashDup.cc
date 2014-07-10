@@ -58,7 +58,7 @@ hashDup::hashDup (ssize_t size, const char *init, bool scratch)
                 ssize_t tmp = read(fds, table + sr, size - sr);
                 if (tmp <= 0)
                 {
-                    std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Cannot read " << init << std::endl;
+                    std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Cannot read \"" << init << "\"" << std::endl;
                     exit(-1);
                 }
                 else

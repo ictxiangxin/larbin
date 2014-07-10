@@ -42,10 +42,10 @@ hashTable::hashTable (bool create)
             table[i] = 0;
     else
     {
-        int fds = open("hashtable.bak", O_RDONLY);
+        int fds = open(hashFile, O_RDONLY);
         if (fds < 0)
         {
-            std::cerr << "Cannot find hashtable.bak, restart from scratch\n";
+            std::cerr << "\e[1;37m[\e[0;33mWarning\e[1;37m]\e[0m Cannot find \""<< hashFile <<"\", restart from scratch" << std::endl;
             for (ssize_t i = 0; i < hashSize / 8; i++)
                 table[i] = 0;
         }
@@ -57,8 +57,8 @@ hashTable::hashTable (bool create)
                 ssize_t tmp = read(fds, table + sr, total - sr);
                 if (tmp <= 0)
                 {
-                    std::cerr << "Cannot read hashtable.bak : " << strerror(errno) << std::endl;
-                    exit(1);
+                    std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Cannot read \"" << hashFile << "\" : " << strerror(errno) << std::endl;
+                    exit(-1);
                 }
                 else
                     sr += tmp;
@@ -77,14 +77,14 @@ hashTable::~hashTable ()
 /* save the hashTable in a file */
 void hashTable::save()
 {
-    rename("hashtable.bak", "hashtable.old");
-    int fds = creat("hashtable.bak", 00600);
+    rename(hashFile, hashFileOld);
+    int fds = creat(hashFile, 00600);
     if (fds >= 0)
     {
         ecrireBuff(fds, table, hashSize / 8);
         close(fds);
     }
-    unlink("hashtable.old");
+    unlink(hashFileOld);
 }
 
 /*
