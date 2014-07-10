@@ -47,7 +47,7 @@ SET(CMAKE_CXX_FLAGS
         "-Wall -Wno-deprecated -O3 -D__STDC_LIMIT_MACROS -D_REENTRANT -I${BASEDIR} -I${ADNSDIR}"
         )
 
-add_executable(
+ADD_EXECUTABLE(
         larbin
         ${MAIN_SRC}
         ${FETCH_SRC}

@@ -18,8 +18,4 @@
 // (not needed if you did not add code yourself)
 //#define THREAD_OUTPUT
 
-// Please enable this option if you want to report a crash
-// then compile with "make debug"
-//#define CRASH
-
 #endif // LARBIN_CONFIG

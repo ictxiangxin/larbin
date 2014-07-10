@@ -19,7 +19,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#define TRUE 1
+#define TRUE  1
 #define FALSE 0
 
 // Size of the HashSize (max number of urls that can be fetched)

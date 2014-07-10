@@ -38,7 +38,7 @@ hashTable::hashTable (bool create)
     ssize_t total = hashSize / 8;
     table = new char[total];
     if (create)
-        for (ssize_t i = 0; i<hashSize / 8; i++)
+        for (ssize_t i = 0; i < hashSize / 8; i++)
             table[i] = 0;
     else
     {

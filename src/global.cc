@@ -143,7 +143,7 @@ global::global (int argc, char *argv[])
     {
         std::cerr << "\e[1;33mUsage :\e[0m " << argv[0];
         std::cerr << " \e[1;37m[-c configFile] [-scratch]\e[0m" << std::endl;
-        exit(1);
+        exit(-1);
     }
 
     // Standard values
