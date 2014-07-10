@@ -213,8 +213,10 @@ struct global
 
 /** set this fds for next poll */
 #define setPoll(fds, event) \
-    global::pollfds[global::posPoll].fd = fds; \
-    global::pollfds[global::posPoll].events = event; \
-    global::posPoll++
+            do { \
+                global::pollfds[global::posPoll].fd = fds; \
+                global::pollfds[global::posPoll].events = event; \
+                global::posPoll++; \
+            } while(0)
 
 #endif // GLOBAL_H

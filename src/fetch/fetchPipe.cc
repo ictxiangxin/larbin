@@ -104,10 +104,10 @@ void checkAll ()
         {
         case connectingC:
         case writeC:
-            global::setPoll(n, POLLOUT);
+            setPoll(n, POLLOUT);
             break;
         case openC:
-            global::setPoll(n, POLLIN);
+            setPoll(n, POLLIN);
             break;
         }
     }

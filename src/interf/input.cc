@@ -93,7 +93,7 @@ int input ()
     if (nbInput < maxInput-1)
     {
         n = inputFds;
-        global::setPoll(inputFds, POLLIN);
+        setPoll(inputFds, POLLIN);
     }
     // read open sockets
     int i=0;
@@ -179,7 +179,7 @@ int input ()
         else     // go to next connection
         {
             if (in->fds > n) n = in->fds;
-            global::setPoll(in->fds, POLLIN);
+            setPoll(in->fds, POLLIN);
             i++;
         }
     }

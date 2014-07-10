@@ -120,7 +120,6 @@ bool            global::specificSearch = false;
 global::global (int argc, char *argv[])
 {
     char *configFile = (char*)"larbin.conf";
-    bool reload = global::reload;
     now = time(NULL);
     // verification of arguments
     int pos = 1;
@@ -131,9 +130,14 @@ global::global (int argc, char *argv[])
             configFile = argv[pos + 1];
             pos += 2;
         }
-        else if (!strcmp(argv[pos], "-scratch"))
+        else if (!strcmp(argv[pos], "--scratch"))
         {
             reload = false;
+            pos++;
+        }
+        else if (!strcmp(argv[pos], "--reload"))
+        {
+            reload = true;
             pos++;
         }
         else
@@ -142,7 +146,7 @@ global::global (int argc, char *argv[])
     if (pos != argc)
     {
         std::cerr << "\e[1;33mUsage :\e[0m " << argv[0];
-        std::cerr << " \e[1;37m[-c configFile] [-scratch]\e[0m" << std::endl;
+        std::cerr << " \e[1;37m[-c configFile] [--scratch]|[--reload]\e[0m" << std::endl;
         exit(-1);
     }
 
@@ -354,8 +358,6 @@ void global::parseFile (char *file)
             highLevelWebServer = true;
         else if (!strcasecmp(tok, "printStats"))
             printStats = true;
-        else if (!strcasecmp(tok, "reload"))
-            reload = true;
         else if (!strcasecmp(tok, "histograms"))
             histograms = true;
         else if (!strcasecmp(tok, "fetchInfo"))
