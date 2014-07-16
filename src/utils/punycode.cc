@@ -80,7 +80,8 @@ static uint16_t *utf8_to_unicode(const char * src, uint32_t *len)
     uint32_t srclen = strlen(src);
     uint16_t *unicode = new uint16_t[srclen];
     uint32_t di = 0;
-    for (uint32_t si = 0; si < srclen - 2;)
+    uint32_t si = 0;
+    for (; si < srclen - 2;)
         if ((src[si] & 0xf0) == 0xe0)
         {
             unicode[di] = src[si++] & 0x0f;
@@ -90,6 +91,11 @@ static uint16_t *utf8_to_unicode(const char * src, uint32_t *len)
         }
         else
             unicode[di++] = src[si++];
+    if (si < srclen)
+    {
+        unicode[di++] = src[si++];
+        unicode[di++] = src[si++];
+    }
     unicode[di] = 0;
     *len = di;
     return unicode;
