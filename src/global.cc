@@ -52,7 +52,7 @@ SyncFifo<url>   *global::URLsPriorityWait;
 uint            global::readPriorityWait = 0;
 PersistentFifo  *global::URLsDisk;
 PersistentFifo  *global::URLsDiskWait;
-uint            global::readWait=0;
+uint            global::readWait = 0;
 IPSite          *global::IPSiteList;
 NamedSite       *global::namedSiteList;
 Fifo<IPSite>    *global::okSites;
