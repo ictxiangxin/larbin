@@ -77,7 +77,7 @@ void loaded (html *page)
     }
     if(global::fetchInfo)
     {
-        std::cout << "\e[1;37m[\e[1;32mSuccess\e[1;37m]\e[0m ";
+        std::cout << "["GREEN_MSG("Success")"] ";
         page->getUrl()->print();
     }
 }
@@ -103,7 +103,7 @@ void failure (url *u, FetchError reason)
     }
     if(global::fetchInfo)
     {
-        std::cout << "\e[1;37m[\e[1;31m" << errorMsg[reason] << "\e[1;37m]\e[0m ";
+        std::cout << "[" << RED_MSG(errorMsg[reason]) << "] ";
         u->print();
     }
 }

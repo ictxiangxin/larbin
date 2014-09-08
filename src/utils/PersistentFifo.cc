@@ -74,7 +74,7 @@ PersistentFifo::PersistentFifo (bool reload, char *baseName)
         }
         if (fin == fout && fin != 0)
         {
-            std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m previous crawl was too little, cannot reload state"
+            std::cerr << "["RED_MSG("Error")"] previous crawl was too little, cannot reload state"
                       << std::endl
                       << "please restart larbin with --scratch option"
                       << std::endl;
@@ -256,7 +256,7 @@ char *PersistentFifo::readLine ()
                 // We have a trouble here
                 if (errno != EINTR)
                 {
-                    std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Big Problem while reading (persistentFifo.h)\n";
+                    std::cerr << "["RED_MSG("Error")"] Big Problem while reading (persistentFifo.h)\n";
                     perror("reason");
                     assert(false);
                 }

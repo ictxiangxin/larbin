@@ -45,7 +45,7 @@ hashTable::hashTable (bool create)
         int fds = open(hashFile, O_RDONLY);
         if (fds < 0)
         {
-            std::cerr << "\e[1;37m[\e[0;33mWarning\e[1;37m]\e[0m Cannot find \""<< hashFile <<"\", restart from scratch" << std::endl;
+            std::cerr << "["YELLOW_MSG("Warning")"] Cannot find \""<< hashFile <<"\", restart from scratch" << std::endl;
             for (ssize_t i = 0; i < hashSize / 8; i++)
                 table[i] = 0;
         }
@@ -57,7 +57,7 @@ hashTable::hashTable (bool create)
                 ssize_t tmp = read(fds, table + sr, total - sr);
                 if (tmp <= 0)
                 {
-                    std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Cannot read \"" << hashFile << "\" : " << strerror(errno) << std::endl;
+                    std::cerr << "["RED_MSG("Error")"] Cannot read \"" << hashFile << "\" : " << strerror(errno) << std::endl;
                     exit(-1);
                 }
                 else

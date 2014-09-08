@@ -98,9 +98,9 @@
 // Various reasons of error when getting a page
 #define nbAnswers 16
 
-#define RED_MSG(msg) "\e[0;31m"msg"\e[0m"
-#define GREEN_MSG(msg) "\e[0;32m"msg"\e[0m"
-#define YELLOW_MSG(msg) "\e[0;33m"msg"\e[0m"
+#define RED_MSG(msg) "\e[0;31m" << msg << "\e[0m"
+#define GREEN_MSG(msg) "\e[0;32m" << msg << "\e[0m"
+#define YELLOW_MSG(msg) "\e[0;33m" << msg << "\e[0m"
 
 enum FetchError
 {

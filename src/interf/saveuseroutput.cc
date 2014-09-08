@@ -69,7 +69,7 @@ void save_loaded (html *page)
         indexFds = creat(fileName, S_IRWXU);
         if (indexFds < 0)
         {
-            std::cerr << "\e[1;37m[\e[1;31mError\e[1;37m]\e[0m Cannot open file " << fileName << std::endl;
+            std::cerr << "["RED_MSG("Error")"] Cannot open file " << fileName << std::endl;
             exit(-1);
         }
         // new filename
@@ -80,7 +80,7 @@ void save_loaded (html *page)
     int fd = creat(fileName, S_IRWXU);
     if (fd < 0)
     {
-        std::cerr << "\e[1;37m[\e[1;31mError\e[1;37m]\e[0m Cannot open file " << fileName << std::endl;
+        std::cerr << "["RED_MSG("Error")"] Cannot open file " << fileName << std::endl;
         exit(-1);
     }
     int s = 0;
