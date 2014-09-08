@@ -44,9 +44,9 @@
 // Struct global
 
 // define all the static variables
-time_t      global::now;
-hashTable   *global::seen;
-hashDup *global::hDuplicate;
+time_t          global::now;
+hashTable       *global::seen;
+hashDup         *global::hDuplicate;
 SyncFifo<url>   *global::URLsPriority;
 SyncFifo<url>   *global::URLsPriorityWait;
 uint            global::readPriorityWait = 0;
@@ -145,33 +145,33 @@ global::global (int argc, char *argv[])
     }
     if (pos != argc)
     {
-        std::cerr << "\e[1;33mUsage :\e[0m " << argv[0];
-        std::cerr << " \e[1;37m[-c configFile] [--scratch]|[--reload]\e[0m" << std::endl;
+        std::cerr << YELLOW_MSG("Usage : ") << argv[0];
+        std::cerr << " [-c configure file] ([--scratch]|[--reload])" << std::endl;
         exit(-1);
     }
 
     // Standard values
     waitDuration = 60;
-    depthInSite = 5;
-    userAgent = (char*)"larbin";
-    sender = (char*)"larbin@unspecified.mail";
-    nb_conn = 20;
-    dnsConn = 3;
-    httpPort = 0;
-    inputPort = 0;  // by default, no input available
-    proxyAddr = NULL;
-    domains = NULL;
+    depthInSite  = 5;
+    userAgent    = (char*)"larbin";
+    sender       = (char*)"larbin@unspecified.mail";
+    nb_conn      = 20;
+    dnsConn      = 3;
+    httpPort     = 0;
+    inputPort    = 0;  // by default, no input available
+    proxyAddr    = NULL;
+    domains      = NULL;
     // FIFOs
-    URLsDisk = new PersistentFifo(reload, (char*)fifoFile);
-    URLsDiskWait = new PersistentFifo(reload, (char*)fifoFileWait);
-    URLsPriority = new SyncFifo<url>;
+    URLsDisk         = new PersistentFifo(reload, (char*)fifoFile);
+    URLsDiskWait     = new PersistentFifo(reload, (char*)fifoFileWait);
+    URLsPriority     = new SyncFifo<url>;
     URLsPriorityWait = new SyncFifo<url>;
-    inter = new Interval(ramUrls);
-    namedSiteList = new NamedSite[namedSiteListSize];
-    IPSiteList = new IPSite[IPSiteListSize];
-    okSites = new Fifo<IPSite>(2000);
-    dnsSites = new Fifo<NamedSite>(2000);
-    seen = new hashTable(!reload);
+    inter            = new Interval(ramUrls);
+    namedSiteList    = new NamedSite[namedSiteListSize];
+    IPSiteList       = new IPSite[IPSiteListSize];
+    okSites          = new Fifo<IPSite>(2000);
+    dnsSites         = new Fifo<NamedSite>(2000);
+    seen             = new hashTable(!reload);
     // Read the configuration file
     crash("Read the configuration file");
     parseFile(configFile);
@@ -234,7 +234,7 @@ global::global (int argc, char *argv[])
     sn.sa_flags = SA_RESTART;
     sn.sa_handler = SIG_IGN;
     if (sigaction(SIGPIPE, &sn, &so))
-        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Unable to disable \e[1;33mSIGPIPE\e[0m : " << strerror(errno) << std::endl;
+        std::cerr << "["RED_MSG("Error")"] Unable to disable "YELLOW_MSG("SIGPIPE")" : " << strerror(errno) << std::endl;
 }
 
 // If time out, this function will be invoked.
@@ -245,11 +245,11 @@ global::~global ()
 // parse configuration file
 void global::parseFile (char *file)
 {
-    std::cout << "\e[1;37m[\e[1;32mInfo\e[1;37m]\e[0m Configure: " << file << std::endl;
+    std::cout << "["GREEN_MSG("Info")"] Configure: " << file << std::endl;
     int fds = open(file, O_RDONLY);
     if (fds < 0)
     {
-        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Cannot open config file (" << file << ") : " << strerror(errno) << std::endl;
+        std::cerr << "["RED_MSG("Error")"] Cannot open config file (" << file << ") : " << strerror(errno) << std::endl;
         exit(-1);
     }
     char *tmp = readfile(fds);
@@ -287,7 +287,7 @@ void global::parseFile (char *file)
             }
             else
             {
-                std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m The start url " << tok << " is invalid" << std::endl;
+                std::cerr << "["RED_MSG("Error")"] The start url " << tok << " is invalid" << std::endl;
                 exit(-1);
             }
         }
@@ -306,7 +306,7 @@ void global::parseFile (char *file)
             if ((hp = gethostbyname(tok)) == NULL)
             {
                 endhostent();
-                std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  Unable to find proxy ip address (" << tok << ")" << std::endl;
+                std::cerr << "["RED_MSG("Error")"] Unable to find proxy ip address (" << tok << ")" << std::endl;
                 exit(-1);
             }
             else
@@ -398,7 +398,7 @@ void global::parseFile (char *file)
         }
         else
         {
-            std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m  bad configuration file : " << tok << std::endl;
+            std::cerr << "["MSG_RED("Error")"] bad configuration file : " << tok << std::endl;
             exit(-1);
         }
         tok = nextToken(&posParse);
@@ -419,7 +419,7 @@ void global::manageDomain (char **posParse)
     }
     if (tok == NULL)
     {
-        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Bad configuration file : no end to limitToDomain" << std::endl;
+        std::cerr << "["MSG_RED("Error")"] Bad configuration file : no end to limitToDomain" << std::endl;
         exit(-1);
     }
 }
@@ -439,7 +439,7 @@ void global::manageExt (char **posParse)
     }
     if (tok == NULL)
     {
-        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Bad configuration file : no end to forbiddenExtensions" << std::endl;
+        std::cerr << "["RED_MSG("Error")"] Bad configuration file : no end to forbiddenExtensions" << std::endl;
         exit(-1);
     }
 }
@@ -457,7 +457,7 @@ void global::manageSpec (char **posParse)
     }
     if (tokType == NULL || tokExt == NULL)
     {
-        std::cerr << "\e[1;37m[\e[0;31mError\e[1;37m]\e[0m Bad configuration file : no end to specific search content types and exts" << std::endl;
+        std::cerr << "["RED_MSG("Error")"] Bad configuration file : no end to specific search content types and exts" << std::endl;
         exit(-1);
     }
 }
