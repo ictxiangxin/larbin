@@ -398,7 +398,7 @@ void global::parseFile (char *file)
         }
         else
         {
-            std::cerr << "["MSG_RED("Error")"] bad configuration file : " << tok << std::endl;
+            std::cerr << "["RED_MSG("Error")"] bad configuration file : " << tok << std::endl;
             exit(-1);
         }
         tok = nextToken(&posParse);
@@ -419,7 +419,7 @@ void global::manageDomain (char **posParse)
     }
     if (tok == NULL)
     {
-        std::cerr << "["MSG_RED("Error")"] Bad configuration file : no end to limitToDomain" << std::endl;
+        std::cerr << "["RED_MSG("Error")"] Bad configuration file : no end to limitToDomain" << std::endl;
         exit(-1);
     }
 }
