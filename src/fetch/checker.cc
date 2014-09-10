@@ -80,7 +80,7 @@ bool filter1 (char *host, char *file)
     int l = strlen(file);
     if (   endWithIgnoreCase((char*)"html", file, l)
             || endWithIgnoreCase((char*)"htm", file, l)
-            || file[l-1] == '/'
+            || file[l - 1] == '/'
        )
         return true;
     for (int i = 0; global::forbExt[i] != NULL; i++)

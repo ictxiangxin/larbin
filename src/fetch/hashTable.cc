@@ -35,10 +35,10 @@
 /* constructor */
 hashTable::hashTable (bool create)
 {
-    ssize_t total = hashSize / 8;
+    ssize_t total = hashSize >> 3;
     table = new char[total];
     if (create)
-        for (ssize_t i = 0; i < hashSize / 8; i++)
+        for (ssize_t i = 0; i < hashSize >> 3; i++)
             table[i] = 0;
     else
     {
@@ -46,7 +46,7 @@ hashTable::hashTable (bool create)
         if (fds < 0)
         {
             std::cerr << "["YELLOW_MSG("Warning")"] Cannot find \""<< hashFile <<"\", restart from scratch" << std::endl;
-            for (ssize_t i = 0; i < hashSize / 8; i++)
+            for (ssize_t i = 0; i < hashSize >> 3; i++)
                 table[i] = 0;
         }
         else
@@ -81,7 +81,7 @@ void hashTable::save()
     int fds = creat(hashFile, 00600);
     if (fds >= 0)
     {
-        ecrireBuff(fds, table, hashSize / 8);
+        ecrireBuff(fds, table, hashSize >> 3);
         close(fds);
     }
     unlink(hashFileOld);
@@ -95,7 +95,7 @@ void hashTable::save()
 bool hashTable::test (url *U)
 {
     uint code = U->hashCode();
-    uint pos = code / 8;
+    uint pos = code >> 3;
     uint bits = 1 << (code % 8);
     return table[pos] & bits;
 }
@@ -104,7 +104,7 @@ bool hashTable::test (url *U)
 void hashTable::set (url *U)
 {
     uint code = U->hashCode();
-    uint pos = code / 8;
+    uint pos = code >> 3;
     uint bits = 1 << (code % 8);
     table[pos] |= bits;
 }
@@ -117,7 +117,7 @@ void hashTable::set (url *U)
 bool hashTable::testSet (url *U)
 {
     uint code = U->hashCode();
-    uint pos = code / 8;
+    uint pos = code >> 3;
     uint bits = 1 << (code % 8);
     int res = table[pos] & bits;
     table[pos] |= bits;
