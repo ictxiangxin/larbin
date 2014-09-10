@@ -404,7 +404,7 @@ url *url::giveBase ()
 char *url::giveUrl ()
 {
     char *tmp;
-    uint i = strlen(file);
+    int i = strlen(file);
     uint j = strlen(host);
 
     tmp = new char[18 + i + j];  // 7 + j + 1 + 9 + i + 1
