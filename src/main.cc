@@ -152,26 +152,19 @@ int main (int argc, char *argv[])
         stateMain(-count);
         if (global::limitBand != 0)
             waitBandwidth(&old);
-        stateMain(1);
         for (uint i = 0; i < global::maxFds; i++)
             global::ansPoll[i] = 0;
         for (uint i = 0; i < global::posPoll; i++)
             global::ansPoll[global::pollfds[i].fd] = global::pollfds[i].revents;
         global::posPoll = 0;
-        stateMain(2);
         input();
-        stateMain(3);
         sequencer();
-        stateMain(4);
         fetchDns();
-        stateMain(5);
         fetchOpen();
-        stateMain(6);
         checkAll();
         // select
         stateMain(count++);
         poll(global::pollfds, global::posPoll, 10);
-        stateMain(7);
     }
     std::cout << "["GREEN_MSG("Search")"] End." << std::endl;
     while(global::webServerOn)

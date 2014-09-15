@@ -102,6 +102,9 @@
 #define GREEN_MSG(msg) "\e[0;32m" << msg << "\e[0m"
 #define YELLOW_MSG(msg) "\e[0;33m" << msg << "\e[0m"
 
+#define LIKELY(x)   __builtin_expect(!!(x), 1)
+#define UNLIKELY(x) __builtin_expect(!!(x), 0)
+
 enum FetchError
 {
     success,
