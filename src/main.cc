@@ -95,8 +95,6 @@ static void printLimitTime(uint t)
     std::cout << tm << " Minutes." << std::endl;
 }
 
-static uint count = 0;
-
 static void getSIGINT(int signo)
 {
     std::cout << std::endl;
