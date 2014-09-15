@@ -14,7 +14,7 @@ build/
 larbin
 
 # fifo files
-fifo*
+fifo0*
 
 # lib files
 *.a
