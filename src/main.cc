@@ -149,7 +149,6 @@ int main (int argc, char *argv[])
             if(!cron())
                 break;
         }
-        stateMain(-count);
         if (global::limitBand != 0)
             waitBandwidth(&old);
         for (uint i = 0; i < global::maxFds; i++)
@@ -163,7 +162,6 @@ int main (int argc, char *argv[])
         fetchOpen();
         checkAll();
         // select
-        stateMain(count++);
         poll(global::pollfds, global::posPoll, 10);
     }
     std::cout << "["GREEN_MSG("Search")"] End." << std::endl;
@@ -236,7 +234,7 @@ static int cron ()
                       << std::endl
                       << "success : " << answers[success] << "\t(rate : " << successRate << ")"
                       << std::endl;
-            if (global::limitTime != 0)
+            if (LIKELY(global::limitTime != 0))
             {
                 std::cout << "Remaining Time: ";
                 transTime(global::limitTime - global::now + global::startTime, &td, &th, &tm);

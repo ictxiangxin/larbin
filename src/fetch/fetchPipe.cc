@@ -49,9 +49,9 @@ static void endOfFile (Connexion *conn);
  */
 void checkTimeout ()
 {
-    for (uint i=0; i<global::nb_conn; i++)
+    for (uint i = 0; i < global::nb_conn; i++)
     {
-        Connexion *conn = global::connexions+i;
+        Connexion *conn = global::connexions + i;
         if (conn->state != emptyC)
         {
             if (conn->timeout > 0)
@@ -81,7 +81,7 @@ void checkAll ()
     // read and write what can be
     for (uint i = 0; i < global::nb_conn; i++)
     {
-        Connexion *conn = global::connexions+i;
+        Connexion *conn = global::connexions + i;
         switch (conn->state)
         {
         case connectingC :
@@ -99,8 +99,8 @@ void checkAll ()
     // update fd_set for the next select
     for (uint i = 0; i < global::nb_conn; i++)
     {
-        int n = (global::connexions+i)->socket;
-        switch ((global::connexions+i)->state)
+        int n = (global::connexions + i)->socket;
+        switch ((global::connexions + i)->state)
         {
         case connectingC:
         case writeC:
@@ -243,7 +243,6 @@ static void pipeRead (Connexion *conn)
 
 static void endOfFile (Connexion *conn)
 {
-    crash("End of file");
     conn->state = emptyC;
     close(conn->socket);
     if (conn->parser->isRobots)

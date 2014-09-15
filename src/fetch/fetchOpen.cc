@@ -41,7 +41,7 @@ void fetchDns ()
 {
     // Submit queries
     // try to avoid too many dns calls
-    while (global::nbDnsCalls<global::dnsConn && global::freeConns->isNonEmpty() && global::IPUrl < maxIPUrls)
+    while (global::nbDnsCalls < global::dnsConn && global::freeConns->isNonEmpty() && global::IPUrl < maxIPUrls)
     {
         NamedSite *site = global::dnsSites->tryGet();
         if (site == NULL)
