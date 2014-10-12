@@ -145,7 +145,10 @@ int main (int argc, char *argv[])
             // this block is called every second
             old = global::now;
             if(!cron())
+            {
+                global::searchOn = FALSE;
                 break;
+            }
         }
         if (global::limitBand != 0)
             waitBandwidth(&old);
