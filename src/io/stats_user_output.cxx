@@ -27,7 +27,7 @@
 #include "fetch/file.h"
 #include "utils/text.h"
 #include "utils/debug.h"
-#include "interf/output.h"
+#include "io/output.h"
 
 #define nb 25
 #define taille 4096

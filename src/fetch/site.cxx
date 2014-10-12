@@ -28,11 +28,11 @@
 #include "options.h"
 
 #include "types.h"
-#include "utils/Fifo.h"
+#include "utils/fifo.h"
 #include "utils/debug.h"
 #include "utils/text.h"
-#include "utils/connexion.h"
-#include "interf/output.h"
+#include "utils/connection.h"
+#include "io/output.h"
 #include "fetch/site.h"
 
 

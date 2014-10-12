@@ -35,11 +35,11 @@
 #include "types.h"
 #include "global.h"
 #include "utils/text.h"
-#include "utils/Fifo.h"
+#include "utils/fifo.h"
 #include "utils/debug.h"
 #include "fetch/site.h"
-#include "interf/output.h"
-#include "interf/input.h"
+#include "io/output.h"
+#include "io/input.h"
 
 // Struct global
 

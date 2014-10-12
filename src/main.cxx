@@ -32,18 +32,18 @@
 
 #include "fetch/checker.h"
 #include "fetch/sequencer.h"
-#include "fetch/fetchOpen.h"
-#include "fetch/fetchPipe.h"
+#include "fetch/fetch_open.h"
+#include "fetch/fetch_pipe.h"
 
-#include "interf/input.h"
-#include "interf/output.h"
+#include "io/input.h"
+#include "io/output.h"
 
 #include "utils/text.h"
-#include "utils/mypthread.h"
+#include "utils/thread.h"
 #include "utils/debug.h"
 #include "utils/webserver.h"
 #include "utils/histogram.h"
-#include "utils/limitTime.h"
+#include "utils/limit_time.h"
 #include "utils/level.h"
 
 static int cron ();

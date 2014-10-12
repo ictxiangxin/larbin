@@ -1,43 +1,43 @@
 SET(MAIN_SRC
-        main.cc
-        global.cc
+        main.cxx
+        global.cxx
         )
 
 SET(FETCH_SRC
-        fetch/site.cc
-        fetch/sequencer.cc
-        fetch/hashTable.cc
-        fetch/checker.cc
-        fetch/file.cc
-        fetch/fetchOpen.cc
-        fetch/fetchPipe.cc
-        fetch/savespecbuf.cc
+        fetch/site.cxx
+        fetch/sequencer.cxx
+        fetch/hash_table.cxx
+        fetch/checker.cxx
+        fetch/file.cxx
+        fetch/fetch_open.cxx
+        fetch/fetch_pipe.cxx
+        fetch/save_specific_buffer.cxx
         )
 
-SET(INTERF_SRC
-        interf/input.cc
-        interf/useroutput.cc
-        interf/output.cc
-        interf/defaultuseroutput.cc
-        interf/saveuseroutput.cc
-        interf/mirrorsaveuseroutput.cc
-        interf/statsuseroutput.cc
+SET(IO_SRC
+        io/input.cxx
+        io/user_output.cxx
+        io/output.cxx
+        io/default_user_output.cxx
+        io/save_user_output.cxx
+        io/mirror_user_output.cxx
+        io/stats_user_output.cxx
         )
 
 SET(UTILS_SRC
-        utils/string.cc
-        utils/debug.cc
-        utils/url.cc
-        utils/connexion.cc
-        utils/text.cc
-        utils/histogram.cc
-        utils/webserver.cc
-        utils/PersistentFifo.cc
-        utils/hashDup.cc
-        utils/mypthread.cc
-        utils/limitTime.cc
-        utils/level.cc
-        utils/punycode.cc
+        utils/string.cxx
+        utils/debug.cxx
+        utils/url.cxx
+        utils/connection.cxx
+        utils/text.cxx
+        utils/histogram.cxx
+        utils/webserver.cxx
+        utils/persistent_fifo.cxx
+        utils/hash_duplicate.cxx
+        utils/thread.cxx
+        utils/limit_time.cxx
+        utils/level.cxx
+        utils/punycode.cxx
         )
 
 SET(BASEDIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -51,7 +51,7 @@ ADD_EXECUTABLE(
         larbin
         ${MAIN_SRC}
         ${FETCH_SRC}
-        ${INTERF_SRC}
+        ${IO_SRC}
         ${UTILS_SRC}
         )
 

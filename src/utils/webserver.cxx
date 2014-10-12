@@ -35,12 +35,12 @@
 #include "fetch/sequencer.h"
 
 #include "utils/text.h"
-#include "utils/connexion.h"
+#include "utils/connection.h"
 #include "utils/debug.h"
 #include "utils/histogram.h"
 #include "utils/level.h"
 
-#include "interf/useroutput.h"
+#include "io/user_output.h"
 
 static char *readRequest (int fds);
 static void manageAns (int fds, char *req);

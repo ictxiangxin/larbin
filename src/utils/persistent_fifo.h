@@ -32,8 +32,8 @@
 #include "types.h"
 #include "utils/url.h"
 #include "utils/text.h"
-#include "utils/connexion.h"
-#include "utils/mypthread.h"
+#include "utils/connection.h"
+#include "utils/thread.h"
 
 class PersistentFifo {
  protected:

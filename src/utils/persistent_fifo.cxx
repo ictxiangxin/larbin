@@ -26,8 +26,8 @@
 
 #include "types.h"
 #include "global.h"
-#include "utils/mypthread.h"
-#include "utils/PersistentFifo.h"
+#include "utils/thread.h"
+#include "utils/persistent_fifo.h"
 
 PersistentFifo::PersistentFifo (bool reload, char *baseName)
 {

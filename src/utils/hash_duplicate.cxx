@@ -27,8 +27,8 @@
 #include <stdlib.h>
 
 #include "types.h"
-#include "utils/hashDup.h"
-#include "utils/connexion.h"
+#include "utils/hash_duplicate.h"
+#include "utils/connection.h"
 
 // constructor
 hashDup::hashDup (ssize_t size, const char *init, bool scratch)

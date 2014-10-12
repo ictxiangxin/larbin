@@ -27,8 +27,8 @@
 #include "fetch/file.h"
 #include "utils/text.h"
 #include "utils/debug.h"
-#include "interf/useroutput.h"
-#include "utils/mypthread.h"
+#include "io/user_output.h"
+#include "utils/thread.h"
 
 
 /** The fetch failed

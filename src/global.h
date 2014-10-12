@@ -30,15 +30,15 @@
 #include <adns.h>
 
 #include "fetch/file.h"
-#include "fetch/hashTable.h"
-#include "utils/hashDup.h"
+#include "fetch/hash_table.h"
+#include "utils/hash_duplicate.h"
 #include "utils/url.h"
-#include "utils/Vector.h"
+#include "utils/vector.h"
 #include "utils/string.h"
-#include "utils/PersistentFifo.h"
-#include "utils/ConstantSizedFifo.h"
-#include "utils/SyncFifo.h"
-#include "utils/Fifo.h"
+#include "utils/persistent_fifo.h"
+#include "utils/constant_fifo.h"
+#include "utils/sync_fifo.h"
+#include "utils/fifo.h"
 #include "fetch/site.h"
 #include "fetch/checker.h"
 

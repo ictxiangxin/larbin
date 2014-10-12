@@ -7,7 +7,7 @@
 #include "options.h"
 
 #include "global.h"
-#include "utils/Fifo.h"
+#include "utils/fifo.h"
 #include "utils/debug.h"
 #include "fetch/site.h"
 

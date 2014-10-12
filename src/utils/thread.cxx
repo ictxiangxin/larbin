@@ -19,7 +19,7 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "utils/mypthread.h"
+#include "utils/thread.h"
 
 /* Launch a new thread
  * return 0 in case of success

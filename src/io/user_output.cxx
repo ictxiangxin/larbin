@@ -33,8 +33,8 @@
 #include "fetch/file.h"
 #include "utils/text.h"
 #include "utils/debug.h"
-#include "interf/output.h"
-#include "interf/useroutputrecall.h"
+#include "io/output.h"
+#include "io/user_output_recall.h"
 
 static char errorMsg[][32] =
 {

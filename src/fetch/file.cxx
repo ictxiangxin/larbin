@@ -33,12 +33,12 @@
 #include "utils/text.h"
 #include "utils/url.h"
 #include "utils/string.h"
-#include "utils/Vector.h"
+#include "utils/vector.h"
 #include "fetch/site.h"
 #include "fetch/file.h"
-#include "fetch/fetchOpen.h"
+#include "fetch/fetch_open.h"
 #include "fetch/checker.h"
-#include "fetch/savespecbuf.h"
+#include "fetch/save_specific_buffer.h"
 
 #include "utils/debug.h"
 

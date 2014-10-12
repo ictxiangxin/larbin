@@ -23,7 +23,7 @@
 
 #define std_size 100
 
-#include "utils/mypthread.h"
+#include "utils/thread.h"
 
 template <class T>
 class SyncFifo

@@ -28,7 +28,7 @@
 #include "global.h"
 #include "utils/text.h"
 #include "utils/debug.h"
-#include "interf/input.h"
+#include "io/input.h"
 
 #define INIT -1
 #define END -2

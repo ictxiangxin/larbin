@@ -30,7 +30,7 @@
 #include "global.h"
 #include "utils/url.h"
 #include "utils/text.h"
-#include "utils/connexion.h"
+#include "utils/connection.h"
 #include "utils/punycode.h"
 #include "utils/debug.h"
 

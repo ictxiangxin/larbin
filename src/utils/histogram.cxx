@@ -24,12 +24,12 @@
 
 #include "global.h"
 #include "utils/histogram.h"
-#include "utils/connexion.h"
+#include "utils/connection.h"
 
 #define SIZE 80
 #define HEIGHT 15
 
-static char curve[HEIGHT+2][SIZE+17];
+static char curve[HEIGHT + 2][SIZE + 17];
 
 /* definition of class histogram */
 class Histogram

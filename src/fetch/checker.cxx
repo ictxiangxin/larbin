@@ -30,8 +30,8 @@
 #include "global.h"
 #include "utils/url.h"
 #include "utils/text.h"
-#include "utils/Vector.h"
-#include "fetch/hashTable.h"
+#include "utils/vector.h"
+#include "fetch/hash_table.h"
 #include "fetch/file.h"
 
 #include "utils/debug.h"

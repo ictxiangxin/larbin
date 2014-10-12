@@ -25,7 +25,7 @@
 
 #include <assert.h>
 
-#include "utils/mypthread.h"
+#include "utils/thread.h"
 
 template <class T>
 class ConstantSizedFifo {

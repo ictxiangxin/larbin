@@ -29,8 +29,8 @@
 #include "global.h"
 #include "types.h"
 #include "utils/url.h"
-#include "utils/connexion.h"
-#include "fetch/hashTable.h"
+#include "utils/connection.h"
+#include "fetch/hash_table.h"
 
 /* constructor */
 hashTable::hashTable (bool create)

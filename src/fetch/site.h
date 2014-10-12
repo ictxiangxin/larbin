@@ -12,7 +12,7 @@
 #include <adns.h> 
 
 #include "types.h"
-#include "utils/Fifo.h"
+#include "utils/fifo.h"
 #include "utils/url.h"
 
 void initSite ();

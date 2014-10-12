@@ -10,7 +10,7 @@
 #include "types.h"
 #include "utils/url.h"
 #include "utils/string.h"
-#include "utils/Vector.h"
+#include "utils/vector.h"
 #include "fetch/site.h"
 
 struct Connexion;

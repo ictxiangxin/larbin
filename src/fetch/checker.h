@@ -6,7 +6,7 @@
 #define CHECKER_H
 
 #include "types.h"
-#include "utils/Vector.h"
+#include "utils/vector.h"
 
 /** check if an url is allready known
  * if not send it

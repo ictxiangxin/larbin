@@ -32,10 +32,10 @@
 #include "utils/url.h"
 #include "utils/text.h"
 #include "utils/string.h"
-#include "utils/connexion.h"
+#include "utils/connection.h"
 #include "fetch/site.h"
 #include "fetch/file.h"
-#include "interf/output.h"
+#include "io/output.h"
 
 #include "utils/debug.h"
 
