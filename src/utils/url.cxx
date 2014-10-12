@@ -345,6 +345,11 @@ bool url::initOK (url *from)
     if (strcmp(from->getHost(), host))
     {
         // different site
+        if(global::lockSite)
+        {
+            errno = outSite;
+            return false;
+        }
         if(global::depthBySite)
             depth = global::depthInSite;
     }

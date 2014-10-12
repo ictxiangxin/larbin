@@ -40,7 +40,7 @@
 #define maxIPUrls 80000  // this should allow less dns call
 
 // Max number of urls per site in Url
-#define maxUrlsBySite 40  // must fit in uint8_t
+#define maxUrlsBySite 64  // must fit in uint8_t
 
 // time out when reading a page (in sec)
 #define timeoutPage 30   // default time out
@@ -50,7 +50,7 @@
 #define dnsValidTime (2 * 24 * 3600)
 
 // Maximum size of a page
-#define maxPageSize    2 * 1024 * 1024
+#define maxPageSize    8 * 1024 * 1024
 #define nearlyFullPage (maxPageSize - 512 * 1024)
 
 // Maximum size of a robots.txt that is read
@@ -73,8 +73,8 @@
 #define STRING_SIZE 1024
 
 // Max size for a url
-#define maxUrlSize  512
-#define maxSiteSize 64   // max size for the name of a site
+#define maxUrlSize  1024
+#define maxSiteSize 256   // max size for the name of a site
 
 // max size for cookies
 #define maxCookieSize 128
@@ -122,7 +122,8 @@ enum FetchError
     fastNoConn,
     fastNoDns,
     tooDeep,
-    urlDup
+    urlDup,
+    outSite
 };
 
 // output mode

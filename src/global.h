@@ -209,6 +209,7 @@ struct global
     static bool pageNoDuplicate;
     static uint outputMode;
     static bool specificSearch;
+    static bool lockSite;
 };
 
 /** set this fds for next poll */

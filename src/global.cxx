@@ -112,6 +112,7 @@ bool            global::punycode = false;
 bool            global::pageNoDuplicate = false;
 uint            global::outputMode = 0;
 bool            global::specificSearch = false;
+bool            global::lockSite = false;
 
 /*
  * Constructor : initialize almost everything
@@ -380,6 +381,8 @@ void global::parseFile (char *file)
             pageNoDuplicate = true;
         else if (!strcasecmp(tok, "specificSearch"))
             specificSearch = true;
+        else if (!strcasecmp(tok, "lockSite"))
+            lockSite = true;
         else if (!strcasecmp(tok, "outputMode"))
         {
             tok = nextToken(&posParse);

@@ -53,7 +53,8 @@ static char errorMsg[][32] =
     "<fast>No Connect",
     "<fast>No DNS",
     "Too Deep",
-    "URL Dup"
+    "URL Dup",
+    "Out Site"
 };
 
 void loaded (html *page)
