@@ -78,7 +78,7 @@ static uint32_t encode_var_int(const uint32_t bias, const uint32_t delta, unsign
 static uint16_t *utf8_to_unicode(const char * src, uint32_t *len)
 {
     uint32_t srclen = strlen(src);
-    uint16_t *unicode = new uint16_t[srclen];
+    uint16_t *unicode = new uint16_t[srclen + 1];
     uint32_t di = 0;
     uint32_t si = 0;
     for (; si < srclen - 2;)
@@ -110,11 +110,11 @@ static char *punycode_encode(const char *src_str, uint32_t *dst_len)
     uint32_t di = 0;
     uint32_t srclen;
     uint16_t *src = utf8_to_unicode(src_str, &srclen);
-    uint32_t dstlen = 4 * srclen + 4 + 1;
+    uint32_t dstlen = 8 * srclen + 8;
     char *dst_str = new char[dstlen];
     strcpy(dst_str, "xn--");
     unsigned char *dst = (unsigned char *)(dst_str + 4);
-    for (; si < srclen && di < dstlen; si++)
+    for (; si < srclen && di < dstlen - 4; si++)
         if (src[si] < 0x80)
             dst[di++] = src[si];
     b = h = di;
@@ -123,7 +123,7 @@ static char *punycode_encode(const char *src_str, uint32_t *dst_len)
     n = INITIAL_N;
     bias = INITIAL_BIAS;
     delta = 0;
-    for (; h < srclen && di < dstlen; n++, delta++)
+    for (; h < srclen && di < dstlen - 4; n++, delta++)
     {
         for (m = UINT32_MAX, si = 0; si < srclen; si++)
             if (src[si] >= n && src[si] < m)
@@ -173,7 +173,7 @@ char *punycode_host(const char *host)
     uint32_t hostlen = strlen(host);
     if (!have_unicode(host, hostlen))
         return (char*)host;
-    char *pchost = new char[4 * hostlen];
+    char *pchost = new char[8 * hostlen];
     uint32_t pchost_i = 0;
     uint32_t start = 0;
     uint32_t size = 0;
