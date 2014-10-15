@@ -117,7 +117,6 @@ Larbin主要在Linux下进行开发。
 * 首先还是要将代码重构一遍。
 * 一个全新的webserver，计划使用GNU libmicrohttpd实现。
 * 支持javascript，这将是一个非常庞大的功能。
-* punycode的长度计算有点问题，会发生崩溃。
 
 ###联系我
 

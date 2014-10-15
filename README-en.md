@@ -116,7 +116,6 @@ but i'll work on it for future versions. Please report success or failure on any
 * First, I need to reconstruct the source code.
 * A new webserver, I want to use GNU libmicrohttdp to implement it.
 * Support javascript, this is a very big project.
-* bug: punycode
 
 ###Contact
 
