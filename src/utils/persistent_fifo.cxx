@@ -206,7 +206,7 @@ void PersistentFifo::updateWrite ()
         close(wfds);
         makeName(++fin);
         wfds = creat(fileName, S_IRUSR | S_IWUSR);
-        if(global::reload)
+        if(global::canReload)
         {
             global::seen->save();
             if (global::pageNoDuplicate)

@@ -210,6 +210,7 @@ struct global
     static uint outputMode;
     static bool specificSearch;
     static bool lockSite;
+    static bool canReload;
 };
 
 /** set this fds for next poll */

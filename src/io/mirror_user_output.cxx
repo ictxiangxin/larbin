@@ -44,24 +44,25 @@ void mirror_loaded (html *page)
     char *f = u->getFile();
     // update dir name
     uint d = u->hostHashCode() % nbDir;
-    for (int i=2; i<7; i++)
+    for (int i = 2; i < 7; i++)
     {
-        fileName[endFileName-i] = d % 10 + '0';
+        fileName[endFileName - i] = d % 10 + '0';
         d /= 10;
     }
     // set file name
     uint len = endFileName;
     if (p == 80)
-        len += sprintf(fileName+endFileName, "%s%s", h, f);
+        len += sprintf(fileName + endFileName, "%s%s", h, f);
     else
-        len += sprintf(fileName+endFileName, "%s:%u%s", h, p, f);
+        len += sprintf(fileName + endFileName, "%s:%u%s", h, p, f);
     // make sure the path of the file exists
     bool cont = true;
     struct stat st;
     while (cont)
     {
         len--;
-        while (fileName[len] != '/') len--;
+        while (fileName[len] != '/')
+            len--;
         fileName[len] = 0;
         cont = stat(fileName, &st); // this becomes true at least for saveDir
         fileName[len] = '/';
@@ -84,7 +85,7 @@ void mirror_loaded (html *page)
     }
     if (fileName[len-1] == '/')
     {
-        strcpy(fileName+len, indexFile);
+        strcpy(fileName + len, indexFile);
     }
     // open fds and write file
     int fd = creat(fileName, S_IRWXU);
@@ -114,8 +115,8 @@ void mirror_initUserOutput ()
     endFileName = strlen(saveDir);
     fileName = new char[endFileName+maxUrlSize+50];
     strcpy(fileName, saveDir);
-    if (fileName[endFileName-1] != '/') fileName[endFileName++] = '/';
-    strcpy(fileName+endFileName, "d00000/");
+    if (fileName[endFileName - 1] != '/') fileName[endFileName++] = '/';
+    strcpy(fileName + endFileName, "d00000/");
     endFileName += 7; // indique le premier char a ecrire
 }
 

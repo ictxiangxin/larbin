@@ -113,6 +113,7 @@ bool            global::pageNoDuplicate = false;
 uint            global::outputMode = 0;
 bool            global::specificSearch = false;
 bool            global::lockSite = false;
+bool            global::canReload = false;
 
 /*
  * Constructor : initialize almost everything
@@ -383,6 +384,8 @@ void global::parseFile (char *file)
             specificSearch = true;
         else if (!strcasecmp(tok, "lockSite"))
             lockSite = true;
+        else if (!strcasecmp(tok, "canReload"))
+            canReload = true;
         else if (!strcasecmp(tok, "outputMode"))
         {
             tok = nextToken(&posParse);
