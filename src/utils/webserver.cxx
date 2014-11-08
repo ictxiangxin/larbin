@@ -42,9 +42,12 @@
 
 #include "io/user_output.h"
 
+#define HTTP(X) ecrire(fds, X)
+
 static char *readRequest (int fds);
 static void manageAns (int fds, char *req);
 
+static int totalduree;
 static time_t startTime;
 static char *startDate;
 
@@ -98,48 +101,67 @@ void *startWebserver (void *none)
 
 static void writeHeader(int fds)
 {
-    ecrire(fds, (char*)"HTTP/1.0 200 OK\r\nServer: Larbin\r\nContent-type: text/html\r\n\r\n<html>\n<head>\n<title>");
-    ecrire(fds, global::userAgent);
-    ecrire(fds, (char*)" real time statistic</title>\n</head>\n<body bgcolor=\"#FFFFFF\">\n<center><h1>Larbin is");
+    ecrire(fds, (char*)"HTTP/1.0 200 OK\r\nServer: Larbin\r\nContent-type: text/html\r\n\r\n");
+    HTTP("<html>\n");
+    HTTP("<head>\n");
+    HTTP("<link rel=\"stylesheet\" href=\"http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css\">\n");
+    HTTP("<script src=\"http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js\"></script>\n");
+    HTTP("<script src=\"http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js\"></script>\n");
+    HTTP("<title>");
+    HTTP(global::userAgent);
+    HTTP(" real time statistic</title>\n");
+    HTTP("</head>\n");
+    HTTP("<body>\n");
+    HTTP("<center><h1>Larbin is");
     if (!global::searchOn)
-        ecrire(fds, (char*)" end ");
+        HTTP(" end ");
     else
-        ecrire(fds, (char*)" up and running ");
-    ecrire(fds, (char*)"!</h1></center>\n<pre>\n");
-}
-
-static void writeFooter(int fds)
-{
-    // end of page and kill the connexion
-    ecrire(fds, (char*)"\n</pre>\n<a href=\"stats.html\">stats</a>\n(<a href=\"smallstats.html\">small stats</a>+<a href=\"graph.html\">graphics</a>)\n<a href=\"debug.html\">debug</a>\n<a href=\"all.html\">all</a>\n<a href=\"ip.html\">ip</a>\n<a href=\"dns.html\">dns</a>\n<a href=\"output.html\">output</a>\n<hr>\n<A HREF=\"mailto:ictxiangxin@gmail.com\">ictxiangxin@gmail.com</A>\n</body>\n</html>");
-    shutdown(fds, 2);
-}
-
-static int totalduree;
-
-/** write date and time informations */
-static void writeTime (int fds)
-{
-    ecrire(fds, (char*)"Start date :   ");
-    ecrire(fds, startDate);
-    ecrire(fds, (char*)"Current date : ");
-    ecrire(fds, ctime(&global::now));
-    ecrire(fds, (char*)"up: ");
+        HTTP(" up and running ");
+    HTTP(" <small>v2.6.5</small></h1></center>\n");
+    HTTP("<div class=\"container\">\n");
+    HTTP("<div class=\"row\">\n");
+    HTTP("<nav class=\"navbar navbar-inverse\" role=\"navigation\">\n");
+    HTTP("<div class=\"container-fluid\">\n");
+    HTTP("<div class=\"navbar-header\">\n");
+    HTTP("<a class=\"navbar-brand\">Larbin</a>\n");
+    HTTP("</div>\n");
+    HTTP("<ul class=\"nav navbar-nav\">\n");
+    HTTP("<li><a href=\"/stats.html\">Stats</a></li>\n");
+    HTTP("<li><a href=\"/histograms.html\">Histograms</a></li>\n");
+    HTTP("<li><a href=\"/urls.html\">URLs</a></li>\n");
+    HTTP("<li><a href=\"/dns.html\">DNS</a></li>\n");
+    HTTP("<li><a href=\"/system.html\">System</a></li>\n");
+    HTTP("<li><a href=\"/output.html\">Output</a></li>\n");
+    HTTP("</ul>\n");
+    HTTP("<ul class=\"nav navbar-nav navbar-right\">\n");
+    HTTP("<li><a>Update ");
     int duree = global::now - startTime;
     totalduree = duree;
     if (duree > 86400)
     {
         ecrireInt(fds, duree / 86400);
         duree %= 86400;
-        ecrire(fds, (char*)" day(s) ");
+        HTTP(" Day(s) ");
     }
     ecrireInt(fds, duree/3600);
     duree %= 3600;
-    ecrire(fds, (char*)":");
+    HTTP(":");
     ecrireInt2(fds, duree/60);
     duree %= 60;
-    ecrire(fds, (char*)":");
+    HTTP(":");
     ecrireInt2(fds, duree);
+    HTTP("</a></li>\n");
+    HTTP("</ul>\n");
+    HTTP("</div>\n");
+    HTTP("</nav>\n");
+    HTTP("</div>\n");
+}
+
+static void writeFooter(int fds)
+{
+    // end of page and kill the connexion
+    HTTP("</div>\n</body>\n</html>");
+    shutdown(fds, 2);
 }
 
 /* write stats information (if any) */
@@ -183,89 +205,260 @@ static void writeSpecStats(int fds)
 // main part
 static void writeStats (int fds)
 {
+    HTTP("<div class=\"panel panel-primary\">\n");
+    HTTP("<div class=\"panel-heading\">Stats</div>\n");
+    HTTP("<div class=\"panel-body\">\n");
+    HTTP("<table class=\"table table-condensed table-hover\">\n");
+    HTTP("<thead>\n");
+    HTTP("<tr>\n");
+    HTTP("<th>Title</th>\n");
+    HTTP("<th>Data</th>\n");
+    HTTP("</tr>\n");
+    HTTP("</thead>\n");
+    HTTP("<tbody>\n");
     writeSpecStats(fds);
-    ecrire(fds, (char*)"\n\n<h2>Pages :</h2>\n\nurls treated : ");
-    ecrireInti(fds, urls, (char*)"%13d");
-    ecrire(fds, (char*)"   (current rate : ");
-    ecrireInti(fds, urlsRate, (char*)"%3d");
-    ecrire(fds, (char*)", overall rate : ");
-    ecrireInti(fds, urls / totalduree, (char*)"%3d");
-    ecrire(fds, (char*)")\nforb robots : ");
-    ecrireInti(fds, answers[forbiddenRobots], (char*)"%14d");
-    ecrire(fds, (char*)"\nno dns : ");
-    ecrireInti(fds, answers[noDNS], (char*)"%19d");
-    ecrire(fds, (char*)"\n\nPages : ");
-    ecrireInti(fds, pages, (char*)"%20d");
-    ecrire(fds, (char*)"   (current rate : ");
-    ecrireInti(fds, pagesRate, (char*)"%3d");
-    ecrire(fds, (char*)", overall rate : ");
-    ecrireInti(fds, pages / totalduree, (char*)"%3d");
-    ecrire(fds, (char*)")\nSuccess : ");
-    ecrireInti(fds, answers[success], (char*)"%18d");
-    ecrire(fds, (char*)"   (current rate : ");
-    ecrireInti(fds, successRate, (char*)"%3d");
-    ecrire(fds, (char*)", overall rate : ");
-    ecrireInti(fds, answers[success] / totalduree, (char*)"%3d");
-    ecrire(fds, (char*)")\nno connection : ");
-    ecrireInti(fds, answers[noConnection], (char*)"%12d");
-    ecrire(fds, (char*)"\nearly stop : ");
-    ecrireInti(fds, answers[earlyStop], (char*)"%15d");
-    ecrire(fds, (char*)"\ntimeout : ");
-    ecrireInti(fds, answers[timeout], (char*)"%18d");
-    ecrire(fds, (char*)"\nbad type : ");
-    ecrireInti(fds, answers[badType], (char*)"%17d");
-    ecrire(fds, (char*)"\ntoo big : ");
-    ecrireInti(fds, answers[tooBig], (char*)"%18d");
-    ecrire(fds, (char*)"\nerr 30X : ");
-    ecrireInti(fds, answers[err30X], (char*)"%18d");
-    ecrire(fds, (char*)"\nerr 40X : ");
-    ecrireInti(fds, answers[err40X], (char*)"%18d");
+    HTTP("<tr>\n");
+    HTTP("<td>urls treated</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, urls, (char*)"%1d");
+    HTTP(" (current rate: ");
+    ecrireInti(fds, urlsRate, (char*)"%d");
+    HTTP(", overall rate: ");
+    ecrireInti(fds, urls / totalduree, (char*)"%d");
+    HTTP(")");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>Pages</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, pages, (char*)"%d");
+    ecrire(fds, (char*)" (current rate: ");
+    ecrireInti(fds, pagesRate, (char*)"%d");
+    ecrire(fds, (char*)", overall rate: ");
+    ecrireInti(fds, pages / totalduree, (char*)"%d");
+    HTTP(")");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>Success</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[success], (char*)"%d");
+    ecrire(fds, (char*)" (current rate: ");
+    ecrireInti(fds, successRate, (char*)"%d");
+    ecrire(fds, (char*)", overall rate: ");
+    ecrireInti(fds, answers[success] / totalduree, (char*)"%d");
+    HTTP(")");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("</tbody>\n");
+    HTTP("</table>\n");
+    HTTP("<div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n");
+    HTTP("<div class=\"panel panel-info\">\n");
+    HTTP("<div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n");
+    HTTP("<h4 class=\"panel-title\">\n");
+    HTTP("<a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"false\" aria-controls=\"collapseOne\">\n");
+    HTTP("Error Statistics\n");
+    HTTP("</a>\n");
+    HTTP("</h4>\n");
+    HTTP("</div>\n");
+    HTTP("<div id=\"collapseOne\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOne\">\n");
+    HTTP("<div class=\"panel-body\">\n");
+    HTTP("<table class=\"table table-condensed table-hover\">\n");
+    HTTP("<thead>\n");
+    HTTP("<tr>\n");
+    HTTP("<th>Title</th>\n");
+    HTTP("<th>Data</th>\n");
+    HTTP("</tr>\n");
+    HTTP("</thead>\n");
+    HTTP("<tbody>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>forb robots</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[forbiddenRobots], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>no dns</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[noDNS], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>no connection</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[noConnection], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>early stop</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[earlyStop], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>timeout</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[timeout], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>bad type</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[badType], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>too big</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[tooBig], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>err 30X</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[err30X], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>err 40X</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[err40X], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
     if (global::pageNoDuplicate)
     {
-        ecrire(fds, (char*)"\nduplicate : ");
-        ecrireInti(fds, answers[duplicate], (char*)"%16d");
+        HTTP("<tr>\n");
+        HTTP("<td>duplicate</td>\n");
+        HTTP("<td>");
+        ecrireInti(fds, answers[duplicate], (char*)"%d");
+        HTTP("</td>\n");
+        HTTP("</tr>\n");
     }
-    ecrire(fds, (char*)"\n\nurls accepted : ");
-    ecrireInt(fds, hashUrls);
-    ecrire(fds, (char*)" / ");
-    ecrireInt(fds, hashSize);
-    ecrire(fds, (char*)"\n\nfast robots : ");
-    ecrireInti(fds, answers[fastRobots], (char*)"%14d");
-    ecrire(fds, (char*)"\nfast no conn : ");
-    ecrireInti(fds, answers[fastNoConn], (char*)"%13d");
-    ecrire(fds, (char*)"\nfast no dns : ");
-    ecrireInti(fds, answers[fastNoDns], (char*)"%14d");
-    ecrire(fds, (char*)"\ntoo deep : ");
-    ecrireInti(fds, answers[tooDeep], (char*)"%17d");
-    ecrire(fds, (char*)"\ndup url : ");
-    ecrireInti(fds, answers[urlDup], (char*)"%18d");
-
-    ecrire(fds, (char*)"\n\n<h2>Sites seen (dns call done) :</h2>\n\ntotal number : ");
-    ecrireInti(fds, siteSeen, (char*)"%18d");
-    ecrire(fds, (char*)" +");
-    ecrireInti(fds, global::nbDnsCalls, (char*)"%2d");
-    ecrire(fds, (char*)"   (current rate : ");
-    ecrireInti(fds, siteSeenRate, (char*)"%2d");
-    ecrire(fds, (char*)", overall rate : ");
-    ecrireInti(fds, siteSeen / totalduree, (char*)"%2d");
-    ecrire(fds, (char*)")\nwith dns : ");
-    ecrireInti(fds, siteDNS, (char*)"%22d");
-    ecrire(fds, (char*)"       (current rate : ");
-    ecrireInti(fds, siteDNSRate, (char*)"%2d");
-    ecrire(fds, (char*)", overall rate : ");
-    ecrireInti(fds, siteDNS / totalduree, (char*)"%2d");
-    ecrire(fds, (char*)")\nwith robots.txt : ");
-    ecrireInti(fds, siteRobots, (char*)"%15d");
-    ecrire(fds, (char*)"\nwith good robots.txt : ");
-    ecrireInti(fds, robotsOK, (char*)"%10d");
-
-    ecrire(fds, (char*)"\n\nsites ready      : ");
+    HTTP("<tr>\n");
+    HTTP("<td>fast robots</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[fastRobots], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>fast no conn</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[fastNoConn], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>fast no dns</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[fastNoDns], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>too deep</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[tooDeep], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>dup url</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, answers[urlDup], (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("</tbody>\n");
+    HTTP("</table>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
+    HTTP("<div class=\"panel panel-info\">\n");
+    HTTP("<div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n");
+    HTTP("<h4 class=\"panel-title\">\n");
+    HTTP("<a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n");
+    HTTP("DNS Statistics\n");
+    HTTP("</a>\n");
+    HTTP("</h4>\n");
+    HTTP("</div>\n");
+    HTTP("<div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n");
+    HTTP("<div class=\"panel-body\">\n");
+    HTTP("<table class=\"table table-condensed table-hover\">\n");
+    HTTP("<thead>\n");
+    HTTP("<tr>\n");
+    HTTP("<th>Title</th>\n");
+    HTTP("<th>Data</th>\n");
+    HTTP("</tr>\n");
+    HTTP("</thead>\n");
+    HTTP("<tbody>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>Sites seen total number</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, siteSeen, (char*)"%d");
+    HTTP(" + ");
+    ecrireInti(fds, global::nbDnsCalls, (char*)"%d");
+    HTTP(" (current rate: ");
+    ecrireInti(fds, siteSeenRate, (char*)"%d");
+    HTTP(", overall rate: ");
+    ecrireInti(fds, siteSeen / totalduree, (char*)"%d");
+    HTTP(")");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>with dns</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, siteDNS, (char*)"%d");
+    HTTP(" (current rate: ");
+    ecrireInti(fds, siteDNSRate, (char*)"%d");
+    HTTP(", overall rate: ");
+    ecrireInti(fds, siteDNS / totalduree, (char*)"%d");
+    HTTP(")");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>with robots.txt</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, siteRobots, (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>with good robots.txt</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, robotsOK, (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>sites ready</td>\n");
+    HTTP("<td>");
     ecrireInti(fds,
                global::okSites->getLength()
                + global::nb_conn
-               - global::freeConns->getLength(), (char*)"%5d");
-    ecrire(fds, (char*)"\nsites without ip : ");
-    ecrireInti(fds, global::dnsSites->getLength(), (char*)"%5d");
+               - global::freeConns->getLength(), (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>sites without ip</td>\n");
+    HTTP("<td>");
+    ecrireInti(fds, global::dnsSites->getLength(), (char*)"%d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("</tbody>\n");
+    HTTP("</table>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
+    HTTP("<p class=\"text-primary\"><strong>URLs accepted: ");
+    ecrireInt(fds, hashUrls);
+    HTTP(" / ");
+    ecrireInt(fds, hashSize);
+    HTTP("</strong></p>\n");
+    HTTP("<div class=\"progress\">\n");
+    HTTP("<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: ");
+    int rate = hashUrls / hashSize;
+    ecrireInt(fds, rate);
+    HTTP("%;\">");
+    ecrireInt(fds, rate);
+    HTTP("%</div>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
 }
 
 /** draw graphs
@@ -274,7 +467,12 @@ static void writeGraph (int fds)
 {
     if(global::histograms)
     {
-        ecrire(fds, (char*)"\n\n<h2>Histograms :</h2>");
+        HTTP("<div class=\"panel panel-primary\">\n");
+        HTTP("<div class=\"panel-heading\">Histograms</div>\n");
+        HTTP("<div class=\"panel-body\">\n");
+        HTTP("<div id=\"graphdiv\" style=\"width: 100%\"></div>\n");
+        HTTP("</div>\n");
+        HTTP("</div>\n");
         histoWrite(fds);
     }
 }
@@ -417,35 +615,30 @@ static void manageAns (int fds, char *req)
         {
             writeUrls(fds);
         }
-        else if (!strcmp(req, "/ip.html"))
+        else if (!strcmp(req, "/urls.html"))
         {
             writeIpUrls(fds);
         }
         else if (!strcmp(req, "/all.html"))
         {
-            writeTime(fds);
             writeStats(fds);
             writeGraph(fds);
             writeDebug(fds);
         }
-        else if (!strcmp(req, "/debug.html"))
+        else if (!strcmp(req, "/system.html"))
         {
-            writeTime(fds);
             writeDebug(fds);
         }
-        else if (!strcmp(req, "/graph.html"))
+        else if (!strcmp(req, "/histograms.html"))
         {
-            writeTime(fds);
             writeGraph(fds);
         }
-        else if (!strcmp(req, "/smallstats.html"))
+        else if (!strcmp(req, "/stats.html"))
         {
-            writeTime(fds);
             writeStats(fds);
         }
-        else     // stat
+        else
         {
-            writeTime(fds);
             writeStats(fds);
             writeGraph(fds);
         }
