@@ -26,10 +26,10 @@
 #include "utils/histogram.h"
 #include "utils/connection.h"
 
-#define SIZE 80
+#define SIZE 256
 #define HEIGHT 15
 
-static char curve[HEIGHT + 2][SIZE + 17];
+#define HTTP(X) ecrire(fds, X)
 
 /* definition of class histogram */
 class Histogram
@@ -97,27 +97,16 @@ void histoWrite (int fds)
  */
 Histogram::Histogram (time_t period)
 {
-    for (int i=0; i<SIZE; ++i)
+    for (int i = 0; i < SIZE; ++i)
     {
         tab1[i] = 0;
         tab2[i] = 0;
     }
     beg = 0;
     end = 0;
-    maxv = HEIGHT;
     this->period = period;
     count = 0;
     beg_time = time (NULL);
-    for (int i=0; i<HEIGHT; i++)
-    {
-        sprintf(curve[i], "                ");
-        curve[i][SIZE+16] = '\n';
-    }
-    curve[0][13] = '-';
-    curve[0][14] = '>';
-    sprintf(curve[HEIGHT], "           0 -> ");
-    for (int i=16; i<SIZE+16; i++) curve[HEIGHT][i] = '-';
-    curve[HEIGHT][SIZE+16] = 0;
 }
 
 /* Destructor */
@@ -130,7 +119,8 @@ void Histogram::pageHit (int x, int y)
 {
     tab1[end] += x;
     tab2[end] += y;
-    if (tab1[end] > maxv) maxv = tab1[end];
+    if (tab1[end] > maxv)
+        maxv = tab1[end];
     if (++count >= period)
     {
         count = 0;
@@ -142,11 +132,13 @@ void Histogram::pageHit (int x, int y)
 void Histogram::incrementEnd ()
 {
     end += 1;
-    if (end >= SIZE) end = 0;
+    if (end >= SIZE)
+        end = 0;
     if (end <= beg)   /* have to delete the oldest interval */
     {
         beg += 1;
-        if (beg >= SIZE) beg = 0;
+        if (beg >= SIZE)
+            beg = 0;
         beg_time += period;
     }
     tab1[end] = 0;
@@ -156,45 +148,32 @@ void Histogram::incrementEnd ()
 /* Html output stat for last intervals */
 void Histogram::write (int fds)
 {
-    /* Compute the curve */
-    int maxvbis = maxv;
-    maxv = HEIGHT; /* let's recompute it for next time */
-    for (int i=beg, c=0; c<SIZE; ++i, ++c)
+    HTTP("<script type=\"text/javascript\">\n");
+    HTTP("g = new Dygraph(\n");
+    HTTP("document.getElementById(\"graphdiv");
+    ecrireInt(fds, period);
+    HTTP("\"),\n");
+    HTTP("\"Time, H1, H2\\n\" +\n");
+    for (int i = beg, c = 0; c < SIZE; ++i, ++c)
     {
-        if (i == SIZE) i = 0;
-        if (tab1[i] > maxv) maxv = tab1[i];
-        int h1 = (tab1[i] * HEIGHT) / maxvbis;
-        int h2 = (tab2[i] * HEIGHT) / maxvbis;
-        for (int j=0; j<HEIGHT; ++j)
-        {
-            if (j >= h1)
-                curve[HEIGHT-1-j][c+16] = ' ';
-            else if (j >= h2)
-                curve[HEIGHT-1-j][c+16] = 'x';
-            else
-                curve[HEIGHT-1-j][c+16] = '*';
-        }
+        if (i == SIZE)
+            i = 0;
+        if (tab1[i] == 0 && tab2[i] == 0 && i >= 9)
+            break;
+        HTTP("\"");
+        ecrireInt (fds, i);
+        HTTP(", ");
+        ecrireInt (fds, tab2[i]);
+        HTTP(", ");
+        ecrireInt (fds, tab1[i]);
+        HTTP("\\n\" +\n");
     }
-
-    /* Write the curve */
-    ecrire (fds, (char*)"\n\nOne column is the number of pages retrieved during ");
-    ecrireInt (fds, period);
-    ecrire (fds, (char*)" seconds : \n");
-    sprintf(curve[0], "%12d", maxvbis);
-    curve[0][12] = ' ';
-    int now_col = (global::now - beg_time) / period + 16;
-    curve[HEIGHT][now_col] = '|';
-    ecrire(fds, curve[0]);
-    curve[HEIGHT][now_col] = '-';
-    ecrireChar(fds, '\n');
-    /* Show time bounds : */
-    char *deb = asctime (localtime (&beg_time));
-    deb[strlen(deb)-1] = 0;
-    ecrire (fds, deb);
-    snprintf(curve[HEIGHT+1], SIZE + 3 - strlen(deb), "%10000s", "");
-    ecrire(fds, curve[HEIGHT+1]);
-    time_t fin_time = beg_time + period * SIZE;
-    char *fin = asctime (localtime (&fin_time));
-    ecrire (fds, fin);
+    HTTP("\"\",\n");
+    HTTP("{title: 'Pages per ");
+    ecrireInt(fds, period);
+    HTTP("s', ");
+    HTTP("ylabel: 'Pages'}\n");
+    HTTP(");\n");
+    HTTP("</script>\n");
 }
 

@@ -107,6 +107,7 @@ static void writeHeader(int fds)
     HTTP("<link rel=\"stylesheet\" href=\"http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css\">\n");
     HTTP("<script src=\"http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js\"></script>\n");
     HTTP("<script src=\"http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js\"></script>\n");
+    HTTP("<script src=\"http://dygraphs.com/1.0.1/dygraph-combined.js\"></script>\n");
     HTTP("<title>");
     HTTP(global::userAgent);
     HTTP(" real time statistic</title>\n");
@@ -123,7 +124,7 @@ static void writeHeader(int fds)
     HTTP("<nav class=\"navbar navbar-inverse\" role=\"navigation\">\n");
     HTTP("<div class=\"container-fluid\">\n");
     HTTP("<div class=\"navbar-header\">\n");
-    HTTP("<a class=\"navbar-brand\">Larbin</a>\n");
+    HTTP("<a href=\"/\" class=\"navbar-brand\">Larbin</a>\n");
     HTTP("</div>\n");
     HTTP("<ul class=\"nav navbar-nav\">\n");
     HTTP("<li><a href=\"/stats.html\">Stats</a></li>\n");
@@ -451,7 +452,7 @@ static void writeStats (int fds)
     HTTP("</strong></p>\n");
     HTTP("<div class=\"progress\">\n");
     HTTP("<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: ");
-    int rate = hashUrls / hashSize;
+    int rate = (int)((float)hashUrls / (float)hashSize * 100);
     ecrireInt(fds, rate);
     HTTP("%;\">");
     ecrireInt(fds, rate);
@@ -470,7 +471,9 @@ static void writeGraph (int fds)
         HTTP("<div class=\"panel panel-primary\">\n");
         HTTP("<div class=\"panel-heading\">Histograms</div>\n");
         HTTP("<div class=\"panel-body\">\n");
-        HTTP("<div id=\"graphdiv\" style=\"width: 100%\"></div>\n");
+        HTTP("<div id=\"graphdiv3600\" style=\"width: 100%\"></div>\n");
+        HTTP("<div id=\"graphdiv60\" style=\"width: 100%\"></div>\n");
+        HTTP("<div id=\"graphdiv1\" style=\"width: 100%\"></div>\n");
         HTTP("</div>\n");
         HTTP("</div>\n");
         histoWrite(fds);
@@ -483,73 +486,191 @@ static void writeDebug (int fds)
 {
     if (!global::debug)
         return;
-    ecrire(fds, (char*)"\n\n<h2>Ressources Sharing :</h2>\n\nused connexions : ");
-    ecrireInti(fds, global::nb_conn - global::freeConns->getLength(), (char*)"%8d");
+	HTTP("<div class=\"panel panel-primary\">\n");
+    HTTP("<div class=\"panel-heading\">Ressources Sharing</div>\n");
+    HTTP("<div class=\"panel-body\">\n");
+    HTTP("<table class=\"table table-condensed table-hover\">\n");
+    HTTP("<thead>\n");
+    HTTP("<tr>\n");
+    HTTP("<th>Title</th>\n");
+    HTTP("<th>Data</th>\n");
+    HTTP("</tr>\n");
+    HTTP("</thead>\n");
+    HTTP("<tbody>\n");
+	HTTP("<tr>\n");
+    HTTP("<td>used connections</td>\n");
+	HTTP("<td>");
+    ecrireInti(fds, global::nb_conn - global::freeConns->getLength(), (char*)"%d");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
 #ifdef THREAD_OUTPUT
-    ecrire(fds, (char*)"\nuser connexions : ");
-    ecrireInti(fds, global::userConns->getLength(), (char*)"%8d");
+    HTTP("<tr>\n");
+    HTTP("<td>user connections</td>\n");
+	HTTP("<td>");
+    ecrireInti(fds, global::userConns->getLength(), (char*)"%d");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
 #endif
-    ecrire(fds, (char*)"\nfree connexions : ");
-    ecrireInti(fds, global::freeConns->getLength(), (char*)"%8d");
-    ecrire(fds, (char*)"\nparsers         : ");
-    ecrireInti(fds, debPars, (char*)"%8d");
-    ecrire(fds, (char*)"\n\nsites in ram    : ");
-    ecrireInti(fds, sites, (char*)"%8d");
-    ecrire(fds, (char*)"\nipsites in ram  : ");
-    ecrireInti(fds, ipsites, (char*)"%8d");
-    ecrire(fds, (char*)"\nurls in ram     : ");
-    ecrireInti(fds, debUrl, (char*)"%8d");
-    ecrire(fds, (char*)"   (");
+    HTTP("<tr>\n");
+    HTTP("<td>free connections</td>\n");
+	HTTP("<td>");
+    ecrireInti(fds, global::freeConns->getLength(), (char*)"%d");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+    HTTP("<td>parsers</td>\n");
+	HTTP("<td>");
+    ecrireInti(fds, debPars, (char*)"%d");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+    HTTP("<td>sites in ram</td>\n");
+	HTTP("<td>");
+    ecrireInti(fds, sites, (char*)"%d");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+    HTTP("<td>ipsites in ram</td>\n");
+	HTTP("<td>");
+    ecrireInti(fds, ipsites, (char*)"%d");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+    HTTP("<td>urls in ram</td>\n");
+	HTTP("<td>");
+    ecrireInti(fds, debUrl, (char*)"%d");
+    HTTP(" (");
     ecrireInt(fds, global::inter->getPos() - space);
-    ecrire(fds, (char*)" = ");
+    HTTP(" = ");
     ecrireInt(fds, namedUrl);
-    ecrire(fds, (char*)" + ");
+    HTTP(" + ");
     ecrireInt(fds, global::IPUrl);
-    ecrire(fds, (char*)")\nurls on disk    : ");
+    HTTP(")");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+	HTTP("<td>urls on disk</td>\n");
     int ui = global::URLsDisk->getLength();
     int uiw = global::URLsDiskWait->getLength();
-    ecrireInti(fds, ui+uiw, (char*)"%8d");
-    ecrire(fds, (char*)"   (");
+	HTTP("<td>");
+    ecrireInti(fds, ui + uiw, (char*)"%d");
+    HTTP(" (");
     ecrireInt(fds, ui);
-    ecrire(fds, (char*)" + ");
+    HTTP(" + ");
     ecrireInt(fds, uiw);
-    ecrire(fds, (char*)")\npriority urls   : ");
+    HTTP(")");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+	HTTP("<td>priority urls</td>\n");
     int up = global::URLsPriority->getLength();
     int upw = global::URLsPriorityWait->getLength();
-    ecrireInti(fds, up+upw, (char*)"%8d");
-    ecrire(fds, (char*)"   (");
+	HTTP("<td>");
+    ecrireInti(fds, up + upw, (char*)"%d");
+    HTTP(" (");
     ecrireInt(fds, up);
-    ecrire(fds, (char*)" + ");
-
+    HTTP(" + ");
     ecrireInt(fds, upw);
-    ecrire(fds, (char*)")\nmiss urls       : ");
-    ecrireInti(fds, missUrl, (char*)"%8d");
-
-    ecrire(fds, (char*)"\n\nreceive : ");
-    ecrireIntl(fds, byte_read, (char*)"%12lu");
-    ecrire(fds, (char*)"   (current rate : ");
-    ecrireIntl(fds, readRate, (char*)"%7lu");
-    ecrire(fds, (char*)", overall rate : ");
-    ecrireIntl(fds, byte_read / totalduree, (char*)"%7lu");
-    ecrire(fds, (char*)")\nemit    : ");
-    ecrireIntl(fds, byte_write, (char*)"%12lu");
-    ecrire(fds, (char*)"   (current rate : ");
-    ecrireIntl(fds, writeRate, (char*)"%7lu");
-    ecrire(fds, (char*)", overall rate : ");
-    ecrireIntl(fds, byte_write / totalduree, (char*)"%7lu");
-
-    ecrire(fds, (char*)")\n\nstateMain : ");
+    HTTP(")");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+	HTTP("<td>miss urls</td>\n");
+	HTTP("<td>");
+    ecrireInti(fds, missUrl, (char*)"%d");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+    HTTP("<td>receive</td>\n");
+	HTTP("<td>");
+    ecrireIntl(fds, byte_read, (char*)"%lu");
+    HTTP(" (current rate: ");
+    ecrireIntl(fds, readRate, (char*)"%lu");
+    HTTP(", overall rate: ");
+    ecrireIntl(fds, byte_read / totalduree, (char*)"%lu");
+    HTTP(")");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+	HTTP("<td>emit</td>\n");
+	HTTP("<td>");
+    ecrireIntl(fds, byte_write, (char*)"%lu");
+    HTTP(" (current rate: ");
+    ecrireIntl(fds, writeRate, (char*)"%lu");
+    HTTP(", overall rate: ");
+    ecrireIntl(fds, byte_write / totalduree, (char*)"%lu");
+    HTTP(")");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+	HTTP("<td>stateMain</td>\n");
+	HTTP("<td>");
     ecrireInt(fds, stateMain);
-    ecrire(fds, (char*)"\ndebug     : ");
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("<tr>\n");
+    HTTP("<td>debug</td>\n");
+	HTTP("<td>");
     ecrireInt(fds, debug);
+	HTTP("</td>\n");
+	HTTP("</tr>\n");
+	HTTP("</tbody>\n");
+    HTTP("</table>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
 
 #ifdef HAS_PROC_SELF_STATUS
-    ecrire(fds, (char*)"\n\n<h2>/proc/self/status :</h2>\n");
+	HTTP("<div class=\"panel panel-primary\">\n");
+    HTTP("<div class=\"panel-heading\">/proc/self/status</div>\n");
+    HTTP("<div class=\"panel-body\">\n");
+	HTTP("<table class=\"table table-condensed table-hover\">\n");
+    HTTP("<thead>\n");
+    HTTP("<tr>\n");
+    HTTP("<th>Title</th>\n");
+    HTTP("<th>Data</th>\n");
+    HTTP("</tr>\n");
+    HTTP("</thead>\n");
+    HTTP("<tbody>\n");
     int status = open("/proc/self/status", O_RDONLY);
     char *file = readfile(status);
-    ecrire(fds, file);
+	int len = strlen(file);
+	char tmp_entry[256] = {'\0'};
+	int tmp_i = 0;
+	int flag = 0;
+	for (int i = 0; i < len; i++)
+	{
+	    if (file[i] == ':')
+		{
+		    tmp_entry[tmp_i] = '\0';
+			tmp_i = 0;
+			HTTP("<tr>\n");
+			HTTP("<td>");
+			HTTP(tmp_entry);
+			HTTP("</td>\n");
+			flag = 1;
+			continue;
+		}
+		if (file[i] == '\n')
+		{
+		    tmp_entry[tmp_i] = '\0';
+			tmp_i = 0;
+			HTTP("<td>");
+			HTTP(tmp_entry);
+			HTTP("</td>\n");
+			HTTP("</tr>\n");
+		}
+		if (flag == 1 && file[i] <= ' ')
+		    continue;
+		flag = 0;
+	    tmp_entry[tmp_i++] = file[i];
+	}
+    //ecrire(fds, file);
     delete [] file;
     close(status);
+	HTTP("</tbody>\n");
+    HTTP("</table>\n");
+	HTTP("</div>\n");
+    HTTP("</div>\n");
 #endif // HAS_PROC_SELF_STATUS
 }
 
@@ -557,22 +678,37 @@ static void writeDebug (int fds)
  */
 static void writeUrls (int fds)
 {
-    ecrire(fds, (char*)"<h2>Urls in next NamedSite</h2>\n");
+	HTTP("<div class=\"panel panel-primary\">\n");
+    HTTP("<div class=\"panel-heading\">URLs in next NamedSite</div>\n");
+    HTTP("<div class=\"panel-body\">\n");
     NamedSite *ds = global::dnsSites->tryRead();
     if (ds != NULL)
     {
+	    HTTP("<span class=\"label label-info\">");
         ecrireInt(fds, ds->fifoLength());
-        ecrire(fds, (char*)" waiting url(s)\n\n");
-        for (uint i=ds->outFifo; i!=ds->inFifo; i=(i+1)%maxUrlsBySite)
+		HTTP(" Waiting URLs</span>\n");
+		HTTP("<table class=\"table table-condensed table-hover\">\n");
+        HTTP("<thead>\n");
+        HTTP("<tr>\n");
+        HTTP("<th></th>\n");
+        HTTP("</tr>\n");
+        HTTP("</thead>\n");
+        HTTP("<tbody>\n");
+        for (uint i = ds->outFifo; i != ds->inFifo; i= (i + 1) % maxUrlsBySite)
         {
             int n = ds->fifo[i]->writeUrl(buf);
-            buf[n++] = '\n';
+			HTTP("<tr>\n");
+			HTTP("<td><a href=\"");
             ecrireBuff(fds, buf, n);
+			HTTP("\">");
+			ecrireBuff(fds, buf, n);
+			HTTP("</a></td>\n");
+			HTTP("</tr>\n");
         }
     }
     else
     {
-        ecrire(fds, (char*)"no site available\n");
+        HTTP("<span class=\"label label-primary\">No site available</span>\n");
     }
 }
 
@@ -580,23 +716,40 @@ static void writeUrls (int fds)
  */
 static void writeIpUrls (int fds)
 {
-    ecrire(fds, (char*)"<h2>Urls in next IPSite</h2>\n");
+    HTTP("<div class=\"panel panel-primary\">\n");
+    HTTP("<div class=\"panel-heading\">URLs in next IPSite</div>\n");
+    HTTP("<div class=\"panel-body\">\n");
     IPSite *is = global::okSites->tryRead();
     if (is != NULL)
     {
         Fifo<url> *f = &is->tab;
+		HTTP("<span class=\"label label-info\">");
         ecrireInt(fds, f->getLength());
-        ecrire(fds, (char*)" waiting url(s)\n\n");
-        for (uint i=f->out; i!=f->in; i=(i+1)%f->size)
+		HTTP(" URLs</span>\n");
+		HTTP("<table class=\"table table-condensed table-hover\">\n");
+        HTTP("<thead>\n");
+        HTTP("<tr>\n");
+        HTTP("<th></th>\n");
+        HTTP("</tr>\n");
+        HTTP("</thead>\n");
+        HTTP("<tbody>\n");
+        for (uint i = f->out; i != f->in; i = (i + 1) % f->size)
         {
             int n = f->tab[i]->writeUrl(buf);
-            buf[n++] = '\n';
+			HTTP("<tr>\n");
+			HTTP("<td><a href=\"");
             ecrireBuff(fds, buf, n);
+			HTTP("\">");
+			ecrireBuff(fds, buf, n);
+			HTTP("</a></td>\n");
+			HTTP("</tr>\n");
         }
+		HTTP("</tbody>\n");
+		HTTP("</table>\n");
     }
     else
     {
-        ecrire(fds, (char*)"no site available\n");
+        HTTP("<span class=\"label label-primary\">No site available</span>\n");
     }
 }
 
