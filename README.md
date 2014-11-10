@@ -28,6 +28,8 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 
 * 使用cmake来构建larbin。
 
+* 一个全新的web UI，基于bootstrap和dygraphs。
+
 ##内容提要：
 
 * [编译Larbin](#编译larbin)
@@ -115,7 +117,6 @@ Larbin主要在Linux下进行开发。
 ###计划开发
 
 * 首先还是要将代码重构一遍。
-* 一个全新的webserver，计划使用GNU libmicrohttpd实现。
 * 支持javascript，这将是一个非常庞大的功能。
 
 ###联系我

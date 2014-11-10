@@ -28,6 +28,8 @@ We will continue develop this nice software and open the source on Github.
 
 * Use cmake to build larbin
 
+* A new web UI, base on bootstrap and dygraphs.
+
 ##Table of content :
 
 * [Compiling](#compiling)
@@ -114,7 +116,6 @@ but i'll work on it for future versions. Please report success or failure on any
 ###TODO
 
 * First, I need to reconstruct the source code.
-* A new webserver, I want to use GNU libmicrohttdp to implement it.
 * Support javascript, this is a very big project.
 
 ###Contact
