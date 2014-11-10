@@ -37,7 +37,6 @@ class Histogram
 protected:
     int tab1[SIZE];
     int tab2[SIZE];
-    int maxv;
     int beg, end;
     time_t period, count, beg_time;
 
@@ -119,8 +118,6 @@ void Histogram::pageHit (int x, int y)
 {
     tab1[end] += x;
     tab2[end] += y;
-    if (tab1[end] > maxv)
-        maxv = tab1[end];
     if (++count >= period)
     {
         count = 0;
@@ -153,7 +150,7 @@ void Histogram::write (int fds)
     HTTP("document.getElementById(\"graphdiv");
     ecrireInt(fds, period);
     HTTP("\"),\n");
-    HTTP("\"Time, H1, H2\\n\" +\n");
+    HTTP("\"Time, Success, Total\\n\" +\n");
     for (int i = beg, c = 0; c < SIZE; ++i, ++c)
     {
         if (i == SIZE)
@@ -161,7 +158,7 @@ void Histogram::write (int fds)
         if (tab1[i] == 0 && tab2[i] == 0 && i >= 9)
             break;
         HTTP("\"");
-        ecrireInt (fds, i);
+        ecrireInt (fds, c);
         HTTP(", ");
         ecrireInt (fds, tab2[i]);
         HTTP(", ");
