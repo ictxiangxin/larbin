@@ -29,15 +29,15 @@ int ecrire (int fd, const char *buf);
  * return 0 on success, 1 otherwise
  * Don't work on non-blocking fds...
  */
-int ecrireBuff (int fd, char *buf, int count);
+int ecrireBuff (int fd, const char *buf, int count);
 
 /** Write an int on a fds
  * (uses ecrire)
  */
 int ecrireInt (int fd, int i);
 int ecrireInt2 (int fd, int i);
-int ecrireInti (int fd, int i, char *f);
-int ecrireIntl (int fd, long i, char *f);
+int ecrireInti (int fd, int i, const char *f);
+int ecrireIntl (int fd, long i, const char *f);
 
 /** Write an int on a fds
  * (uses ecrire)

@@ -61,7 +61,7 @@ int ecrire (int fd, const char *buf)
  * return 0 on success, 1 otherwise
  * Don't work on non-blocking fds...
  */
-int ecrireBuff (int fd, char *buf, int count)
+int ecrireBuff (int fd, const char *buf, int count)
 {
     int pos = 0;
     while (pos < count)
@@ -105,14 +105,14 @@ int ecrireInt2 (int fd, int i)
     return ecrire(fd, buf);
 }
 
-int ecrireInti (int fd, int i, char *f)
+int ecrireInti (int fd, int i, const char *f)
 {
     char buf[128];
     sprintf(buf, f, i);
     return ecrire(fd, buf);
 }
 
-int ecrireIntl (int fd, long i, char *f)
+int ecrireIntl (int fd, long i, const char *f)
 {
     char buf[128];
     sprintf(buf, f, i);

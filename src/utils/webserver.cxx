@@ -43,6 +43,8 @@
 #include "io/user_output.h"
 
 #define HTTP(X) ecrire(fds, X)
+#define HTTPint(X) ecrireInt(fds, X)
+
 
 static char *readRequest (int fds);
 static void manageAns (int fds, char *req);
@@ -101,7 +103,7 @@ void *startWebserver (void *none)
 
 static void writeHeader(int fds)
 {
-    ecrire(fds, (char*)"HTTP/1.0 200 OK\r\nServer: Larbin\r\nContent-type: text/html\r\n\r\n");
+    HTTP("HTTP/1.0 200 OK\r\nServer: Larbin\r\nContent-type: text/html\r\n\r\n");
     HTTP("<html>\n");
     HTTP("<head>\n");
     HTTP("<link rel=\"stylesheet\" href=\"http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css\">\n");
@@ -172,35 +174,82 @@ static void writeSpecStats(int fds)
 {
     if (!global::specificSearch)
         return;
-    ecrire(fds, (char*)"\n\n<h2>Interesting pages (");
-    ecrire(fds, global::contentTypes[0]);
-    int i=1;
+    HTTP("<div class=\"panel panel-info\">\n");
+    HTTP("<div class=\"panel-heading\" role=\"tab\" id=\"headingSpec\">\n");
+    HTTP("<h4 class=\"panel-title\">\n");
+    HTTP("<a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseSpec\" aria-expanded=\"false\" aria-controls=\"collapseSpec\">\n");
+    HTTP("Specific Search\n");
+    HTTP("</a>\n");
+    HTTP("</h4>\n");
+    HTTP("</div>\n");
+    HTTP("<div id=\"collapseSpec\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingSpec\">\n");
+    HTTP("<div class=\"panel-body\">\n");
+    HTTP("<table class=\"table table-condensed table-hover\">\n");
+    HTTP("<thead>\n");
+    HTTP("<tr>\n");
+    HTTP("<th>Title</th>\n");
+    HTTP("<th>Data</th>\n");
+    HTTP("</tr>\n");
+    HTTP("</thead>\n");
+    HTTP("<tbody>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>Interesting Pages</td>\n");
+    HTTP("<td>");
+    HTTP(global::contentTypes[0]);
+    uint i = 1;
     while (global::contentTypes[i] != NULL)
     {
-        ecrire(fds, (char*)", ");
-        ecrire(fds, global::contentTypes[i]);
+        HTTP(", ");
+        HTTP(global::contentTypes[i]);
         i++;
     }
-    ecrire(fds, (char*)") :</h2>\ntotal fetched (success)          : ");
-    ecrireInti(fds, interestingPage, (char*)"%5d");
-    ecrire(fds, (char*)"\ntotal fetched (error or success) : ");
-    ecrireInti(fds, interestingSeen, (char*)"%5d");
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>Total Fetched</td>\n");
+    HTTP("<td>");
+    HTTPint(interestingSeen);
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
+    HTTP("<tr>\n");
+    HTTP("<td>Success</td>\n");
+    HTTP("<td>");
+    HTTPint(interestingPage);
+    HTTP("</td>\n");
+    HTTP("</tr>\n");
     if (global::privilegedExts[0] != NULL)
     {
-        ecrire(fds, (char*)"\nprivileged links seen (");
+        HTTP("<tr>\n");
+        HTTP("<td>Privileged Links Seen</td>\n");
+        HTTP("<td>");
+        HTTPint(interestingExtension);
+        HTTP("</td>\n");
+        HTTP("</tr>\n");
+        HTTP("<tr>\n");
+        HTTP("<td>Privileged Links Fetched</td>\n");
+        HTTP("<td>");
+        HTTPint(extensionTreated);
+        HTTP("</td>\n");
+        HTTP("</tr>\n");
+        HTTP("<tr>\n");
+        HTTP("<td>Extensions</td>\n");
+        HTTP("<td>");
         ecrire(fds, global::privilegedExts[0]);
         uint i = 1;
         while (global::privilegedExts[i] != NULL)
         {
-            ecrire(fds, (char*)", ");
-            ecrire(fds, global::privilegedExts[i]);
+            HTTP(", ");
+            HTTP(global::privilegedExts[i]);
             i++;
         }
-        ecrire(fds, (char*)") :     ");
-        ecrireInti(fds, interestingExtension, (char*)"%5d");
-        ecrire(fds, (char*)"\nprivileged links fetched :         ");
-        ecrireInti(fds, extensionTreated, (char*)"%5d");
+        HTTP("</td>\n");
+        HTTP("</tr>\n");
     }
+    HTTP("</tbody>\n");
+    HTTP("</table>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
 }
 
 // main part
@@ -217,43 +266,43 @@ static void writeStats (int fds)
     HTTP("</tr>\n");
     HTTP("</thead>\n");
     HTTP("<tbody>\n");
-    writeSpecStats(fds);
     HTTP("<tr>\n");
     HTTP("<td>URLs Treated</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, urls, (char*)"%1d");
+    HTTPint(urls);
     HTTP(" (current rate: ");
-    ecrireInti(fds, urlsRate, (char*)"%d");
+    HTTPint(urlsRate);
     HTTP(", overall rate: ");
-    ecrireInti(fds, urls / totalduree, (char*)"%d");
+    HTTPint(urls / totalduree);
     HTTP(")");
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Pages</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, pages, (char*)"%d");
-    ecrire(fds, (char*)" (current rate: ");
-    ecrireInti(fds, pagesRate, (char*)"%d");
-    ecrire(fds, (char*)", overall rate: ");
-    ecrireInti(fds, pages / totalduree, (char*)"%d");
+    HTTPint(pages);
+    HTTP(" (current rate: ");
+    HTTPint(pagesRate);
+    HTTP(", overall rate: ");
+    HTTPint(pages / totalduree);
     HTTP(")");
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Success</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[success], (char*)"%d");
-    ecrire(fds, (char*)" (current rate: ");
-    ecrireInti(fds, successRate, (char*)"%d");
-    ecrire(fds, (char*)", overall rate: ");
-    ecrireInti(fds, answers[success] / totalduree, (char*)"%d");
+    HTTPint(answers[success]);
+    HTTP(" (current rate: ");
+    HTTPint(successRate);
+    HTTP(", overall rate: ");
+    HTTPint(answers[success] / totalduree);
     HTTP(")");
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("</tbody>\n");
     HTTP("</table>\n");
     HTTP("<div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n");
+    writeSpecStats(fds);
     HTTP("<div class=\"panel panel-info\">\n");
     HTTP("<div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n");
     HTTP("<h4 class=\"panel-title\">\n");
@@ -275,55 +324,55 @@ static void writeStats (int fds)
     HTTP("<tr>\n");
     HTTP("<td>Forbidden Robots</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[forbiddenRobots], (char*)"%d");
+    HTTPint(answers[forbiddenRobots]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>No DNS</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[noDNS], (char*)"%d");
+    HTTPint(answers[noDNS]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>No Connection</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[noConnection], (char*)"%d");
+    HTTPint(answers[noConnection]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Early Stop</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[earlyStop], (char*)"%d");
+    HTTPint(answers[earlyStop]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Timeout</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[timeout], (char*)"%d");
+    HTTPint(answers[timeout]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Bad Type</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[badType], (char*)"%d");
+    HTTPint(answers[badType]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Too Big</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[tooBig], (char*)"%d");
+    HTTPint(answers[tooBig]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Error 30X</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[err30X], (char*)"%d");
+    HTTPint(answers[err30X]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Error 40X</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[err40X], (char*)"%d");
+    HTTPint(answers[err40X]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     if (global::pageNoDuplicate)
@@ -331,38 +380,38 @@ static void writeStats (int fds)
         HTTP("<tr>\n");
         HTTP("<td>Duplicate</td>\n");
         HTTP("<td>");
-        ecrireInti(fds, answers[duplicate], (char*)"%d");
+        HTTPint(answers[duplicate]);
         HTTP("</td>\n");
         HTTP("</tr>\n");
     }
     HTTP("<tr>\n");
     HTTP("<td>Fast Robots</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[fastRobots], (char*)"%d");
+    HTTPint(answers[fastRobots]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Fast No Connect</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[fastNoConn], (char*)"%d");
+    HTTPint(answers[fastNoConn]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Fast No DNS</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[fastNoDns], (char*)"%d");
+    HTTPint(answers[fastNoDns]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Too Deep</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[tooDeep], (char*)"%d");
+    HTTPint(answers[tooDeep]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Duplicate URL</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, answers[urlDup], (char*)"%d");
+    HTTPint(answers[urlDup]);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("</tbody>\n");
@@ -391,52 +440,51 @@ static void writeStats (int fds)
     HTTP("<tr>\n");
     HTTP("<td>Sites Seen Total Number</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, siteSeen, (char*)"%d");
+    HTTPint(siteSeen);
     HTTP(" + ");
-    ecrireInti(fds, global::nbDnsCalls, (char*)"%d");
+    HTTPint(global::nbDnsCalls);
     HTTP(" (current rate: ");
-    ecrireInti(fds, siteSeenRate, (char*)"%d");
+    HTTPint(siteSeenRate);
     HTTP(", overall rate: ");
-    ecrireInti(fds, siteSeen / totalduree, (char*)"%d");
+    HTTPint(siteSeen / totalduree);
     HTTP(")");
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>With DNS</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, siteDNS, (char*)"%d");
+    HTTPint(siteDNS);
     HTTP(" (current rate: ");
-    ecrireInti(fds, siteDNSRate, (char*)"%d");
+    HTTPint(siteDNSRate);
     HTTP(", overall rate: ");
-    ecrireInti(fds, siteDNS / totalduree, (char*)"%d");
+    HTTPint(siteDNS / totalduree);
     HTTP(")");
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>With robots.txt</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, siteRobots, (char*)"%d");
+    HTTPint(siteRobots);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>With Good robots.txt</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, robotsOK, (char*)"%d");
+    HTTPint(robotsOK);
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Sites Ready</td>\n");
     HTTP("<td>");
-    ecrireInti(fds,
-               global::okSites->getLength()
-               + global::nb_conn
-               - global::freeConns->getLength(), (char*)"%d");
+    HTTPint(global::okSites->getLength()
+          + global::nb_conn
+          - global::freeConns->getLength());
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("<tr>\n");
     HTTP("<td>Sites Without IP</td>\n");
     HTTP("<td>");
-    ecrireInti(fds, global::dnsSites->getLength(), (char*)"%d");
+    HTTPint(global::dnsSites->getLength());
     HTTP("</td>\n");
     HTTP("</tr>\n");
     HTTP("</tbody>\n");
@@ -500,45 +548,45 @@ static void writeDebug (int fds)
 	HTTP("<tr>\n");
     HTTP("<td>Used Connections</td>\n");
 	HTTP("<td>");
-    ecrireInti(fds, global::nb_conn - global::freeConns->getLength(), (char*)"%d");
+    HTTPint(global::nb_conn - global::freeConns->getLength());
 	HTTP("</td>\n");
 	HTTP("</tr>\n");
 #ifdef THREAD_OUTPUT
     HTTP("<tr>\n");
     HTTP("<td>User Connections</td>\n");
 	HTTP("<td>");
-    ecrireInti(fds, global::userConns->getLength(), (char*)"%d");
+    HTTPint(global::userConns->getLength());
 	HTTP("</td>\n");
 	HTTP("</tr>\n");
 #endif
     HTTP("<tr>\n");
     HTTP("<td>Free Connections</td>\n");
 	HTTP("<td>");
-    ecrireInti(fds, global::freeConns->getLength(), (char*)"%d");
+    HTTPint(global::freeConns->getLength());
 	HTTP("</td>\n");
 	HTTP("</tr>\n");
 	HTTP("<tr>\n");
     HTTP("<td>Parsers</td>\n");
 	HTTP("<td>");
-    ecrireInti(fds, debPars, (char*)"%d");
+    HTTPint(debPars);
 	HTTP("</td>\n");
 	HTTP("</tr>\n");
 	HTTP("<tr>\n");
     HTTP("<td>Sites in RAM</td>\n");
 	HTTP("<td>");
-    ecrireInti(fds, sites, (char*)"%d");
+    HTTPint(sites);
 	HTTP("</td>\n");
 	HTTP("</tr>\n");
 	HTTP("<tr>\n");
     HTTP("<td>IPsites in RAM</td>\n");
 	HTTP("<td>");
-    ecrireInti(fds, ipsites, (char*)"%d");
+    HTTPint(ipsites);
 	HTTP("</td>\n");
 	HTTP("</tr>\n");
 	HTTP("<tr>\n");
     HTTP("<td>URLs in RAM</td>\n");
 	HTTP("<td>");
-    ecrireInti(fds, debUrl, (char*)"%d");
+    HTTPint(debUrl);
     HTTP(" (");
     ecrireInt(fds, global::inter->getPos() - space);
     HTTP(" = ");
@@ -553,7 +601,7 @@ static void writeDebug (int fds)
     int ui = global::URLsDisk->getLength();
     int uiw = global::URLsDiskWait->getLength();
 	HTTP("<td>");
-    ecrireInti(fds, ui + uiw, (char*)"%d");
+    HTTPint(ui + uiw);
     HTTP(" (");
     ecrireInt(fds, ui);
     HTTP(" + ");
@@ -566,7 +614,7 @@ static void writeDebug (int fds)
     int up = global::URLsPriority->getLength();
     int upw = global::URLsPriorityWait->getLength();
 	HTTP("<td>");
-    ecrireInti(fds, up + upw, (char*)"%d");
+    HTTPint(up + upw);
     HTTP(" (");
     ecrireInt(fds, up);
     HTTP(" + ");
@@ -577,7 +625,7 @@ static void writeDebug (int fds)
 	HTTP("<tr>\n");
 	HTTP("<td>Miss URLs</td>\n");
 	HTTP("<td>");
-    ecrireInti(fds, missUrl, (char*)"%d");
+    HTTPint(missUrl);
 	HTTP("</td>\n");
 	HTTP("</tr>\n");
 	HTTP("<tr>\n");
