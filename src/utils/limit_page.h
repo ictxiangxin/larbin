@@ -1,3 +1,4 @@
+
 /*
  *   Larbin - is a web crawler
  *   Copyright (C) 2013  ictxiangxin
@@ -16,8 +17,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-void webServerOn();
-void webServerOff();
-void searchOn();
-void searchOff();
-void closeLevelUp(int l);
+#ifndef LIMIT_PAGE_H
+#define LIMIT_PAGE_H
+void *pLimitPage (void *none);
+#endif // LIMIT_PAGE_H

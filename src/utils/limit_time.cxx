@@ -37,7 +37,7 @@ void *pLimitTime (void *none)
         if((uint)(endTime - startTime) >= global::limitTime)
         {
             std::cout << "["GREEN_MSG("Search")"] Time up." << std::endl;
-            closeLevelUp();
+            closeLevelUp(LEVEL_SEARCH);
             pthread_exit(NULL);
         }
     }

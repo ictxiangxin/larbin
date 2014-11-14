@@ -16,7 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIMITTIME_H
-#define LIMITTIME_H
+#ifndef LIMIT_TIME_H
+#define LIMIT_TIME_H
 void *pLimitTime (void *none);
-#endif // LIMITTIME_H
+#endif // LIMIT_TIME_H

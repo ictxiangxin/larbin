@@ -70,7 +70,7 @@ bool            global::externalLinks = true;
 bool            global::ignoreRobots = false;
 uint            global::limitTime = 0;
 uint            global::startTime = 0;
-uint            global::closeLevel = 0;
+int             global::closeLevel = 0;
 bool            global::searchOn = false;
 bool            global::webServerOn = false;
 bool            global::highLevelWebServer = false;
@@ -97,6 +97,7 @@ uint            global::maxFds;
 long            global::limitBand = 0;
 long            global::remainBand = 0;
 pthread_t       global::limitTimeThread = 0;
+pthread_t       global::limitPageThread = 0;
 pthread_t       global::webServerThread = 0;
 int             global::IPUrl = 0;
 bool            global::reload = false;
@@ -114,6 +115,7 @@ uint            global::outputMode = 0;
 bool            global::specificSearch = false;
 bool            global::lockSite = false;
 bool            global::canReload = false;
+uint            global::limitPage = 0;
 
 /*
  * Constructor : initialize almost everything
@@ -386,6 +388,11 @@ void global::parseFile (char *file)
             lockSite = true;
         else if (!strcasecmp(tok, "canReload"))
             canReload = true;
+        else if (!strcasecmp(tok, "limitPage"))
+        {
+            tok = nextToken(&posParse);
+            limitPage = atoi(tok);
+        }
         else if (!strcasecmp(tok, "outputMode"))
         {
             tok = nextToken(&posParse);

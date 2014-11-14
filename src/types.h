@@ -132,6 +132,11 @@ enum FetchError
 #define OM_MIRROR  2
 #define OM_STATS   3
 
+// level
+#define LEVEL_ALL -1
+#define LEVEL_SEARCH 0
+#define LEVEL_WEBSERVER 1
+
 // standard types
 typedef unsigned int        uint;
 typedef unsigned short int  ushort;

@@ -36,6 +36,7 @@ SET(UTILS_SRC
         utils/hash_duplicate.cxx
         utils/thread.cxx
         utils/limit_time.cxx
+        utils/limit_page.cxx
         utils/level.cxx
         utils/punycode.cxx
         )

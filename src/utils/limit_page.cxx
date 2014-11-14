@@ -1,3 +1,4 @@
+
 /*
  *   Larbin - is a web crawler
  *   Copyright (C) 2013  ictxiangxin
@@ -16,8 +17,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-void webServerOn();
-void webServerOff();
-void searchOn();
-void searchOff();
-void closeLevelUp(int l);
+#include <iostream>
+#include <time.h>
+#include <pthread.h>
+
+#include "types.h"
+#include "global.h"
+#include "utils/level.h"
+
+void *pLimitPage (void *none)
+{
+    while(TRUE)
+    {
+        sleep(1);
+        if(!global::searchOn)
+            break;
+        if(answers[success] >= global::limitPage)
+        {
+            std::cout << "["GREEN_MSG("Search")"] Limit pages." << std::endl;
+            closeLevelUp(LEVEL_SEARCH);
+            pthread_exit(NULL);
+        }
+    }
+    pthread_exit(NULL);
+}

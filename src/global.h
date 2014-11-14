@@ -123,7 +123,7 @@ struct global
     static uint limitTime;
     static uint startTime;
     /** close flag */
-    static uint closeLevel;
+    static int closeLevel;
     /** search is running */
     static bool searchOn;
     /** web server is running */
@@ -195,6 +195,7 @@ struct global
     static long limitBand;
     static long remainBand;
     static pthread_t limitTimeThread;
+    static pthread_t limitPageThread;
     static pthread_t webServerThread;
     static bool reload;
     static bool histograms;
@@ -211,6 +212,7 @@ struct global
     static bool specificSearch;
     static bool lockSite;
     static bool canReload;
+    static uint limitPage;
 };
 
 /** set this fds for next poll */

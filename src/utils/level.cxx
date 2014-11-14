@@ -41,34 +41,36 @@ void searchOff()
     global::searchOn = false;
 }
 
-void closeLevelUp()
+void closeLevelUp(int l)
 {
     switch(global::closeLevel)
     {
-    case 0 :
-        std::cout << "["GREEN_MSG("Search")"] Closing... ";
-        if (global::httpPort != 0)
+    case LEVEL_SEARCH :
+        if (global::searchOn)
+        {
+            std::cout << "["GREEN_MSG("Search")"] Closing... ";
             if (global::webServerOn && global::highLevelWebServer)
                 std::cout << "(["GREEN_MSG("Webserver")"] still running)";
-        std::cout << std::endl;
-        if (global::httpPort != 0)
-            if(!global::highLevelWebServer)
-            {
-                std::cout << "["GREEN_MSG("Webserver")"] Closing..." << std::endl;
-                global::webServerOn = false;
-            }
-        global::searchOn = false;
+            std::cout << std::endl;
+            if (global::webServerOn)
+                if(!global::highLevelWebServer)
+                {
+                    std::cout << "["GREEN_MSG("Webserver")"] Closing..." << std::endl;
+                    global::webServerOn = false;
+                }
+            global::searchOn = false;
+        }
         break;
-    case 1 :
-        if (global::httpPort != 0)
-            if(global::webServerOn)
-            {
-                std::cout << "["GREEN_MSG("Webserver]")"] Closing..." << std::endl;
-                global::webServerOn = false;
-            }
+    case LEVEL_WEBSERVER :
+        if(global::webServerOn)
+        {
+            std::cout << "["GREEN_MSG("Webserver]")"] Closing..." << std::endl;
+            global::webServerOn = false;
+        }
         break;
     default :
         break;
     }
-    global::closeLevel++;
+    if (l < 0 || l >= global::closeLevel)
+        global::closeLevel++;
 }

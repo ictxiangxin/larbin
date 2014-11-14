@@ -44,6 +44,7 @@
 #include "utils/webserver.h"
 #include "utils/histogram.h"
 #include "utils/limit_time.h"
+#include "utils/limit_page.h"
 #include "utils/level.h"
 
 static int cron ();
@@ -98,7 +99,7 @@ static void printLimitTime(uint t)
 static void getSIGINT(int signo)
 {
     std::cout << std::endl;
-    closeLevelUp();
+    closeLevelUp(LEVEL_ALL);
 }
 
 static void welcome()
@@ -135,6 +136,10 @@ int main (int argc, char *argv[])
         global::limitTimeThread = startThread(pLimitTime, NULL);
         printLimitTime(global::limitTime);
     }
+    if (global::limitPage != 0)
+    {
+        global::limitPageThread = startThread(pLimitPage, NULL);
+    }
 
     while (global::searchOn)
     {
@@ -146,7 +151,7 @@ int main (int argc, char *argv[])
             old = global::now;
             if(!cron())
             {
-                global::searchOn = FALSE;
+                closeLevelUp(LEVEL_SEARCH);
                 break;
             }
         }

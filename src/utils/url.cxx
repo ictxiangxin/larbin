@@ -373,18 +373,18 @@ bool url::initOK (url *from)
     {
         switch (ns->dnsState)
         {
-        case errorDns:
-            errno = fastNoDns;
-            return false;
-        case noConnDns:
-            errno = fastNoConn;
-            return false;
-        case doneDns:
-            if (!ns->testRobots(file))
-            {
-                errno = fastRobots;
+            case errorDns:
+                errno = fastNoDns;
                 return false;
-            }
+            case noConnDns:
+                errno = fastNoConn;
+                return false;
+            case doneDns:
+                if (!ns->testRobots(file))
+                {
+                    errno = fastRobots;
+                    return false;
+                }
         }
     }
     return true;
@@ -607,7 +607,7 @@ bool url::isProtocol (char *s)
         len = strlen(cookie); \
         strncpy(cookie + len, s, maxCookieSize - len); \
         cookie[maxCookieSize - 1] = 0; \
-        } while(0)
+    } while(0)
 
 /* see if a header contain a new cookie */
 
