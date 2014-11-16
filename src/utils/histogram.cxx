@@ -38,6 +38,7 @@ protected:
     int tab1[SIZE];
     int tab2[SIZE];
     int beg, end;
+    int tick;
     time_t period, count, beg_time;
 
     /* Insert a new interval : */
@@ -106,6 +107,7 @@ Histogram::Histogram (time_t period)
     this->period = period;
     count = 0;
     beg_time = time (NULL);
+    tick = 0;
 }
 
 /* Destructor */
@@ -120,6 +122,7 @@ void Histogram::pageHit (int x, int y)
     tab2[end] += y;
     if (++count >= period)
     {
+        tick++;
         count = 0;
         incrementEnd();
     }
@@ -128,12 +131,12 @@ void Histogram::pageHit (int x, int y)
 /* Insert a new interval : */
 void Histogram::incrementEnd ()
 {
-    end += 1;
+    end++;
     if (end >= SIZE)
         end = 0;
     if (end <= beg)   /* have to delete the oldest interval */
     {
-        beg += 1;
+        beg++;
         if (beg >= SIZE)
             beg = 0;
         beg_time += period;
@@ -151,12 +154,10 @@ void Histogram::write (int fds)
     ecrireInt(fds, period);
     HTTP("\"),\n");
     HTTP("\"Time, Success, Total\\n\" +\n");
-    for (int i = beg, c = 0; c < SIZE; ++i, ++c)
+    for (int i = beg, c = 0; (c < SIZE && c <= tick) || c < 10; ++i, ++c)
     {
         if (i == SIZE)
             i = 0;
-        if (tab1[i] == 0 && tab2[i] == 0 && i >= 9)
-            break;
         HTTP("\"");
         ecrireInt (fds, c);
         HTTP(", ");

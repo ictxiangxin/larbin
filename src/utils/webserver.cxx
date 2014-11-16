@@ -39,6 +39,7 @@
 #include "utils/debug.h"
 #include "utils/histogram.h"
 #include "utils/level.h"
+#include "utils/limit_time.h"
 
 #include "io/user_output.h"
 
@@ -101,6 +102,23 @@ void *startWebserver (void *none)
 ////////////////////////////////////////////////////////////
 // write answer
 
+static void writeTime(int fds, time_t t)
+{
+    if (t > 86400)
+    {
+        ecrireInt(fds, t / 86400);
+        t %= 86400;
+        HTTP(" Day(s) ");
+    }
+    ecrireInt(fds, t / 3600);
+    t %= 3600;
+    HTTP(":");
+    ecrireInt2(fds, t / 60);
+    t %= 60;
+    HTTP(":");
+    ecrireInt2(fds, t);
+}
+
 static void writeHeader(int fds)
 {
     HTTP("HTTP/1.0 200 OK\r\nServer: Larbin\r\nContent-type: text/html\r\n\r\n");
@@ -140,19 +158,7 @@ static void writeHeader(int fds)
     HTTP("<li><a>Update ");
     int duree = global::now - startTime;
     totalduree = duree;
-    if (duree > 86400)
-    {
-        ecrireInt(fds, duree / 86400);
-        duree %= 86400;
-        HTTP(" Day(s) ");
-    }
-    ecrireInt(fds, duree/3600);
-    duree %= 3600;
-    HTTP(":");
-    ecrireInt2(fds, duree/60);
-    duree %= 60;
-    HTTP(":");
-    ecrireInt2(fds, duree);
+    writeTime(fds, duree);
     HTTP("</a></li>\n");
     HTTP("</ul>\n");
     HTTP("</div>\n");
@@ -174,7 +180,7 @@ static void writeSpecStats(int fds)
 {
     if (!global::specificSearch)
         return;
-    HTTP("<div class=\"panel panel-info\">\n");
+    HTTP("<div class=\"panel panel-default\">\n");
     HTTP("<div class=\"panel-heading\" role=\"tab\" id=\"headingSpec\">\n");
     HTTP("<h4 class=\"panel-title\">\n");
     HTTP("<a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseSpec\" aria-expanded=\"false\" aria-controls=\"collapseSpec\">\n");
@@ -258,52 +264,64 @@ static void writeStats (int fds)
     HTTP("<div class=\"panel panel-primary\">\n");
     HTTP("<div class=\"panel-heading\">Stats</div>\n");
     HTTP("<div class=\"panel-body\">\n");
-    HTTP("<table class=\"table table-condensed table-hover\">\n");
-    HTTP("<thead>\n");
-    HTTP("<tr>\n");
-    HTTP("<th>Title</th>\n");
-    HTTP("<th>Data</th>\n");
-    HTTP("</tr>\n");
-    HTTP("</thead>\n");
-    HTTP("<tbody>\n");
-    HTTP("<tr>\n");
-    HTTP("<td>URLs Treated</td>\n");
-    HTTP("<td>");
+    HTTP("<div class=\"row\">\n");
+    HTTP("<div class=\"col-md-12\">\n");
+    HTTP("<div class=\"btn-group\">\n");
+    HTTP("<button href=\"#\" class=\"btn btn-primary active\">URLs Treaded</button>\n");
+    HTTP("<button href=\"#\" class=\"btn btn-default active\">");
     HTTPint(urls);
-    HTTP(" (current rate: ");
-    HTTPint(urlsRate);
-    HTTP(", overall rate: ");
-    HTTPint(urls / totalduree);
-    HTTP(")");
-    HTTP("</td>\n");
-    HTTP("</tr>\n");
-    HTTP("<tr>\n");
-    HTTP("<td>Pages</td>\n");
-    HTTP("<td>");
+    HTTP("</button>\n");
+    HTTP("</div>\n");
+    HTTP("<div class=\"btn-group\">\n");
+    HTTP("<button href=\"#\" class=\"btn btn-info active\">Pages</button>\n");
+    HTTP("<button href=\"#\" class=\"btn btn-default active\">");
     HTTPint(pages);
-    HTTP(" (current rate: ");
-    HTTPint(pagesRate);
-    HTTP(", overall rate: ");
-    HTTPint(pages / totalduree);
-    HTTP(")");
-    HTTP("</td>\n");
-    HTTP("</tr>\n");
-    HTTP("<tr>\n");
-    HTTP("<td>Success</td>\n");
-    HTTP("<td>");
+    HTTP("</button>\n");
+    HTTP("</div>\n");
+    HTTP("<div class=\"btn-group\">\n");
+    HTTP("<button href=\"#\" class=\"btn btn-success active\">Success</button>\n");
+    HTTP("<button href=\"#\" class=\"btn btn-default active\">");
     HTTPint(answers[success]);
-    HTTP(" (current rate: ");
-    HTTPint(successRate);
-    HTTP(", overall rate: ");
-    HTTPint(answers[success] / totalduree);
-    HTTP(")");
-    HTTP("</td>\n");
-    HTTP("</tr>\n");
-    HTTP("</tbody>\n");
-    HTTP("</table>\n");
+    HTTP("</button>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
+    HTTP("</div>\n");
+    HTTP("<br>\n");
+    if (global::limitPage != 0)
+    {
+        HTTP("<p class=\"text-success\"><strong>Page Limit: ");
+        ecrireInt(fds, answers[success]);
+        HTTP(" / ");
+        ecrireInt(fds, global::limitPage);
+        HTTP("</strong></p>\n");
+        int complete = (int)((float)answers[success] / (float)global::limitPage * 100);
+        HTTP("<div class=\"progress\">\n");
+        HTTP("<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: ");
+        ecrireInt(fds, complete);
+        HTTP("%;\">");
+        ecrireInt(fds, complete);
+        HTTP("%</div>\n");
+        HTTP("</div>\n");
+    }
+    if (global::limitTime != 0)
+    {
+        HTTP("<p class=\"text-info\"><strong>Time Limit: ");
+        writeTime(fds, passTime());
+        HTTP(" / ");
+        writeTime(fds, global::limitTime);
+        HTTP("</strong></p>\n");
+        int complete = (int)((float)passTime() / (float)global::limitTime * 100);
+        HTTP("<div class=\"progress\">\n");
+        HTTP("<div class=\"progress-bar progress-bar-info\" role=\"progressbar\" style=\"width: ");
+        ecrireInt(fds, complete);
+        HTTP("%;\">");
+        ecrireInt(fds, complete);
+        HTTP("%</div>\n");
+        HTTP("</div>\n");
+    }
     HTTP("<div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n");
     writeSpecStats(fds);
-    HTTP("<div class=\"panel panel-info\">\n");
+    HTTP("<div class=\"panel panel-default\">\n");
     HTTP("<div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n");
     HTTP("<h4 class=\"panel-title\">\n");
     HTTP("<a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"false\" aria-controls=\"collapseOne\">\n");
@@ -419,7 +437,7 @@ static void writeStats (int fds)
     HTTP("</div>\n");
     HTTP("</div>\n");
     HTTP("</div>\n");
-    HTTP("<div class=\"panel panel-info\">\n");
+    HTTP("<div class=\"panel panel-default\">\n");
     HTTP("<div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n");
     HTTP("<h4 class=\"panel-title\">\n");
     HTTP("<a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n");
@@ -498,9 +516,20 @@ static void writeStats (int fds)
     HTTP(" / ");
     ecrireInt(fds, hashSize);
     HTTP("</strong></p>\n");
-    HTTP("<div class=\"progress\">\n");
-    HTTP("<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: ");
     int rate = (int)((float)hashUrls / (float)hashSize * 100);
+    HTTP("<div class=\"progress\">\n");
+    HTTP("<div class=\"progress-bar progress-bar-");
+    if (rate <= 20)
+        HTTP("success");
+    else if (rate > 20 && rate <= 40)
+        HTTP("info");
+    else if (rate > 40 && rate <= 60)
+        HTTP("primary");
+    else if (rate > 60 && rate <= 80)
+        HTTP("warning");
+    else
+        HTTP("danger");
+    HTTP("\" role=\"progressbar\" style=\"width: ");
     ecrireInt(fds, rate);
     HTTP("%;\">");
     ecrireInt(fds, rate);

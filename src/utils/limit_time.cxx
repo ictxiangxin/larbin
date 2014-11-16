@@ -24,13 +24,16 @@
 #include "global.h"
 #include "utils/level.h"
 
+static time_t startTime;
+static time_t endTime;
+
 void *pLimitTime (void *none)
 {
-    time_t startTime = time(NULL);
-    time_t endTime;
+    startTime = time(NULL);
+    endTime = startTime;
     while(global::searchOn)
     {
-        sleep(30);
+        sleep(1);
         endTime = time(NULL);
         if(!global::searchOn)
             break;
@@ -42,4 +45,10 @@ void *pLimitTime (void *none)
         }
     }
     pthread_exit(NULL);
+}
+
+time_t passTime ()
+{
+    time_t tmp = endTime - startTime;
+    return tmp > (time_t)global::limitTime ? (time_t)global::limitTime : tmp;
 }

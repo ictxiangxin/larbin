@@ -19,4 +19,5 @@
 #ifndef LIMIT_TIME_H
 #define LIMIT_TIME_H
 void *pLimitTime (void *none);
+time_t passTime ();
 #endif // LIMIT_TIME_H
