@@ -10,25 +10,13 @@ Version: 2.6.5
 Larbin is a web crawler and stop develop, the least version is 2.6.3.
 We will continue develop this nice software and open the source on Github.
 
-##Develop:
+##Snapshot:
 
-* Currently, I did some modify on Larbin v2.6.3, fix many compiling warning and fix a serious bug.
+###状态界面
+![State](http://raw.githubusercontent.com/ictxiangxin/larbin/master/doc/image/readme/state.jpg)
 
-* I use the newest adns v1.4 to replace the old adns v1.1 which used in origin Larbin v2.6.3.
-
-* Add timer, you can set the uptime of Larbin.
-
-* Add HighLevelWebServer mode, when larbin is end, webserver still running, return the state information.
-
-* Add a new conf option: ignoreRobots, it can make Larbin ignore robots.txt, as you know.
-
-* New version larbin will move all functions to larbin.conf file, instead old options.h file, you needn't recompile larbin to change it's functions.
-
-* Supporting chinese, such as chinese words appear in URI and chinese domain name (e.g. [http://哈尔滨工业大学。中国](http://哈尔滨工业大学。中国)).
-
-* Use cmake to build larbin
-
-* A new web UI, base on bootstrap and dygraphs.
+###图表界面
+![Histogram](http://raw.githubusercontent.com/ictxiangxin/larbin/master/doc/image/readme/histogram.jpg)
 
 ##Table of content :
 

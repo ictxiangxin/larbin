@@ -10,25 +10,13 @@
 Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本是2.6.3。
 我将继续开发这一优秀的软件，并在Github上开放源代码。
 
-##开发概况：
+##截图展示：
 
-* 目前，我在Larbin v2.6.3上做了一些修改， 修复了许多编译时的警告，发现并修复了一个严重的bug。
+###状态界面
+![状态界面](http://raw.githubusercontent.com/ictxiangxin/larbin/master/doc/image/readme/state.jpg)
 
-* 使用了最新版的adns v1.4替换了原始Larbin v2.6.3中的旧版adns v1.1。
-
-* 增加了定时器功能，能设置larbin的运行时间。
-
-* 增加HighLevelWebServer模式，在larbin停止爬取后，webserver依然正常运行，反馈状态信息。
-
-* 增加了一个配置选项ignoreRobots，它可以使Larbin在抽取网页时不受robots.txt的影响，你懂的。
-
-* 新版本larbin正在将所有功能开关以及设置移到larbin.conf中，而不是原来的options.h中, 你无需重新编译larbin就可以配置它的功能。
-
-* 增加了对中文(unicode)的支持，包括URI中出现的中文编码以及中文域名（如：[http://哈尔滨工业大学。中国](http://哈尔滨工业大学。中国)）。
-
-* 使用cmake来构建larbin。
-
-* 一个全新的web UI，基于bootstrap和dygraphs。
+###图表界面
+![图表界面](http://raw.githubusercontent.com/ictxiangxin/larbin/master/doc/image/readme/histogram.jpg)
 
 ##内容提要：
 
