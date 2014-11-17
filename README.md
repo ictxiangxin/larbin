@@ -13,10 +13,10 @@ Larbin是一个网络爬虫，但是目前已经停止开发，最终的版本�
 ##截图展示：
 
 ###状态界面
-![状态界面](http://raw.githubusercontent.com/ictxiangxin/larbin/master/doc/image/readme/state.jpg)
+![状态界面](http://raw.github.com/ictxiangxin/larbin/master/doc/image/readme/state.jpg)
 
 ###图表界面
-![图表界面](http://raw.githubusercontent.com/ictxiangxin/larbin/master/doc/image/readme/histogram.jpg)
+![图表界面](http://raw.github.com/ictxiangxin/larbin/master/doc/image/readme/histogram.jpg)
 
 ##内容提要：
 

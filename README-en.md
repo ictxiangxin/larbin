@@ -13,10 +13,10 @@ We will continue develop this nice software and open the source on Github.
 ##Snapshot:
 
 ###状态界面
-![State](http://raw.githubusercontent.com/ictxiangxin/larbin/master/doc/image/readme/state.jpg)
+![State](http://raw.github.com/ictxiangxin/larbin/master/doc/image/readme/state.jpg)
 
 ###图表界面
-![Histogram](http://raw.githubusercontent.com/ictxiangxin/larbin/master/doc/image/readme/histogram.jpg)
+![Histogram](http://raw.github.com/ictxiangxin/larbin/master/doc/image/readme/histogram.jpg)
 
 ##Table of content :
 
