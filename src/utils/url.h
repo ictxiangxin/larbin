@@ -35,7 +35,7 @@ class url
         char *punycode;
         char *file;
         uint16_t port; // the order of variables is important for physical size
-        int8_t depth;
+        int depth;
         /* parse the url */
         void parse (char *s);
         /** parse a file with base */
@@ -49,10 +49,10 @@ class url
 
     public:
         /* Constructor : Parses an url (u is deleted) */
-        url (char *u, int8_t depth, url *base);
+        url (char *u, int depth, url *base);
 
         /* constructor used by input */
-        url (char *line, int8_t depth);
+        url (char *line, int depth);
 
         /* Constructor : read the url from a file (cf serialize) */
         url (char *line);
@@ -82,7 +82,7 @@ class url
         inline char *getFile () { return file; }
 
         /** Depth in the Site */
-        inline int8_t getDepth () { return depth; }
+        inline int getDepth () { return depth; }
 
         /* Set depth to max if we are at an entry point in the site
          * try to find the ip addr

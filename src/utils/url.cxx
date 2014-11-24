@@ -174,7 +174,7 @@ bool fileNormalize (char *file)
 // definition of methods of class url
 
 // Constructor : Parses an url
-url::url (char *u, int8_t depth, url *base)
+url::url (char *u, int depth, url *base)
 {
     newUrl();
     this->depth = depth;
@@ -211,7 +211,7 @@ url::url (char *u, int8_t depth, url *base)
 }
 
 /* constructor used by input */
-url::url (char *line,  int8_t depth)
+url::url (char *line,  int depth)
 {
     newUrl();
     this->depth = depth;
@@ -249,7 +249,7 @@ url::url (char *line)
     // Read depth
     depth = 0;
     for (; line[i] >= '0' && line[i] <= '9'; i++)
-        depth = 10*depth + line[i] - '0';
+        depth = 10 * depth + line[i] - '0';
 #ifdef URL_TAGS
     // read tag
     tag = 0;

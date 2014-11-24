@@ -114,7 +114,7 @@ struct global
     /** Sum of the sizes of a fifo in Sites */
     static Interval *inter;
     /** How deep should we go inside a site */
-    static int8_t depthInSite;
+    static int depthInSite;
     /** Follow external links ? */
     static bool externalLinks;
     /** Ignore robots.txt ? */

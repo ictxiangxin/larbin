@@ -65,7 +65,7 @@ ConstantSizedFifo<Connexion> *global::freeConns;
 ConstantSizedFifo<Connexion> *global::userConns;
 #endif
 Interval        *global::inter;
-int8_t          global::depthInSite;
+int             global::depthInSite;
 bool            global::externalLinks = true;
 bool            global::ignoreRobots = false;
 uint            global::limitTime = 0;
