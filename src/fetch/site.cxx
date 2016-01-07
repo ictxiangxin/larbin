@@ -260,24 +260,13 @@ void NamedSite::dnsAns (adns_answer *ans)
 {
     if (ans->status == adns_s_prohibitedcname)
     {
-        if (cname == NULL)
-        {
-            // try to find ip for cname of cname
-            cname = newString(ans->cname);
-            global::nbDnsCalls++;
-            adns_query quer = NULL;
-            adns_submit(global::ads, cname, (adns_rrtype) adns_r_addr, (adns_queryflags) 0, this, &quer);
-        }
-        else
-        {
-            // dns chains too long => dns error
-            // cf nslookup or host for more information
-            siteSeen();
+        if(cname == NULL)
             delete [] cname;
-            cname = NULL;
-            dnsState = errorDns;
-            dnsErr();
-        }
+        // try to find ip for cname of cname
+        cname = newString(ans->cname);
+        global::nbDnsCalls++;
+        adns_query quer = NULL;
+        adns_submit(global::ads, cname, (adns_rrtype) adns_r_addr, (adns_queryflags) 0, this, &quer);
     }
     else
     {
