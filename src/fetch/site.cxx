@@ -260,7 +260,7 @@ void NamedSite::dnsAns (adns_answer *ans)
 {
     if (ans->status == adns_s_prohibitedcname)
     {
-        if(cname == NULL)
+        if(cname != NULL)
             delete [] cname;
         // try to find ip for cname of cname
         cname = newString(ans->cname);
